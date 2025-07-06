@@ -1,4 +1,5 @@
 import { contarLocalizaciones } from "./counters/moduleLocalizacion";
+import { contarLocFQ } from "./counters/moduleCalidadFormalLocalizacion";
 import { contarCalidadDQ } from "./counters/moduleCalidadEvolutiva";
 import { contarDeterminantes } from "./counters/moduleDeterminantes";
 import { contarCalidadFQ } from "./counters/moduleCalidadFormal";
@@ -47,28 +48,27 @@ import type {
 export type Genero = "M" | "F";
 
 export type Respuesta = {
+  N: number;
+  Texto: string;
+  Lam: string;
   Loc: string;
   DQ: string;
   Det: string;
   FQ: string;
+  Nivel: number;
+  Par: number;
   Contenidos: string;
-  "CC.EE.": string;
-  Lam: string;
+  Populares: string;
   Z: number;
+  "CC.EE.": string;
   [key: string]: any; // Para campos extra
 };
 
-export type MasterSummary = {
-  Edad: number;
-  Genero: Genero;
-  [key: string]: any;
-};
-
-// === FUNCIÓN ===
-
 export function buildMasterSummary(data: Respuesta[]): StructuralSummaryData {
+  // Definir el Objeto Maestro con toda las variables
   const variables: Partial<StructuralSummaryData> = {};
 
+  // Extraer los datos de las respuestas por columnas
   const locs = data.map((r) => r.Loc);
   const dq = data.map((r) => r.DQ);
   const dets = data.map((r) => r.Det);
@@ -82,6 +82,10 @@ export function buildMasterSummary(data: Respuesta[]): StructuralSummaryData {
     r.Z != null ? String(r.Z).trim().toLowerCase() : ""
   );
 
+  // ? Edad y Género tengo que incluirlos en la UI
+  variables.Edad = 18;
+  variables.Genero = "M";
+
   Object.assign(variables, contarLocalizaciones(locs));
   Object.assign(variables, contarCalidadDQ(dq));
 
@@ -92,6 +96,7 @@ export function buildMasterSummary(data: Respuesta[]): StructuralSummaryData {
   variables["RespComplejas"] = detCompljs;
 
   Object.assign(variables, contarCalidadFQ(fq));
+  Object.assign(variables, contarLocFQ(data));
   Object.assign(variables, contarContenidos(cont));
   Object.assign(variables, contarValoresComa(ccee));
 

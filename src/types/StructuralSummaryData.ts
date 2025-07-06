@@ -201,4 +201,26 @@ export type StructuralSummaryData = {
   // Secuencia
   Secuencia: SecuenciaLocalizacion;
   RespComplejas: string[];
+
+  // Resúmenes de FQ_Loc
+  "W_FQx+": number;
+  "W_FQx-": number;
+  W_FQxo: number;
+  W_FQxsin: number;
+  W_FQxu: number;
+  "D_FQx+": number;
+  "D_FQx-": number;
+  D_FQxo: number;
+  D_FQxsin: number;
+  D_FQxu: number;
+  "Dd_FQx+": number;
+  "Dd_FQx-": number;
+  Dd_FQxo: number;
+  Dd_FQxsin: number;
+  Dd_FQxu: number;
+  "S_FQx+": number;
+  "S_FQx-": number;
+  S_FQxo: number;
+  S_FQxsin: number;
+  S_FQxu: number;
 };

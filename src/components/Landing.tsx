@@ -1,23 +1,48 @@
 import { useState } from "react";
-import type { StructuralSummaryData } from "../types/StructuralSummaryData";
+
 import { buildMasterSummary } from "../utils/buildMasterSummary";
 import { parseExcel } from "../utils/parseExcel";
+import { obtenerTablaPorEstilo } from "../utils/normativeData/moduleCargarTablaNormativa";
+import { compararConNormativa } from "../utils/normativeData/normativeComparison";
+
 import FileUpload from "./FileUpload";
 import StructuralSummary from "./StructuralSumary";
+import ComparissonTable from "./ComparisonTable";
+
+import type { Respuesta } from "../utils/buildMasterSummary";
+import type { StructuralSummaryData } from "../types/StructuralSummaryData";
+import type { Comparacion } from "../types/NormativeData";
+import Resume from "./Resume";
 
 export default function Landing() {
   const [summary, setSummary] = useState<StructuralSummaryData | null>(null);
+  const [comparaciones, setComparaciones] = useState<Comparacion[] | null>(
+    null
+  );
 
   const handleFile = async (file: File) => {
-    const data = await parseExcel(file);
-    const summaryData = buildMasterSummary(data); // Aquí pondrás edad/género dinámicos
+    const data: Respuesta[] = await parseExcel(file);
+    console.log(data);
+    const summaryData = buildMasterSummary(data);
     setSummary(summaryData);
+
+    const estilo = summaryData["Tipo Vivencial"] || "Indefinido";
+    const edad = summaryData["Edad"] || 18;
+
+    try {
+      const tabla = await obtenerTablaPorEstilo(estilo, edad);
+      const comparacion = compararConNormativa(summaryData, tabla);
+      setComparaciones(comparacion);
+    } catch (error) {
+      console.error("Error al obtener tabla:", error);
+      setComparaciones(null);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4">
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4 pt-12">
       <div className="max-w-3xl w-full">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-800 text-center">
+        <h1 className="text-4xl md:text-5xl font-bold mb-12 text-gray-700 text-center">
           Generador de Informes Rorschach - Sistema Exner
         </h1>
 
@@ -57,17 +82,49 @@ export default function Landing() {
 
         {summary && (
           <>
+            <Resume summary={summary} />
+
             <StructuralSummary data={summary} />
 
+            {comparaciones && (
+              <ComparissonTable
+                comparaciones={comparaciones}
+                tipoVivencial={summary["Tipo Vivencial"]}
+              />
+            )}
+
             <button
-              onClick={() => setSummary(null)}
-              className="px-6 py-3 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 transition cursor-pointer my-12 mx-auto block">
+              onClick={() => {
+                setSummary(null);
+                setComparaciones(null);
+              }}
+              className="px-6 py-3 bg-teal-600 text-white rounded-lg shadow hover:bg-teal-700 transition mx-auto block w-fit my-12">
               Calcular Otro
             </button>
           </>
         )}
 
-        <footer className="mt-12 text-sm text-gray-500 text-center">
+        <section className="my-20">
+          <h2 className="text-3xl font-semibold text-center text-gray-700">
+            ¡Quiero colaborar!
+          </h2>
+          <p className="text-lg text-gray-600 my-6">
+            Tus observaciones y sugerencias serán de mucha ayuda para poder
+            continuar desarrollando esta aplicación.
+          </p>
+          <p className="text-lg text-gray-600 my-6">
+            Puedes ayudarme respondiendo el cuestionario a continuación, así
+            podré incorporar nuevas funcionalidades más adelante.
+          </p>
+          <a
+            href="https://forms.gle/GAzi5XmUg5EdhJVW7"
+            target="blank"
+            className="px-6 py-3 bg-teal-600 text-white rounded-lg shadow hover:bg-teal-700 transition mx-auto block w-fit">
+            Responder Formulario
+          </a>
+        </section>
+
+        <footer className="mt-12 text-sm text-gray-500 text-center mb-6">
           <span>© {new Date().getFullYear()}</span>{" "}
           <a href="https://manchasdetinta.net" target="blank">
             manchasdetinta.net

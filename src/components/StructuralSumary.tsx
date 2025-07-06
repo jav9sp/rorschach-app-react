@@ -62,7 +62,7 @@ export default function StructuralSummary({ data }: StructuralSummaryProps) {
   ];
 
   return (
-    <div className="font-mono text-sm p-4">
+    <div className="font-mono text-sm p-4 border border-gray-300 rounded">
       <h1 className="text-lg font-bold text-center mb-4">
         SUMARIO ESTRUCTURAL
       </h1>
@@ -121,11 +121,11 @@ export default function StructuralSummary({ data }: StructuralSummaryProps) {
               </div>
               <div>
                 <p>W+D</p>
-                <p>= {data["WDx+"]}</p>
-                <p>= {data["WDxo"]}</p>
-                <p>= {data["WDxu"]}</p>
-                <p>= {data["WDx-"]}</p>
-                <p>= {data["WDxsin"]}</p>
+                <p>= {data["W_FQx+"] + data["D_FQx+"]}</p>
+                <p>= {data["W_FQxo"] + data["D_FQxo"]}</p>
+                <p>= {data["W_FQxu"] + data["D_FQxu"]}</p>
+                <p>= {data["W_FQx-"] + data["D_FQx-"]}</p>
+                <p>= {data["W_FQxsin"] + data["D_FQxsin"]}</p>
               </div>
             </div>
           </div>
