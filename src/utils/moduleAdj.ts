@@ -18,15 +18,14 @@ export function calcularDScore(eaMenosEs: number): number {
  * @returns Valor ajustado es
  */
 export function calcularAdjES(variables: AdjESInput): number {
-  let m = variables["m"] ?? 0;
-  if (m > 1) m = 1;
-
-  let y = variables["SumY"] ?? 0;
-  if (y > 1) y = 1;
-
   const es = variables["es"] ?? 0;
+  const m = variables["m"] ?? 0;
+  const y = variables["SumY"] ?? 0;
 
-  return es - m - y;
+  const mAjuste = Math.max(0, m - 1);
+  const yAjuste = Math.max(0, y - 1);
+
+  return es - mAjuste - yAjuste;
 }
 
 /**

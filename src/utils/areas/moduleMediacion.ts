@@ -47,8 +47,14 @@ export function calcularMediacion(
   const fqXA = norm.filter((r) => ["+", "o", "u"].includes(r.FQ)).length;
   const xaPct = Number((fqXA / totalR).toFixed(2));
 
-  // WDA%: Loc W o D con FQ + o o u
-  const wd = norm.filter((r) => ["W", "D"].includes(r.Loc));
+  // WDA%: Loc W o D (excepto Dd) y FQ en + o o u
+  const wd = norm.filter((r) => {
+    const loc = r.Loc.toUpperCase();
+    return (
+      (loc.startsWith("W") || loc.startsWith("D")) && !loc.startsWith("DD")
+    );
+  });
+
   const fqWDA = wd.filter((r) => ["+", "o", "u"].includes(r.FQ)).length;
   const wdaPct = wd.length !== 0 ? Number((fqWDA / wd.length).toFixed(2)) : 0;
 

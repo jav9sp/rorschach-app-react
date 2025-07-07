@@ -40,6 +40,10 @@ export default function Resume({ summary }: ResumeProps) {
           <span className="font-medium">Constelación DEPI:</span>
           <span>{summary.DEPI}</span>
         </li>
+        <li className="flex justify-between">
+          <span className="font-medium">Constelación SCON:</span>
+          <span>{summary.SCON}</span>
+        </li>
       </ul>
     </div>
   );

@@ -83,7 +83,7 @@ export function buildMasterSummary(data: Respuesta[]): StructuralSummaryData {
   );
 
   // ? Edad y Género tengo que incluirlos en la UI
-  variables.Edad = 18;
+  variables.Edad = 14;
   variables.Genero = "M";
 
   Object.assign(variables, contarLocalizaciones(locs));
