@@ -1,4 +1,4 @@
-import type { TablaNormativaJson } from "../../types/NormativeData";
+import type { JsonNormativeTable } from "../../types/NormativeData";
 import type { StructuralSummaryData } from "../../types/StructuralSummaryData";
 
 type Comparacion = {
@@ -19,7 +19,7 @@ function parseNumber(value: string | number): number {
 
 export function compararConNormativa(
   resultados: StructuralSummaryData,
-  tabla: TablaNormativaJson
+  tabla: JsonNormativeTable
 ): Comparacion[] {
   return tabla.map((row) => {
     const variable = row.VARIABLE;

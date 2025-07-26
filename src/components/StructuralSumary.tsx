@@ -62,38 +62,65 @@ export default function StructuralSummary({ data }: StructuralSummaryProps) {
   ];
 
   return (
-    <div className="font-mono text-sm p-4 border border-gray-300 rounded">
-      <h1 className="text-lg font-bold text-center mb-4">
-        SUMARIO ESTRUCTURAL
-      </h1>
+    <div className="text-sm p-4 border border-gray-300 rounded">
+      <h2 className="text-2xl font-bold mb-4">Sumario Estructural</h2>
 
-      <div className="md:grid md:grid-cols-4 flex flex-col gap-2">
+      <div className="md:grid md:grid-cols-4 flex flex-col gap-2 font-mono">
         {/* Localización */}
         <div className="border border-gray-300 rounded p-2 space-y-3">
           <div>
-            <h2 className="font-bold underline mb-1 text-center">
-              Localización
-            </h2>
-            <p>Zf = {data.Zf}</p>
-            <p>ZSum = {data.Zsum}</p>
-            <p>ZEst = {data.Zest}</p>
+            <h3 className="font-bold underline mb-1">Localización</h3>
+            <div className="flex justify-between">
+              <div>
+                <p>Zf:</p>
+                <p>ZSum:</p>
+                <p>ZEst:</p>
+              </div>
+              <div>
+                <p className="w-10">{data.Zf}</p>
+                <p className="w-10">{data.Zsum}</p>
+                <p className="w-10">{data.Zest}</p>
+              </div>
+            </div>
+
             <br />
-            <p>W = {data.W}</p>
-            <p>D = {data.D}</p>
-            <p>W+D = {data["W+D"]}</p>
-            <p>Dd = {data.Dd}</p>
-            <p>S = {data.S}</p>
+            <div className="flex justify-between">
+              <div>
+                <p>W:</p>
+                <p>D:</p>
+                <p>W+D:</p>
+                <p>Dd:</p>
+                <p>S:</p>
+              </div>
+              <div>
+                <p className="w-10">{data.W}</p>
+                <p className="w-10">{data.D}</p>
+                <p className="w-10">{data["W+D"]}</p>
+                <p className="w-10">{data.Dd}</p>
+                <p className="w-10">{data.S}</p>
+              </div>
+            </div>
+
             <br />
             <span className="font-black">DQ</span>
-            <p>+ = {data["DQ+"]}</p>
-            <p>o = {data["DQo"]}</p>
-            <p>v = {data["DQv"]}</p>
-            <p>v/+ = {data["DQv/+"]}</p>
+
+            <div className="flex justify-between">
+              <div>
+                <p>+ :</p>
+                <p>o :</p>
+                <p>v :</p>
+                <p>v/+ :</p>
+              </div>
+              <div>
+                <p className="w-10">{data["DQ+"]}</p>
+                <p className="w-10">{data["DQo"]}</p>
+                <p className="w-10">{data["DQv"]}</p>
+                <p className="w-10">{data["DQv/+"]}</p>
+              </div>
+            </div>
           </div>
           <div>
-            <h2 className="font-bold underline mb-1 text-center">
-              Calidad Formal
-            </h2>
+            <h3 className="font-bold underline mb-1">Calidad Formal</h3>
             <div className="grid grid-cols-4 gap-2">
               <div>
                 <br />
@@ -104,28 +131,30 @@ export default function StructuralSummary({ data }: StructuralSummaryProps) {
                 <p>sin</p>
               </div>
               <div>
-                <p>FQx</p>
-                <p>= {data["FQx+"]}</p>
-                <p>= {data["FQxo"]}</p>
-                <p>= {data["FQxu"]}</p>
-                <p>= {data["FQx-"]}</p>
-                <p>= {data["FQxsin"]}</p>
+                <p className="text-center">FQx</p>
+                <p className="text-center">{data["FQx+"]}</p>
+                <p className="text-center">{data["FQxo"]}</p>
+                <p className="text-center">{data["FQxu"]}</p>
+                <p className="text-center">{data["FQx-"]}</p>
+                <p className="text-center">{data["FQxsin"]}</p>
               </div>
               <div>
-                <p>MQx</p>
-                <p>= {data["MQ+"]}</p>
-                <p>= {data["MQo"]}</p>
-                <p>= {data["MQu"]}</p>
-                <p>= {data["MQ-"]}</p>
-                <p>= {data["MQsin"]}</p>
+                <p className="text-center">MQx</p>
+                <p className="text-center">{data["MQ+"]}</p>
+                <p className="text-center">{data["MQo"]}</p>
+                <p className="text-center">{data["MQu"]}</p>
+                <p className="text-center">{data["MQ-"]}</p>
+                <p className="text-center">{data["MQsin"]}</p>
               </div>
               <div>
-                <p>W+D</p>
-                <p>= {data["W_FQx+"] + data["D_FQx+"]}</p>
-                <p>= {data["W_FQxo"] + data["D_FQxo"]}</p>
-                <p>= {data["W_FQxu"] + data["D_FQxu"]}</p>
-                <p>= {data["W_FQx-"] + data["D_FQx-"]}</p>
-                <p>= {data["W_FQxsin"] + data["D_FQxsin"]}</p>
+                <p className="text-center">W+D</p>
+                <p className="text-center">{data["W_FQx+"] + data["D_FQx+"]}</p>
+                <p className="text-center">{data["W_FQxo"] + data["D_FQxo"]}</p>
+                <p className="text-center">{data["W_FQxu"] + data["D_FQxu"]}</p>
+                <p className="text-center">{data["W_FQx-"] + data["D_FQx-"]}</p>
+                <p className="text-center">
+                  {data["W_FQxsin"] + data["D_FQxsin"]}
+                </p>
               </div>
             </div>
           </div>
@@ -133,9 +162,7 @@ export default function StructuralSummary({ data }: StructuralSummaryProps) {
 
         {/* Determinantes */}
         <div className="border border-gray-300 rounded p-2">
-          <h2 className="font-bold underline mb-1 text-center">
-            Determinantes
-          </h2>
+          <h3 className="font-bold underline mb-1">Determinantes</h3>
           <div className="grid grid-cols-2 gap-2">
             <div>
               <h3 className="italic">Complejos</h3>
@@ -165,7 +192,7 @@ export default function StructuralSummary({ data }: StructuralSummaryProps) {
                     ) {
                       return <p key={i}>{value}</p>;
                     }
-                    return null; // Si es un objeto como Secuencia, no mostrar nada aquí
+                    return null;
                   })}
                   <br />
                   <p>{data.Pares}</p>
@@ -177,7 +204,7 @@ export default function StructuralSummary({ data }: StructuralSummaryProps) {
 
         {/* Contenidos */}
         <div className="border border-gray-300 rounded p-2">
-          <h2 className="font-bold underline mb-1 text-center">Contenidos</h2>
+          <h3 className="font-bold underline mb-1">Contenidos</h3>
           <div className="grid grid-cols-3">
             <div className="col-span-2">
               {contCodigos.map((det, i) => (
@@ -199,9 +226,7 @@ export default function StructuralSummary({ data }: StructuralSummaryProps) {
         {/* Resumen del enfoque */}
         <div className="space-y-3">
           <div className="border border-gray-300 rounded p-2">
-            <h2 className="font-bold underline mb-1 text-center">
-              Resumen del enfoque
-            </h2>
+            <h3 className="font-bold underline mb-1">Resumen del enfoque</h3>
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <p className="italic">Lámina</p>
@@ -291,10 +316,10 @@ export default function StructuralSummary({ data }: StructuralSummaryProps) {
               </div>
             </div>
           </div>
+
+          {/* Códigos Especiales */}
           <div className="border border-gray-300 rounded p-2">
-            <h2 className="font-bold underline mb-1 text-center">
-              Códigos Especiales
-            </h2>
+            <h3 className="font-bold underline mb-1">Códigos Especiales</h3>
             <div className="grid grid-cols-3 gap-2">
               <div>
                 <br />
@@ -359,12 +384,10 @@ export default function StructuralSummary({ data }: StructuralSummaryProps) {
         </div>
       </div>
 
-      <div className="md:grid md:grid-cols-4 flex flex-col gap-2 mt-4">
+      <div className="md:grid md:grid-cols-4 flex flex-col gap-2 mt-4 font-mono">
         {/* Secciones inferiores */}
         <div className="border border-gray-300 rounded p-2 col-span-2">
-          <h2 className="font-bold underline mb-1 text-center">
-            Sección principal
-          </h2>
+          <h3 className="font-bold underline mb-1">Sección principal</h3>
           <div className="grid grid-cols-6">
             <p>R</p>
             <p>{data.R}</p>
@@ -445,7 +468,7 @@ export default function StructuralSummary({ data }: StructuralSummaryProps) {
         </div>
 
         <div className="border border-gray-300 rounded p-2">
-          <h2 className="font-bold underline mb-1 text-center">Afectos</h2>
+          <h3 className="font-bold underline mb-1">Afectos</h3>
           <div className="grid grid-cols-3 gap-2">
             <div className="col-span-2">
               <p>FC:CF+C</p>
@@ -471,9 +494,7 @@ export default function StructuralSummary({ data }: StructuralSummaryProps) {
         </div>
 
         <div className="border border-gray-300 rounded p-2">
-          <h2 className="font-bold underline mb-1 text-center">
-            Interpersonal
-          </h2>
+          <h3 className="font-bold underline mb-1">Interpersonal</h3>
           <div className="grid grid-cols-3 gap-2">
             <div className="col-span-2">
               <p>COP</p>
@@ -503,9 +524,9 @@ export default function StructuralSummary({ data }: StructuralSummaryProps) {
         </div>
       </div>
 
-      <div className="md:grid md:grid-cols-4 flex flex-col gap-2 mt-4">
+      <div className="md:grid md:grid-cols-4 flex flex-col gap-2 mt-4 font-mono">
         <div className="border border-gray-300 rounded p-2">
-          <h2 className="font-bold underline mb-1 text-center">Ideación</h2>
+          <h3 className="font-bold underline mb-1">Ideación</h3>
           <div className="grid grid-cols-3 gap-2">
             <div className="col-span-2">
               <p>a:p</p>
@@ -533,7 +554,7 @@ export default function StructuralSummary({ data }: StructuralSummaryProps) {
         </div>
 
         <div className="border border-gray-300 rounded p-2">
-          <h2 className="font-bold underline mb-1 text-center">Mediación</h2>
+          <h3 className="font-bold underline mb-1">Mediación</h3>
           <div className="grid grid-cols-3 gap-2">
             <div className="col-span-2">
               <p>XA%</p>
@@ -552,16 +573,14 @@ export default function StructuralSummary({ data }: StructuralSummaryProps) {
               <p>{data["Xu%"]}</p>
               <p>{data["X-%"]}</p>
               <p>{data["S-"]}</p>
-              <p>{data["S-%"]}</p>
+              <p>{data["S-"] ? data["S-%"] : 0}</p>
               <p>{data.Populares}</p>
             </div>
           </div>
         </div>
 
         <div className="border border-gray-300 rounded p-2">
-          <h2 className="font-bold underline mb-1 text-center">
-            Procesamiento
-          </h2>
+          <h3 className="font-bold underline mb-1">Procesamiento</h3>
           <div className="grid grid-cols-3 gap-2">
             <div className="col-span-2">
               <p>Zf</p>
@@ -584,14 +603,13 @@ export default function StructuralSummary({ data }: StructuralSummaryProps) {
           </div>
         </div>
         <div className="border border-gray-300 rounded p-2">
-          <h2 className="font-bold underline mb-1 text-center">
-            Autopercepción
-          </h2>
+          <h3 className="font-bold underline mb-1">Autopercepción</h3>
           <div className="grid grid-cols-3 gap-2">
             <div className="col-span-2">
               <p>I. Ego</p>
               <p>Fr+rF</p>
-              <p>FD+V</p>
+              <p>SumV</p>
+              <p>FD</p>
               <p>An+Xy</p>
               <p>MOR</p>
               <p>H:(H)+Hd+(Hd)</p>
@@ -602,7 +620,8 @@ export default function StructuralSummary({ data }: StructuralSummaryProps) {
             <div>
               <p>{data.Ego}</p>
               <p>{data["Fr+rF"]}</p>
-              <p>{data.FD + data.SumV}</p>
+              <p>{data.SumV}</p>
+              <p>{data.FD}</p>
               <p>{data["An+Xy"]}</p>
               <p>{data.MOR}</p>
               <p>{data["H:(H)+Hd+(Hd)"]}</p>
@@ -614,7 +633,7 @@ export default function StructuralSummary({ data }: StructuralSummaryProps) {
         </div>
       </div>
 
-      <div className="mt-4 border-t border-t-gray-300 pt-2 text-center">
+      <div className="mt-4 border-t border-t-gray-300 pt-2 text-center font-mono">
         <p>
           PTI = {data.PTI} | DEPI = {data["DEPI Contador"]} | CDI ={" "}
           {data["CDI Contador"]} | S-CON = {data["SCON Contador"]} | HVI ={" "}

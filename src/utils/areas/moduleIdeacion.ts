@@ -1,6 +1,6 @@
 import type {
-  CodigosEspecialesInput,
-  IndicadoresIdeacionInput,
+  SpecialCodesInput,
+  IdeationIndicatorsInput,
 } from "../../types/ModuleInputs";
 
 export interface CodigosEspeciales {
@@ -28,9 +28,9 @@ export interface CodigosEspeciales {
  * @returns CodigosEspeciales
  */
 export function calcularCodigosEspeciales(
-  variables: CodigosEspecialesInput
+  variables: SpecialCodesInput
 ): CodigosEspeciales {
-  const clavesCriticas: Array<keyof CodigosEspecialesInput> = [
+  const clavesCriticas: Array<keyof SpecialCodesInput> = [
     "DV1",
     "DV2",
     "INC1",
@@ -124,7 +124,7 @@ export function calcularIndicadoresIdeacion(
     FQ?: string | null;
     Nivel?: number | null;
   }[],
-  dicVariables: IndicadoresIdeacionInput
+  dicVariables: IdeationIndicatorsInput
 ): IndicadoresIdeacion {
   let ma = 0;
   let mp = 0;

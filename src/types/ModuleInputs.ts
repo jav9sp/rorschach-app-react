@@ -20,12 +20,12 @@ export type EBEAEBperInput = Pick<
 >;
 
 // Módulo Ideación
-export type IndicadoresIdeacionInput = Pick<
+export type IdeationIndicatorsInput = Pick<
   StructuralSummaryData,
   "a" | "p" | "AB" | "Art" | "Ay" | "MOR"
 >;
 
-export type CodigosEspecialesInput = Pick<
+export type SpecialCodesInput = Pick<
   StructuralSummaryData,
   | "DV1"
   | "DV2"
@@ -71,19 +71,19 @@ export type InterpersonalInput = Pick<
 >;
 
 // Módulo Procesamiento
-export type ProcesamientoInput = Pick<
+export type ProcessingInput = Pick<
   StructuralSummaryData,
   "W" | "D" | "Dd" | "Zf" | "Zd" | "PSV"
 >;
 
 // Módulo Autopercepción
-export type AutopercepcionInput = Pick<
+export type SelfPerceptionInput = Pick<
   StructuralSummaryData,
   "FV" | "VF" | "V" | "Fd" | "An" | "Xy" | "MOR" | "H" | "(H)" | "Hd" | "(Hd)"
 >;
 
 // Módulo Afectos
-export type AfectosInput = Pick<
+export type AfectsInput = Pick<
   StructuralSummaryData,
   "FC" | "CF" | "C" | "Cn" | "FC'" | "C'F" | "C'" | "CP" | AfectosShKey
 >;

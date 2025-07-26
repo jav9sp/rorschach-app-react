@@ -1,1 +1,11 @@
 @import "tailwindcss";
+
+@utility main-height {
+  min-height: calc(100dvh - 52px);
+}
+
+h1,
+h2,
+h3 {
+  @apply text-teal-700 text-center;
+}

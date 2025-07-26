@@ -33,21 +33,21 @@ import { calcularSecuenciaLocalizacion } from "./counters/moduleSecuenciaLocaliz
 import type { StructuralSummaryData } from "../types/StructuralSummaryData";
 import type {
   AdjESInput,
-  AfectosInput,
-  AutopercepcionInput,
-  CodigosEspecialesInput,
+  AfectsInput,
+  SelfPerceptionInput,
+  SpecialCodesInput,
   EBEAEBperInput,
   EBRatioInput,
-  IndicadoresIdeacionInput,
+  IdeationIndicatorsInput,
   InterpersonalInput,
-  ProcesamientoInput,
+  ProcessingInput,
 } from "../types/ModuleInputs";
 
 // === TIPOS ===
 
-export type Genero = "M" | "F";
+export type Gender = "M" | "F";
 
-export type Respuesta = {
+export type Answer = {
   N: number;
   Texto: string;
   Lam: string;
@@ -64,7 +64,11 @@ export type Respuesta = {
   [key: string]: any; // Para campos extra
 };
 
-export function buildMasterSummary(data: Respuesta[]): StructuralSummaryData {
+export function buildMasterSummary(
+  data: Answer[],
+  age: number,
+  gender: string
+): StructuralSummaryData {
   // Definir el Objeto Maestro con toda las variables
   const variables: Partial<StructuralSummaryData> = {};
 
@@ -82,9 +86,8 @@ export function buildMasterSummary(data: Respuesta[]): StructuralSummaryData {
     r.Z != null ? String(r.Z).trim().toLowerCase() : ""
   );
 
-  // ? Edad y Género tengo que incluirlos en la UI
-  variables.Edad = 14;
-  variables.Genero = "M";
+  variables.Edad = age;
+  variables.Genero = gender;
 
   Object.assign(variables, contarLocalizaciones(locs));
   Object.assign(variables, contarCalidadDQ(dq));
@@ -103,7 +106,7 @@ export function buildMasterSummary(data: Respuesta[]): StructuralSummaryData {
   Object.assign(variables, calcularZScore(lam, z));
 
   // Asignar CC.EE
-  const codigosEspeciales: CodigosEspecialesInput = {
+  const codigosEspeciales: SpecialCodesInput = {
     DV1: Number(variables.DV1 ?? 0),
     DV2: Number(variables.DV2 ?? 0),
     INC1: Number(variables.INC1 ?? 0),
@@ -167,7 +170,7 @@ export function buildMasterSummary(data: Respuesta[]): StructuralSummaryData {
   }));
 
   // Cálculo Afectos
-  const calcularAfectosInput: AfectosInput = {
+  const calcularAfectosInput: AfectsInput = {
     FC: Number(variables.FC ?? 0),
     CF: Number(variables.CF ?? 0),
     C: Number(variables.C ?? 0),
@@ -219,7 +222,7 @@ export function buildMasterSummary(data: Respuesta[]): StructuralSummaryData {
   Object.assign(variables, calcularMediacion(data));
 
   // Cálculo Procesamiento
-  const procesamientoInput: ProcesamientoInput = {
+  const procesamientoInput: ProcessingInput = {
     W: Number(variables.W ?? 0),
     D: Number(variables.D ?? 0),
     Dd: Number(variables.Dd ?? 0),
@@ -230,7 +233,7 @@ export function buildMasterSummary(data: Respuesta[]): StructuralSummaryData {
   Object.assign(variables, calcularProcesamiento(data, procesamientoInput));
 
   // Cálculo Autopercepción
-  const autopercepcionInput: AutopercepcionInput = {
+  const autopercepcionInput: SelfPerceptionInput = {
     FV: Number(variables.FV ?? 0),
     VF: Number(variables.VF ?? 0),
     V: Number(variables.V ?? 0),
@@ -245,14 +248,8 @@ export function buildMasterSummary(data: Respuesta[]): StructuralSummaryData {
   };
   Object.assign(variables, calcularAutopercepcion(data, autopercepcionInput));
 
-  // Cálculo Constelaciones
-  Object.assign(
-    variables,
-    generarConstelaciones(variables, variables.Edad ?? 0)
-  );
-
   // Indicadores Ideación
-  const indicadoresIdeacion: IndicadoresIdeacionInput = {
+  const indicadoresIdeacion: IdeationIndicatorsInput = {
     a: Number(variables.a ?? 0),
     p: Number(variables.p ?? 0),
     AB: Number(variables.AB ?? 0),
@@ -265,10 +262,14 @@ export function buildMasterSummary(data: Respuesta[]): StructuralSummaryData {
     calcularIndicadoresIdeacion(data, indicadoresIdeacion)
   );
 
+  // Cálculo Constelaciones
+  Object.assign(
+    variables,
+    generarConstelaciones(variables, variables.Edad ?? 0)
+  );
+
   // Secuencia de Localización
   variables["Secuencia"] = calcularSecuenciaLocalizacion(data);
-
-  console.log(variables);
 
   return variables as StructuralSummaryData;
 }

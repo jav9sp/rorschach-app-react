@@ -7,9 +7,7 @@ interface ResumeProps {
 export default function Resume({ summary }: ResumeProps) {
   return (
     <div className="w-full rounded border border-gray-300 p-4 mb-8">
-      <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
-        Resumen del Evaluado
-      </h2>
+      <h2 className="text-2xl font-bold">Resumen del Evaluado</h2>
 
       <ul className="space-y-2 text-gray-700">
         <li className="flex justify-between">
@@ -42,7 +40,7 @@ export default function Resume({ summary }: ResumeProps) {
         </li>
         <li className="flex justify-between">
           <span className="font-medium">Constelación SCON:</span>
-          <span>{summary.SCON}</span>
+          <span className="text-balance text-right">{summary["SCON"]}</span>
         </li>
       </ul>
     </div>

@@ -1,0 +1,100 @@
+export const inkblots = [
+  "I",
+  "II",
+  "III",
+  "IV",
+  "V",
+  "VI",
+  "VII",
+  "VIII",
+  "IX",
+  "X",
+];
+
+export const locations = ["W", "D", "Dd", "WS", "DS", "DdS"];
+
+export const formalQualities = ["+", "o", "u", "-", "sin"];
+
+export const devQualities = ["+", "o", "v", "v/+"];
+
+export const determinants = [
+  "F",
+  "FC",
+  "CF",
+  "C",
+  "Cn",
+  "FC'",
+  "C'F",
+  "C'",
+  "Ma",
+  "Mp",
+  "FMa",
+  "FMp",
+  "ma",
+  "mp",
+  "FT",
+  "TF",
+  "T",
+  "FV",
+  "VF",
+  "V",
+  "FY",
+  "YF",
+  "Y",
+  "Fr",
+  "rF",
+  "FD",
+];
+
+export const contents = [
+  "H",
+  "(H)",
+  "Hd",
+  "(Hd)",
+  "Hx",
+  "A",
+  "(A)",
+  "Ad",
+  "(Ad)",
+  "An",
+  "Art",
+  "Ay",
+  "Bl",
+  "Bt",
+  "Cg",
+  "Cl",
+  "Ex",
+  "Fd",
+  "Fi",
+  "Ge",
+  "Hh",
+  "Ls",
+  "Na",
+  "Sc",
+  "Sx",
+  "Xy",
+  "Idio",
+];
+
+export const zPoints = ["ZW", "ZA", "ZD", "ZS"];
+
+export const specialCodes = [
+  "DV1",
+  "DV2",
+  "DR1",
+  "DR2",
+  "INC1",
+  "INC2",
+  "FAB1",
+  "FAB2",
+  "CONTAM",
+  "ALOG",
+  "GHR",
+  "PHR",
+  "COP",
+  "AG",
+  "MOR",
+  "PER",
+  "PSV",
+  "AB",
+];

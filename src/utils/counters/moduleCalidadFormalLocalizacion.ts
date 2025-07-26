@@ -1,4 +1,4 @@
-import type { Respuesta } from "../buildMasterSummary";
+import type { Answer } from "../buildMasterSummary";
 
 /**
  * Claves combinadas de Localización + FQ.
@@ -32,7 +32,7 @@ export type ConteoLocFQ = Record<ClaveLocFQ, number>;
  * @param respuestas Array de Respuesta con Loc y FQ
  */
 export function contarLocFQ(
-  respuestas: Pick<Respuesta, "Loc" | "FQ">[]
+  respuestas: Pick<Answer, "Loc" | "FQ">[]
 ): ConteoLocFQ {
   const clavesFQ: Record<string, string> = {
     "+": "FQx+",

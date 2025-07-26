@@ -5,9 +5,9 @@ import muestraTotalRo from "../../data/muestraTotalRo.json";
 import muestra15Anios from "../../data/muestra15Anios.json";
 import muestra14Anios from "../../data/muestra14Anios.json";
 
-import type { TablaNormativaJson } from "../../types/NormativeData";
+import type { JsonNormativeTable } from "../../types/NormativeData";
 
-const RUTAS_ESTILOS: Record<string, TablaNormativaJson> = {
+const RUTAS_ESTILOS: Record<string, JsonNormativeTable> = {
   Extroversivo: muestraExtroRo,
   Introversivo: muestraIntroRo,
   Ambigual: muestraAmbigualRo,
@@ -20,15 +20,17 @@ const RUTAS_ESTILOS: Record<string, TablaNormativaJson> = {
 export function obtenerTablaPorEstilo(
   estilo: string,
   edad: number
-): TablaNormativaJson {
+): JsonNormativeTable {
   if (edad > 16) {
     return RUTAS_ESTILOS[estilo] || RUTAS_ESTILOS["Indefinido"];
   }
   if (edad === 15) {
     return RUTAS_ESTILOS["15 Años"];
   }
-  if (edad === 14) {
+  // ? Cargamos tabla de 14 años por defecto
+  if (edad <= 14) {
     return RUTAS_ESTILOS["14 Años"];
   }
+
   throw new Error("Edad no soportada");
 }

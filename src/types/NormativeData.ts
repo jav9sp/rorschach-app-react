@@ -1,4 +1,4 @@
-export type FilaNormativa = {
+export type NormativeRow = {
   VARIABLE: string;
   MEDIA: string;
   DT: string;
@@ -13,9 +13,9 @@ export type FilaNormativa = {
   id?: number;
 };
 
-export type TablaNormativaJson = FilaNormativa[];
+export type JsonNormativeTable = NormativeRow[];
 
-export type Comparacion = {
+export type Comparison = {
   VARIABLE: string;
   MEDIA: number | string;
   DT: number | string;

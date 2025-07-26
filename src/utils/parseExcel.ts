@@ -1,5 +1,5 @@
 import * as XLSX from "xlsx";
-import type { Respuesta } from "./buildMasterSummary";
+import type { Answer } from "./buildMasterSummary";
 // Importa tu tipo
 
 /**
@@ -7,7 +7,7 @@ import type { Respuesta } from "./buildMasterSummary";
  * @param file Archivo Excel (.xlsx)
  * @returns Array de objetos Respuesta[]
  */
-export async function parseExcel(file: File): Promise<Respuesta[]> {
+export async function parseExcel(file: File): Promise<Answer[]> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
 
@@ -24,9 +24,7 @@ export async function parseExcel(file: File): Promise<Respuesta[]> {
       const worksheet = workbook.Sheets[sheetName];
 
       // Convierto a JSON
-      const json: Respuesta[] = XLSX.utils.sheet_to_json(
-        worksheet
-      ) as Respuesta[];
+      const json: Answer[] = XLSX.utils.sheet_to_json(worksheet) as Answer[];
       resolve(json);
     };
 

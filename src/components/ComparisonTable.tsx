@@ -1,18 +1,18 @@
-import type { Comparacion } from "../types/NormativeData";
+import type { Comparison } from "../types/NormativeData";
 
-type ComparissonTableProps = {
-  comparaciones: Comparacion[];
+type ComparisonTableProps = {
+  comparaciones: Comparison[];
   tipoVivencial: string;
 };
 
-export default function ComparissonTable({
+export default function ComparisonTable({
   comparaciones,
   tipoVivencial,
-}: ComparissonTableProps) {
+}: ComparisonTableProps) {
   return (
     <>
       <div className="my-12">
-        <h2 className="text-2xl text-center font-bold">
+        <h2 className="text-2xl font-bold">
           Comparación Normativa para Tipo Vivencial {tipoVivencial}
         </h2>
         <div className="overflow-x-auto rounded-lg shadow border border-gray-200 mt-8">

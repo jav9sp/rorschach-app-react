@@ -1,4 +1,4 @@
-import type { AfectosInput, AfectosShKey } from "../../types/ModuleInputs";
+import type { AfectsInput, AfectosShKey } from "../../types/ModuleInputs";
 
 /**
  * Resultado del cálculo de afectos.
@@ -44,7 +44,7 @@ export function calcularAfectos(
     Lam?: string | null;
     Loc?: string | null;
   }[],
-  variables: AfectosInput
+  variables: AfectsInput
 ): AfectosResult {
   const rTotal = data.length;
 
