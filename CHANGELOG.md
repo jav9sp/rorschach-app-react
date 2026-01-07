@@ -1,5 +1,22 @@
 ## [Unreleased]
 
+### Added
+
+- Tipado de niveles de comparación en constante `ComparisonLevel`.
+- Interpretación para W:D:Dd en base a porcentajes.
+
+### Changed
+
+- Renombrado de archivos y funciones a inglés.
+
+### Fixed
+
+- Bugs en la evaluación de patrones de registro de respuestas.
+
+### To fix
+
+- Soporte de tipos para la interpretación de rendimiento cognitivo en análisis preliminar.
+
 ---
 
 ## [1.1.0] - 2025-07-26

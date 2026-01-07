@@ -261,7 +261,7 @@
   },
   {
     "id": 21,
-    "VARIABLE": "MQsIn",
+    "VARIABLE": "MQsin",
     "MEDIA": "0,00",
     "DT": "[0,00]",
     "MIN": "0,00",

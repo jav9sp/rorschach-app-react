@@ -67,7 +67,7 @@ export function calcularZScore(
   if (zest !== null) {
     if (zd! > 3.5) estilo = "Hiperincorporador";
     else if (zd! < -3.5) estilo = "Hipoincorporador";
-    else estilo = "Normal";
+    else estilo = "Dentro del rango";
   }
 
   return {

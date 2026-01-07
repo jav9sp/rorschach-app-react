@@ -4,7 +4,7 @@ import type { StructuralSummaryData } from "../../types/StructuralSummaryData";
  * Evalúa la constelación HVI (hipervigilancia).
  * Requiere que Condición 1 se cumpla (SumT == 0) y al menos 4 del resto.
  */
-export function evaluarHVI(variables: Partial<StructuralSummaryData>): {
+export function evaluateHVI(variables: Partial<StructuralSummaryData>): {
   HVI: string;
 } {
   let resultado = "Negativo";

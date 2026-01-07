@@ -26,7 +26,7 @@ import { calcularInterpersonal } from "./areas/moduleInterpersonal";
 import { calcularMediacion } from "./areas/moduleMediacion";
 import { calcularProcesamiento } from "./areas/moduleProcesamiento";
 import { calcularAutopercepcion } from "./areas/moduleAutopercepcion";
-import { generarConstelaciones } from "./constelations/moduleConstelaciones";
+import { generateConstellations } from "./constellations/generateConstellations";
 
 import { calcularSecuenciaLocalizacion } from "./counters/moduleSecuenciaLocalizacion";
 
@@ -64,13 +64,15 @@ export type Answer = {
   [key: string]: any; // Para campos extra
 };
 
+// ? Se debe dejar como Partial porque otros módulos necesitan la edad
+// ? Si no se deja Partial genera error que no sé cómo corregir por ahora
 export function buildMasterSummary(
   data: Answer[],
   age: number,
   gender: string
 ): StructuralSummaryData {
   // Definir el Objeto Maestro con toda las variables
-  const variables: Partial<StructuralSummaryData> = {};
+  const summary: Partial<StructuralSummaryData> = {};
 
   // Extraer los datos de las respuestas por columnas
   const locs = data.map((r) => r.Loc);
@@ -86,82 +88,82 @@ export function buildMasterSummary(
     r.Z != null ? String(r.Z).trim().toLowerCase() : ""
   );
 
-  variables.Edad = age;
-  variables.Genero = gender;
+  summary.Edad = age;
+  summary.Genero = gender;
 
-  Object.assign(variables, contarLocalizaciones(locs));
-  Object.assign(variables, contarCalidadDQ(dq));
+  Object.assign(summary, contarLocalizaciones(locs));
+  Object.assign(summary, contarCalidadDQ(dq));
 
   const { resumenDeterminantes, resumenSubindices, detCompljs, categorias } =
     contarDeterminantes(dets, fq);
-  Object.assign(variables, resumenDeterminantes, resumenSubindices, categorias);
+  Object.assign(summary, resumenDeterminantes, resumenSubindices, categorias);
 
-  variables["RespComplejas"] = detCompljs;
+  summary.RespComplejas = detCompljs;
 
-  Object.assign(variables, contarCalidadFQ(fq));
-  Object.assign(variables, contarLocFQ(data));
-  Object.assign(variables, contarContenidos(cont));
-  Object.assign(variables, contarValoresComa(ccee));
+  Object.assign(summary, contarCalidadFQ(fq));
+  Object.assign(summary, contarLocFQ(data));
+  Object.assign(summary, contarContenidos(cont));
+  Object.assign(summary, contarValoresComa(ccee));
 
-  Object.assign(variables, calcularZScore(lam, z));
+  Object.assign(summary, calcularZScore(lam, z));
 
   // Asignar CC.EE
   const codigosEspeciales: SpecialCodesInput = {
-    DV1: Number(variables.DV1 ?? 0),
-    DV2: Number(variables.DV2 ?? 0),
-    INC1: Number(variables.INC1 ?? 0),
-    INC2: Number(variables.INC2 ?? 0),
-    DR1: Number(variables.DR1 ?? 0),
-    DR2: Number(variables.DR2 ?? 0),
-    FAB1: Number(variables.FAB1 ?? 0),
-    FAB2: Number(variables.FAB2 ?? 0),
-    ALOG: Number(variables.ALOG ?? 0),
-    CONTAM: Number(variables.CONTAM ?? 0),
-    AB: Number(variables.AB ?? 0),
+    DV1: Number(summary.DV1 ?? 0),
+    DV2: Number(summary.DV2 ?? 0),
+    INC1: Number(summary.INC1 ?? 0),
+    INC2: Number(summary.INC2 ?? 0),
+    DR1: Number(summary.DR1 ?? 0),
+    DR2: Number(summary.DR2 ?? 0),
+    FAB1: Number(summary.FAB1 ?? 0),
+    FAB2: Number(summary.FAB2 ?? 0),
+    ALOG: Number(summary.ALOG ?? 0),
+    CONTAM: Number(summary.CONTAM ?? 0),
+    AB: Number(summary.AB ?? 0),
   };
-  Object.assign(variables, calcularCodigosEspeciales(codigosEspeciales));
+  Object.assign(summary, calcularCodigosEspeciales(codigosEspeciales));
 
-  Object.assign(variables, calcularR(data));
-  Object.assign(variables, calcularLambda(data, resumenDeterminantes));
-  Object.assign(variables, calcularDetsResumidos(resumenDeterminantes));
+  Object.assign(summary, calcularR(data));
+  Object.assign(summary, calcularLambda(data, resumenDeterminantes));
+  Object.assign(summary, calcularDetsResumidos(resumenDeterminantes));
 
   // Cálculos EB, eb
   const ebRatioInput: EBRatioInput = {
-    FM: Number(variables.FM ?? 0),
-    m: Number(variables.m ?? 0),
-    "SumC'": Number(variables["SumC'"] ?? 0),
-    SumT: Number(variables.SumT ?? 0),
-    SumY: Number(variables.SumY ?? 0),
-    SumV: Number(variables.SumV ?? 0),
+    FM: Number(summary.FM ?? 0),
+    m: Number(summary.m ?? 0),
+    "SumC'": Number(summary["SumC'"] ?? 0),
+    SumT: Number(summary.SumT ?? 0),
+    SumY: Number(summary.SumY ?? 0),
+    SumV: Number(summary.SumV ?? 0),
   };
-  Object.assign(variables, calcularEB_Ratio(ebRatioInput));
+  Object.assign(summary, calcularEB_Ratio(ebRatioInput));
 
   const ebEaEbperInput: EBEAEBperInput = {
-    C: Number(variables.C ?? 0),
-    CF: Number(variables.CF ?? 0),
-    FC: Number(variables.FC ?? 0),
-    M: Number(variables.M ?? 0),
-    es: Number(variables.es ?? 0),
+    C: Number(summary.C ?? 0),
+    CF: Number(summary.CF ?? 0),
+    FC: Number(summary.FC ?? 0),
+    M: Number(summary.M ?? 0),
+    es: Number(summary.es ?? 0),
   };
   Object.assign(
-    variables,
-    calcularEB_EA_EBPer(ebEaEbperInput, variables.Lambda ?? 0)
+    summary,
+    calcularEB_EA_EBPer(ebEaEbperInput, summary.Lambda ?? 0)
   );
 
-  variables["Tipo Vivencial"] = calcularEstiloVivencial(
-    variables.EB ?? "0:0",
-    variables.EA ?? 0
+  summary.TipoVivencial = calcularEstiloVivencial(
+    summary.EB ?? "0:0",
+    summary.EA ?? 0
   );
 
-  variables["PuntD"] = calcularDScore(variables["EA-es"] ?? 0);
+  summary.PuntD = calcularDScore(summary["EA-es"] ?? 0);
 
   const adjEsInputs: AdjESInput = {
-    es: Number(variables.es ?? 0),
-    m: Number(variables.m ?? 0),
-    SumY: Number(variables.SumY ?? 0),
+    es: Number(summary.es ?? 0),
+    m: Number(summary.m ?? 0),
+    SumY: Number(summary.SumY ?? 0),
   };
-  variables["Adjes"] = calcularAdjES(adjEsInputs);
-  variables["AdjD"] = calcularAdjD(variables.EA ?? 0, variables.Adjes);
+  summary.Adjes = calcularAdjES(adjEsInputs);
+  summary.AdjD = calcularAdjD(summary.EA ?? 0, summary.Adjes);
 
   const dataAfectos = data.map((r) => ({
     Det: r.Det ?? "",
@@ -171,105 +173,102 @@ export function buildMasterSummary(
 
   // Cálculo Afectos
   const calcularAfectosInput: AfectsInput = {
-    FC: Number(variables.FC ?? 0),
-    CF: Number(variables.CF ?? 0),
-    C: Number(variables.C ?? 0),
-    Cn: Number(variables.Cn ?? 0),
-    CP: Number(variables.CP ?? 0),
-    "FC'": Number(variables["FC'"] ?? 0),
-    "C'F": Number(variables["C'F"] ?? 0),
-    "C'": Number(variables["C'"] ?? 0),
-    FT: Number(variables.FT ?? 0),
-    TF: Number(variables.TF ?? 0),
-    T: Number(variables.T ?? 0),
-    FV: Number(variables.FV ?? 0),
-    VF: Number(variables.VF ?? 0),
-    V: Number(variables.V ?? 0),
-    FY: Number(variables.FY ?? 0),
-    YF: Number(variables.YF ?? 0),
-    Y: Number(variables.Y ?? 0),
+    FC: Number(summary.FC ?? 0),
+    CF: Number(summary.CF ?? 0),
+    C: Number(summary.C ?? 0),
+    Cn: Number(summary.Cn ?? 0),
+    CP: Number(summary.CP ?? 0),
+    "FC'": Number(summary["FC'"] ?? 0),
+    "C'F": Number(summary["C'F"] ?? 0),
+    "C'": Number(summary["C'"] ?? 0),
+    FT: Number(summary.FT ?? 0),
+    TF: Number(summary.TF ?? 0),
+    T: Number(summary.T ?? 0),
+    FV: Number(summary.FV ?? 0),
+    VF: Number(summary.VF ?? 0),
+    V: Number(summary.V ?? 0),
+    FY: Number(summary.FY ?? 0),
+    YF: Number(summary.YF ?? 0),
+    Y: Number(summary.Y ?? 0),
   };
-  Object.assign(variables, calcularAfectos(dataAfectos, calcularAfectosInput));
+  Object.assign(summary, calcularAfectos(dataAfectos, calcularAfectosInput));
 
   // Cálculo Interpersonal
   const interpersonalInput: InterpersonalInput = {
-    R: Number(variables.R ?? 0),
-    COP: Number(variables.COP ?? 0),
-    AG: Number(variables.AG ?? 0),
-    GHR: Number(variables.GHR ?? 0),
-    PHR: Number(variables.PHR ?? 0),
-    a: Number(variables.a ?? 0),
-    p: Number(variables.p ?? 0),
-    Fd: Number(variables.Fd ?? 0),
-    FT: Number(variables.FT ?? 0),
-    TF: Number(variables.TF ?? 0),
-    T: Number(variables.T ?? 0),
-    H: Number(variables.H ?? 0),
-    Hd: Number(variables.Hd ?? 0),
-    "(H)": Number(variables["(H)"] ?? 0),
-    "(Hd)": Number(variables["(Hd)"] ?? 0),
-    Hx: Number(variables.Hx ?? 0),
-    PER: Number(variables.PER ?? 0),
-    Bt: Number(variables.Bt ?? 0),
-    Ge: Number(variables.Ge ?? 0),
-    Ls: Number(variables.Ls ?? 0),
-    Cl: Number(variables.Cl ?? 0),
-    Na: Number(variables.Na ?? 0),
+    R: Number(summary.R ?? 0),
+    COP: Number(summary.COP ?? 0),
+    AG: Number(summary.AG ?? 0),
+    GHR: Number(summary.GHR ?? 0),
+    PHR: Number(summary.PHR ?? 0),
+    a: Number(summary.a ?? 0),
+    p: Number(summary.p ?? 0),
+    Fd: Number(summary.Fd ?? 0),
+    FT: Number(summary.FT ?? 0),
+    TF: Number(summary.TF ?? 0),
+    T: Number(summary.T ?? 0),
+    H: Number(summary.H ?? 0),
+    Hd: Number(summary.Hd ?? 0),
+    "(H)": Number(summary["(H)"] ?? 0),
+    "(Hd)": Number(summary["(Hd)"] ?? 0),
+    Hx: Number(summary.Hx ?? 0),
+    PER: Number(summary.PER ?? 0),
+    Bt: Number(summary.Bt ?? 0),
+    Ge: Number(summary.Ge ?? 0),
+    Ls: Number(summary.Ls ?? 0),
+    Cl: Number(summary.Cl ?? 0),
+    Na: Number(summary.Na ?? 0),
   };
-  Object.assign(variables, calcularInterpersonal(interpersonalInput));
+  Object.assign(summary, calcularInterpersonal(interpersonalInput));
 
   // Cálculo Mediación
-  Object.assign(variables, calcularMediacion(data));
+  Object.assign(summary, calcularMediacion(data));
 
   // Cálculo Procesamiento
   const procesamientoInput: ProcessingInput = {
-    W: Number(variables.W ?? 0),
-    D: Number(variables.D ?? 0),
-    Dd: Number(variables.Dd ?? 0),
-    Zf: Number(variables.Zf ?? 0),
-    Zd: Number(variables.Zd ?? 0),
-    PSV: Number(variables.PSV ?? 0),
+    W: Number(summary.W ?? 0),
+    D: Number(summary.D ?? 0),
+    Dd: Number(summary.Dd ?? 0),
+    Zf: Number(summary.Zf ?? 0),
+    Zd: Number(summary.Zd ?? 0),
+    PSV: Number(summary.PSV ?? 0),
   };
-  Object.assign(variables, calcularProcesamiento(data, procesamientoInput));
+  Object.assign(summary, calcularProcesamiento(data, procesamientoInput));
 
   // Cálculo Autopercepción
   const autopercepcionInput: SelfPerceptionInput = {
-    FV: Number(variables.FV ?? 0),
-    VF: Number(variables.VF ?? 0),
-    V: Number(variables.V ?? 0),
-    Fd: Number(variables.Fd ?? 0),
-    An: Number(variables.An ?? 0),
-    Xy: Number(variables.Xy ?? 0),
-    MOR: Number(variables.MOR ?? 0),
-    H: Number(variables.H ?? 0),
-    "(H)": Number(variables["(H)"] ?? 0),
-    Hd: Number(variables.Hd ?? 0),
-    "(Hd)": Number(variables["(Hd)"] ?? 0),
+    FV: Number(summary.FV ?? 0),
+    VF: Number(summary.VF ?? 0),
+    V: Number(summary.V ?? 0),
+    Fd: Number(summary.Fd ?? 0),
+    An: Number(summary.An ?? 0),
+    Xy: Number(summary.Xy ?? 0),
+    MOR: Number(summary.MOR ?? 0),
+    H: Number(summary.H ?? 0),
+    "(H)": Number(summary["(H)"] ?? 0),
+    Hd: Number(summary.Hd ?? 0),
+    "(Hd)": Number(summary["(Hd)"] ?? 0),
   };
-  Object.assign(variables, calcularAutopercepcion(data, autopercepcionInput));
+  Object.assign(summary, calcularAutopercepcion(data, autopercepcionInput));
 
   // Indicadores Ideación
   const indicadoresIdeacion: IdeationIndicatorsInput = {
-    a: Number(variables.a ?? 0),
-    p: Number(variables.p ?? 0),
-    AB: Number(variables.AB ?? 0),
-    MOR: Number(variables.MOR ?? 0),
-    Art: Number(variables.Art ?? 0),
-    Ay: Number(variables.Ay ?? 0),
+    a: Number(summary.a ?? 0),
+    p: Number(summary.p ?? 0),
+    AB: Number(summary.AB ?? 0),
+    MOR: Number(summary.MOR ?? 0),
+    Art: Number(summary.Art ?? 0),
+    Ay: Number(summary.Ay ?? 0),
   };
   Object.assign(
-    variables,
+    summary,
     calcularIndicadoresIdeacion(data, indicadoresIdeacion)
   );
 
   // Cálculo Constelaciones
-  Object.assign(
-    variables,
-    generarConstelaciones(variables, variables.Edad ?? 0)
-  );
+  Object.assign(summary, generateConstellations(summary));
 
   // Secuencia de Localización
-  variables["Secuencia"] = calcularSecuenciaLocalizacion(data);
+  summary.Secuencia = calcularSecuenciaLocalizacion(data);
 
-  return variables as StructuralSummaryData;
+  return summary as StructuralSummaryData;
 }

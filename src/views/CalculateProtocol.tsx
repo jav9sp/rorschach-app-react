@@ -1,9 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FileUpload from "../components/FileUpload";
-import StructuralSummary from "../components/StructuralSumary";
-import ComparisonTable from "../components/ComparisonTable";
-import Resume from "../components/Resume";
 import { MoonLoader } from "react-spinners";
+import SummaryInfo from "../components/SumaryInfo";
+import Interpretations from "../components/Interpretations";
 
 import { buildMasterSummary } from "../utils/buildMasterSummary";
 import { parseExcel } from "../utils/parseExcel";
@@ -22,35 +21,52 @@ const override: CSSProperties = {
 };
 
 export default function CalculateProtocol() {
+  const [answers, setAnswers] = useState<Answer[]>([]);
   const [summary, setSummary] = useState<StructuralSummaryData | null>(null);
   const [comparisons, setComparisons] = useState<Comparison[] | null>(null);
   const [gender, setGender] = useState("M");
   const [age, setAge] = useState(14);
-
   const [loading, setLoading] = useState(false);
+  const [showInfo, setShowInfo] = useState(true);
+
+  useEffect(() => {
+    const ejecutarComparacion = async () => {
+      if (!summary) return;
+
+      try {
+        const estilo = summary.TipoVivencial || "Indefinido";
+        const edad = summary.Edad;
+
+        const tabla = await obtenerTablaPorEstilo(estilo, edad!);
+        const comparacion = compararConNormativa(summary, tabla);
+
+        localStorage.setItem("comparacion", JSON.stringify(comparacion));
+
+        setComparisons(comparacion);
+      } catch (error) {
+        console.error("Error al comparar con normativa:", error);
+        setComparisons(null);
+      }
+    };
+
+    ejecutarComparacion();
+  }, [summary]);
 
   const handleFile = async (file: File) => {
     setLoading(true);
 
     try {
       const data: Answer[] = await parseExcel(file);
+      setAnswers(data);
 
-      if (!age) {
-        throw new Error("La edad no puede ser cero.");
+      if (!age || age < 4 || age > 99) {
+        throw new Error("Edad fuera de rango válido.");
       }
 
       const summaryData = buildMasterSummary(data, age, gender);
-
-      const estilo = summaryData["Tipo Vivencial"] || "Indefinido";
-      const edad = summaryData.Edad;
-
-      const tabla = await obtenerTablaPorEstilo(estilo, edad);
-      const comparacion = compararConNormativa(summaryData, tabla);
-
-      setComparisons(comparacion);
+      setSummary(summaryData);
 
       setTimeout(() => {
-        setSummary(summaryData);
         setLoading(false);
       }, 800);
     } catch (error) {
@@ -119,7 +135,7 @@ export default function CalculateProtocol() {
               <a
                 href="/plantilla.xlsx"
                 download="ejemplo_protocolo_rorschach.xlsx"
-                className="px-6 py-3 bg-teal-600 text-white rounded-lg shadow hover:bg-teal-700 transition mx-auto block w-fit">
+                className="px-6 py-3 bg-teal-600 text-white rounded shadow hover:bg-teal-700 transition mx-auto block w-fit font-semibold">
                 Descargar plantilla de prueba
               </a>
             </section>
@@ -144,27 +160,34 @@ export default function CalculateProtocol() {
         )}
 
         {summary && (
-          <section>
-            <Resume summary={summary} />
-
-            <StructuralSummary data={summary} />
-
-            {comparisons && (
-              <ComparisonTable
-                comparaciones={comparisons}
-                tipoVivencial={summary["Tipo Vivencial"]}
-              />
-            )}
-
+          <div className="my-10 flex justify-between">
+            <button
+              onClick={() => setShowInfo(!showInfo)}
+              className="px-4 py-2 border rounded border-gray-300 bg-teal-600 hover:bg-teal-500 transition-colors cursor-pointer font-semibold text-white">
+              {showInfo ? "Ver Informe" : "Ver Sumario Estructural"}
+            </button>
             <button
               onClick={() => {
                 setSummary(null);
                 setComparisons(null);
+                setShowInfo(true);
               }}
-              className="px-6 py-3 bg-teal-600 text-white rounded-lg shadow hover:bg-teal-700 transition mx-auto block w-fit my-12">
+              className="px-4 py-2 border rounded border-gray-300 bg-amber-600 hover:bg-amber-500 transition-colors cursor-pointer font-semibold text-white">
               Limpiar Datos
             </button>
-          </section>
+          </div>
+        )}
+
+        {/* Mostrar Información Procesada */}
+        {summary && showInfo && (
+          <SummaryInfo summary={summary} comparisons={comparisons} />
+        )}
+        {summary && comparisons && !showInfo && (
+          <Interpretations
+            answers={answers}
+            summary={summary}
+            comparisons={comparisons}
+          />
         )}
       </div>
     </div>

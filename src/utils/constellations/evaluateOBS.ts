@@ -4,16 +4,16 @@ import type { StructuralSummaryData } from "../../types/StructuralSummaryData";
  * Evalúa la constelación OBS (estilo obsesivo).
  * Marca Positivo si se cumple alguna de las condiciones finales.
  */
-export function evaluarOBS(variables: Partial<StructuralSummaryData>): {
+export function evaluateOBS(summary: Partial<StructuralSummaryData>): {
   OBS: string;
-  "OBS Contador": number;
+  OBSCounter: number;
 } {
   const reglas: boolean[] = [
-    (variables["Dd"] ?? 0) > 3,
-    (variables["Zf"] ?? 0) > 12,
-    (variables["Zd"] ?? 0) > 3.0,
-    (variables["Populares"] ?? 0) > 7,
-    (variables["FQx+"] ?? 0) > 1,
+    (summary["Dd"] ?? 0) > 3,
+    (summary["Zf"] ?? 0) > 12,
+    (summary["Zd"] ?? 0) > 3.0,
+    (summary["Populares"] ?? 0) > 7,
+    (summary["FQx+"] ?? 0) > 1,
   ];
 
   const totalReglas = reglas.filter(Boolean).length;
@@ -23,18 +23,18 @@ export function evaluarOBS(variables: Partial<StructuralSummaryData>): {
   if (reglas.every(Boolean)) {
     resultado = "Positivo";
   }
-  if (totalReglas >= 2 && (variables["FQx+"] ?? 0) > 3) {
+  if (totalReglas >= 2 && (summary["FQx+"] ?? 0) > 3) {
     resultado = "Positivo";
   }
-  if (totalReglas >= 3 && (variables["X+%"] ?? 0) > 0.89) {
+  if (totalReglas >= 3 && (summary["X+%"] ?? 0) > 0.89) {
     resultado = "Positivo";
   }
-  if ((variables["DQ+"] ?? 0) > 3 && (variables["X+%"] ?? 0) > 0.89) {
+  if ((summary["DQ+"] ?? 0) > 3 && (summary["X+%"] ?? 0) > 0.89) {
     resultado = "Positivo";
   }
 
   return {
     OBS: resultado,
-    "OBS Contador": totalReglas,
+    OBSCounter: totalReglas,
   };
 }

@@ -62,6 +62,8 @@ export type StructuralSummaryData = {
   MQsin: number;
   a: number;
   p: number;
+  Ma: number;
+  Mp: number;
   Intereses: number;
   Intelec: number;
   "Nvl-2": number;
@@ -148,7 +150,7 @@ export type StructuralSummaryData = {
   EA: number;
   EBPer: number;
   "EA-es": number;
-  "Tipo Vivencial": string;
+  TipoVivencial: string;
   PuntD: number;
   Adjes: number;
   AdjD: number;
@@ -188,15 +190,18 @@ export type StructuralSummaryData = {
 
   // Constelaciones
   CDI: string;
-  "CDI Contador": number;
+  CDICounter: number;
   DEPI: string;
-  "DEPI Contador": number;
+  DEPICounter: number;
+  DEPIText: string;
   HVI: string;
   OBS: string;
-  "OBS Contador": number;
-  PTI: number;
+  OBSCounter: number;
+  OBSText: string;
+  PTICounter: number;
   SCON: string;
-  "SCON Contador": number;
+  SCONCounter: number;
+  SCONText: string;
 
   // Secuencia
   Secuencia: SecuenciaLocalizacion;

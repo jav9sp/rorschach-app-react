@@ -251,67 +251,108 @@ export default function StructuralSummary({ data }: StructuralSummaryProps) {
                 <hr className="text-gray-300" />
                 <p>X: </p>
               </div>
+              {/* TODO: Refactorizar */}
               <div>
                 <p className="italic">Loc</p>
                 <hr className="text-gray-300 my-2" />
                 <p className="flex flex-wrap gap-2">
-                  {data.Secuencia["I"].map((loc, i) => (
-                    <span key={i}>{loc}</span>
-                  ))}
+                  {data.Secuencia["I"].length ? (
+                    data.Secuencia["I"].map((loc, i) => (
+                      <span key={i}>{loc}</span>
+                    ))
+                  ) : (
+                    <span>FRACASO</span>
+                  )}
                 </p>
                 <hr className="text-gray-300" />
                 <p className="flex flex-wrap gap-2">
-                  {data.Secuencia["II"].map((loc, i) => (
-                    <span key={i}>{loc}</span>
-                  ))}
+                  {data.Secuencia["II"].length ? (
+                    data.Secuencia["II"].map((loc, i) => (
+                      <span key={i}>{loc}</span>
+                    ))
+                  ) : (
+                    <span>FRACASO</span>
+                  )}
                 </p>
                 <hr className="text-gray-300" />
                 <p className="flex flex-wrap gap-2">
-                  {data.Secuencia["III"].map((loc, i) => (
-                    <span key={i}>{loc}</span>
-                  ))}
+                  {data.Secuencia["III"].length ? (
+                    data.Secuencia["III"].map((loc, i) => (
+                      <span key={i}>{loc}</span>
+                    ))
+                  ) : (
+                    <span>FRACASO</span>
+                  )}
                 </p>
                 <hr className="text-gray-300" />
                 <p className="flex flex-wrap gap-2">
-                  {data.Secuencia["IV"].map((loc, i) => (
-                    <span key={i}>{loc}</span>
-                  ))}
+                  {data.Secuencia["IV"].length ? (
+                    data.Secuencia["IV"].map((loc, i) => (
+                      <span key={i}>{loc}</span>
+                    ))
+                  ) : (
+                    <span>FRACASO</span>
+                  )}
                 </p>
                 <hr className="text-gray-300" />
                 <p className="flex flex-wrap gap-2">
-                  {data.Secuencia["V"].map((loc, i) => (
-                    <span key={i}>{loc}</span>
-                  ))}
+                  {data.Secuencia["V"].length ? (
+                    data.Secuencia["V"].map((loc, i) => (
+                      <span key={i}>{loc}</span>
+                    ))
+                  ) : (
+                    <span>FRACASO</span>
+                  )}
                 </p>
                 <hr className="text-gray-300" />
                 <p className="flex flex-wrap gap-2">
-                  {data.Secuencia["VI"].map((loc, i) => (
-                    <span key={i}>{loc}</span>
-                  ))}
+                  {data.Secuencia["VI"].length ? (
+                    data.Secuencia["VI"].map((loc, i) => (
+                      <span key={i}>{loc}</span>
+                    ))
+                  ) : (
+                    <span>FRACASO</span>
+                  )}
                 </p>
                 <hr className="text-gray-300" />
                 <p className="flex flex-wrap gap-2">
-                  {data.Secuencia["VII"].map((loc, i) => (
-                    <span key={i}>{loc}</span>
-                  ))}
+                  {data.Secuencia["VII"].length ? (
+                    data.Secuencia["VII"].map((loc, i) => (
+                      <span key={i}>{loc}</span>
+                    ))
+                  ) : (
+                    <span>FRACASO</span>
+                  )}
                 </p>
                 <hr className="text-gray-300" />
                 <p className="flex flex-wrap gap-2">
-                  {data.Secuencia["VIII"].map((loc, i) => (
-                    <span key={i}>{loc}</span>
-                  ))}
+                  {data.Secuencia["VIII"].length ? (
+                    data.Secuencia["VIII"].map((loc, i) => (
+                      <span key={i}>{loc}</span>
+                    ))
+                  ) : (
+                    <span>FRACASO</span>
+                  )}
                 </p>
                 <hr className="text-gray-300" />
                 <p className="flex flex-wrap gap-2">
-                  {data.Secuencia["IX"].map((loc, i) => (
-                    <span key={i}>{loc}</span>
-                  ))}
+                  {data.Secuencia["IX"].length ? (
+                    data.Secuencia["IX"].map((loc, i) => (
+                      <span key={i}>{loc}</span>
+                    ))
+                  ) : (
+                    <span>FRACASO</span>
+                  )}
                 </p>
                 <hr className="text-gray-300" />
                 <p className="flex flex-wrap gap-2">
-                  {data.Secuencia["X"].map((loc, i) => (
-                    <span key={i}>{loc}</span>
-                  ))}
+                  {data.Secuencia["X"].length ? (
+                    data.Secuencia["X"].map((loc, i) => (
+                      <span key={i}>{loc}</span>
+                    ))
+                  ) : (
+                    <span>FRACASO</span>
+                  )}
                 </p>
               </div>
             </div>
@@ -635,9 +676,9 @@ export default function StructuralSummary({ data }: StructuralSummaryProps) {
 
       <div className="mt-4 border-t border-t-gray-300 pt-2 text-center font-mono">
         <p>
-          PTI = {data.PTI} | DEPI = {data["DEPI Contador"]} | CDI ={" "}
-          {data["CDI Contador"]} | S-CON = {data["SCON Contador"]} | HVI ={" "}
-          {data.HVI} | OBS = {data.OBS}
+          PTI = {data.PTICounter} | DEPI = {data.DEPICounter} | CDI ={" "}
+          {data.CDICounter} | S-CON = {data.SCONCounter} | HVI = {data.HVI} |
+          OBS = {data.OBS}
         </p>
       </div>
     </div>

@@ -15,10 +15,31 @@ export type NormativeRow = {
 
 export type JsonNormativeTable = NormativeRow[];
 
+export const COMPARISON_LEVELS = [
+  "Marcadamente por debajo",
+  "Levemente por debajo",
+  "Dentro del rango",
+  "Levemente por encima",
+  "Marcadamente por encima",
+  "Indefinido",
+] as const;
+
+export type ComparisonLevel = (typeof COMPARISON_LEVELS)[number];
+
 export type Comparison = {
   VARIABLE: string;
-  MEDIA: number | string;
-  DT: number | string;
-  VALOR: number | string;
-  COMPARACION: string;
+  MEDIA: number;
+  DT: number;
+  VALOR: number;
+  COMPARACION: ComparisonLevel;
+};
+
+export type ComparisonMap = {
+  [variable: string]: {
+    VARIABLE: string;
+    MEDIA: number;
+    DT: number;
+    VALOR: number;
+    COMPARACION: ComparisonLevel;
+  };
 };

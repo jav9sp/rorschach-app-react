@@ -1,13 +1,9 @@
-import type { JsonNormativeTable } from "../../types/NormativeData";
+import type {
+  Comparison,
+  ComparisonLevel,
+  JsonNormativeTable,
+} from "../../types/NormativeData";
 import type { StructuralSummaryData } from "../../types/StructuralSummaryData";
-
-type Comparacion = {
-  VARIABLE: string;
-  MEDIA: number | string;
-  DT: number | string;
-  VALOR: number | string;
-  COMPARACION: string;
-};
 
 function parseNumber(value: string | number): number {
   if (typeof value === "number") return value;
@@ -20,7 +16,7 @@ function parseNumber(value: string | number): number {
 export function compararConNormativa(
   resultados: StructuralSummaryData,
   tabla: JsonNormativeTable
-): Comparacion[] {
+): Comparison[] {
   return tabla.map((row) => {
     const variable = row.VARIABLE;
 
@@ -34,8 +30,8 @@ export function compararConNormativa(
         VARIABLE: variable,
         MEDIA: media,
         DT: dt,
-        VALOR: "-",
-        COMPARACION: "No disponible",
+        VALOR: 0,
+        COMPARACION: "Indefinido",
       };
     }
 
@@ -44,7 +40,7 @@ export function compararConNormativa(
     // Evita dividir por cero
     const sd_units = dt !== 0 ? (valor - media) / dt : 0;
 
-    let estado = "";
+    let estado: ComparisonLevel = "Indefinido";
     if (Math.abs(sd_units) <= 1) {
       estado = "Dentro del rango";
     } else if (Math.abs(sd_units) <= 2) {

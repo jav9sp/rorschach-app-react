@@ -28,7 +28,7 @@ export default function Resume({ summary }: ResumeProps) {
         </li>
         <li className="flex justify-between">
           <span className="font-medium">Estilo Vivencial:</span>
-          <span>{summary["Tipo Vivencial"]}</span>
+          <span>{summary.TipoVivencial}</span>
         </li>
         <li className="flex justify-between">
           <span className="font-medium">Constelación CDI:</span>
