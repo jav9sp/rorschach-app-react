@@ -25,7 +25,7 @@ import {
 import { calcularInterpersonal } from "./areas/moduleInterpersonal";
 import { calcularMediacion } from "./areas/moduleMediacion";
 import { calcularProcesamiento } from "./areas/moduleProcesamiento";
-import { calcularAutopercepcion } from "./areas/moduleAutopercepcion";
+import { calculateSelfPerception } from "./areas/moduleAutopercepcion";
 import { generateConstellations } from "./constellations/generateConstellations";
 
 import { calcularSecuenciaLocalizacion } from "./counters/moduleSecuenciaLocalizacion";
@@ -248,7 +248,7 @@ export function buildMasterSummary(
     Hd: Number(summary.Hd ?? 0),
     "(Hd)": Number(summary["(Hd)"] ?? 0),
   };
-  Object.assign(summary, calcularAutopercepcion(data, autopercepcionInput));
+  Object.assign(summary, calculateSelfPerception(data, autopercepcionInput));
 
   // Indicadores Ideación
   const indicadoresIdeacion: IdeationIndicatorsInput = {

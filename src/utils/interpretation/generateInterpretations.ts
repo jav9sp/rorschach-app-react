@@ -1,5 +1,5 @@
 import { interpretPreliminaries } from "./interpretPreliminaries";
-import { interpretProcessing } from "./interpretProssesing";
+import { interpretProcessing } from "./interpretProcessing";
 import { interpretMediation } from "./interpretMediation";
 import { interpretAffects } from "./interpretAffects";
 import { interpretSelfPerception } from "./interpretSelfPerception";

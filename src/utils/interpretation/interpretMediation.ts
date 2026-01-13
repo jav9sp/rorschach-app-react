@@ -2,15 +2,15 @@ import { capitalize } from "../capitalize";
 
 import type { ComparisonMap } from "../../types/NormativeData";
 import type { StructuralSummaryData } from "../../types/StructuralSummaryData";
+import { genderText } from "./genderText";
 
 export function interpretMediation(
   summary: StructuralSummaryData,
   comparisons: ComparisonMap
 ): string[] {
-  const interpretaciones: string[] = [];
+  const [persona, vocal, articulo] = genderText(summary["Genero"]);
 
-  const persona = summary.Genero === "M" ? "el evaluado" : "la evaluada";
-  const articulo = persona === "el evaluado" ? "lo" : "la";
+  const interpretaciones: string[] = [];
 
   // Paso 1: XA%, WDA%
   const xa = summary["XA%"] ?? 0;

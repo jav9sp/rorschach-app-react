@@ -1,14 +1,14 @@
 import type { ComparisonMap } from "../../types/NormativeData";
 import type { StructuralSummaryData } from "../../types/StructuralSummaryData";
+import { genderText } from "./genderText";
 
 export function interpretInterpersonal(
   summary: StructuralSummaryData,
   comparisons: ComparisonMap
 ): string[] {
-  const interpretaciones: string[] = [];
+  const [persona, vocal, articulo] = genderText(summary["Genero"]);
 
-  const persona = summary.Genero === "M" ? "el evaluado" : "la evaluada";
-  const vocal = summary.Genero === "M" ? "o" : "a";
+  const interpretaciones: string[] = [];
 
   // Paso 1: CDI y HVI
   if (summary.CDI === "Positivo") {
@@ -95,28 +95,32 @@ export function interpretInterpersonal(
     );
   }
 
-  if (cop === 0 && ag <= 1) {
-    interpretaciones.push("[PENDIENTE COP = 0 and AG <= 1]");
-  }
+  const attributions: boolean = cop + ag > 0;
 
-  if (cop <= 1 && ag === 2) {
+  if (!attributions) {
     interpretaciones.push(
-      `Además, se observa que ${persona} tiende a percibir la agresividad como componente natural en las relaciones personales, por lo que es más proclive a manifestar conductas agresivas hacia los demás.`
+      `Se observa que ${persona} no realiza atribuciones respecto a la interacción con otros, por lo que no prevé aspectos positivos ni negativos de interactuar. Por este motivo, es probable que sea percibid${vocal} como distante o poco sociable.`
     );
-  }
+  } else {
+    if (cop <= 1 && ag === 2) {
+      interpretaciones.push(
+        `Además, se observa que ${persona} tiende a percibir la agresividad como componente natural en las relaciones personales, por lo que es más proclive a manifestar conductas agresivas hacia los demás.`
+      );
+    }
 
-  if (cop <= 2 && ag > 2) {
-    interpretaciones.push(
-      "Se observa que gran parte de su actividad interpersonal está marcada por una tendencia a asumir actitudes agresivas hacia los demás, lo que puede responder a una actitud defensiva ante una percepción de hostilidad del ambiente."
-    );
-  }
+    if (cop <= 2 && ag > 2) {
+      interpretaciones.push(
+        "Se observa que gran parte de su actividad interpersonal está marcada por una tendencia a asumir actitudes agresivas hacia los demás, lo que puede responder a una actitud defensiva ante una percepción de hostilidad del ambiente."
+      );
+    }
 
-  if (cop === 2 && ag <= 1) {
-    interpretaciones.push("[PENDIENTE COP == 2 and AG <= 1]");
-  }
+    if (cop === 2 && ag <= 1) {
+      interpretaciones.push("[PENDIENTE COP == 2 and AG <= 1]");
+    }
 
-  if (cop === 3 && ag === 2) {
-    interpretaciones.push("[PENDIENTE COP == 3 and AG == 2]");
+    if (cop === 3 && ag === 2) {
+      interpretaciones.push("[PENDIENTE COP == 3 and AG == 2]");
+    }
   }
 
   // Paso 7: Aislamiento
@@ -137,6 +141,7 @@ export function interpretInterpersonal(
   return interpretaciones;
 }
 
+// TODO: Cambiar y usar getDominant()
 function predominioContH(
   persona: string,
   variables: StructuralSummaryData

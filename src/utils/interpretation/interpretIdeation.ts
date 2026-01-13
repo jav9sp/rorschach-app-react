@@ -1,14 +1,14 @@
 import type { ComparisonMap } from "../../types/NormativeData";
 import type { StructuralSummaryData } from "../../types/StructuralSummaryData";
+import { genderText } from "./genderText";
 
 export function interpretIdeation(
   summary: StructuralSummaryData,
   comparisons: ComparisonMap
 ): string[] {
-  const interpretaciones: string[] = [];
+  const [persona, vocal, articulo] = genderText(summary["Genero"]);
 
-  const persona = summary.Genero === "M" ? "el evaluado" : "la evaluada";
-  const articulo = summary.Genero === "M" ? "lo" : "la";
+  const interpretaciones: string[] = [];
 
   const edad = summary.Edad ?? 0;
   const lambda = summary.Lambda ?? 0;

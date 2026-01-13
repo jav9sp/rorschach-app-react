@@ -3,15 +3,14 @@ import type { ComparisonMap } from "../../types/NormativeData";
 import type { StructuralSummaryData } from "../../types/StructuralSummaryData";
 import type { Answer } from "../buildMasterSummary";
 import { capitalize } from "../capitalize";
+import { genderText } from "./genderText";
 
 export function interpretProcessing(
   answers: Answer[],
   summary: StructuralSummaryData,
   comparisons: ComparisonMap
 ): string[] {
-  const persona = summary["Genero"] === "M" ? "el evaluado" : "la evaluada";
-  const articulo = persona === "el evaluado" ? "lo" : "la";
-  const vocal = persona === "el evaluado" ? "o" : "a";
+  const [persona, vocal, articulo] = genderText(summary["Genero"]);
   const interpretaciones: string[] = [];
 
   // LAMBDA

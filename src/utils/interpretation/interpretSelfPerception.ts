@@ -1,13 +1,15 @@
 import type { StructuralSummaryData } from "../../types/StructuralSummaryData";
 import type { ComparisonLevel, ComparisonMap } from "../../types/NormativeData";
+import { getDominant } from "../getDominant";
+import { genderText } from "./genderText";
 
 export function interpretSelfPerception(
   summary: StructuralSummaryData,
   comparisons: ComparisonMap
 ): string[] {
+  const [persona, vocal, articulo] = genderText(summary["Genero"]);
+
   const interpretaciones: string[] = [];
-  const persona = summary.Genero === "M" ? "el evaluado" : "la evaluada";
-  const vocal = summary.Genero === "M" ? "o" : "a";
 
   // Paso 1: OBS y HVI
   if (summary.OBS === "Positivo") {
@@ -76,7 +78,7 @@ export function interpretSelfPerception(
     interpretaciones.push("[PENDIENTE V+FD>2]");
   }
 
-  // Paso 5: An y Xy
+  // Paso 4: An y Xy
   const an = summary.An ?? 0;
   const xy = summary.Xy ?? 0;
 
@@ -90,13 +92,13 @@ export function interpretSelfPerception(
     interpretaciones.push("[REVISAR DISTORSIONES AN+XY = 2]");
   }
 
-  // Paso 6: MOR y contenidos asociados
+  // Paso 5: MOR y contenidos asociados
   if (mor > 2) {
     interpretaciones.push("[VERIFICAR CONTENIDOS MOR]");
   }
 
-  // Paso 7: H:(H)+Hd+(HD)
-  const hPura = summary.H ?? 0;
+  // Paso 6: H:(H)+Hd+(HD)
+  const sumH = summary.H ?? 0;
   const sumHd = summary.Hd ?? 0;
   const sumHImg = summary["(H)"] ?? 0;
   const sumHdImg = summary["(Hd)"] ?? 0;
@@ -118,17 +120,20 @@ export function interpretSelfPerception(
       todoHTxt = `Se observan dificultades en los procesos de identificación que derivan del bajo interés que ${persona} tiene por el componente humano, lo cual apunta a la presencia de conflictos de identidad, de autoimagen o de relación con los demás.`;
       break;
     case "Marcadamente por debajo":
-      todoHTxt = "[PENDIENTE TODOH MUY BAJO]";
+      todoHTxt = `Su interés en el componente humano se encuentra muy por debajo de lo esperado, lo que apunta a la presencia de dificultades importantes en sus procesos de identificación y a una tendencia al aislamiento. Esto sugiere también la presencia de conflictos de identidad y relacionales graves que afectan tanto la percepción que tiene de sí mism${vocal} como de las relaciones con otros.`;
       break;
   }
 
-  if (hPura > sumHd + sumHImg + sumHdImg) {
-    interpretaciones.push("[PENDIENTE H > (H)+Hd+(Hd)]");
-  } else {
-    interpretaciones.push("[PENDIENTE H < (H)+Hd+(Hd)]");
-  }
+  const valuesH = {
+    H: sumH,
+    Hd: sumHd,
+    HImg: sumHImg,
+    HdImg: sumHdImg,
+  };
 
-  interpretaciones.push("[PENDIENTE ANÁLISIS H DOMINANTE]");
+  const dominantH = getDominant(valuesH);
+
+  interpretaciones.push(`PENDIENTE H DOMINANTE: ${dominantH.dominants}`);
 
   const hx = summary.Hx ?? 0;
   if (hx > 0) {

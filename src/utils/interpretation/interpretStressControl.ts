@@ -1,14 +1,14 @@
 import type { ComparisonMap } from "../../types/NormativeData";
 import type { StructuralSummaryData } from "../../types/StructuralSummaryData";
+import { genderText } from "./genderText";
 
 export function interpretStressControl(
   summary: StructuralSummaryData,
   comparisons: ComparisonMap
 ): string[] {
-  const interpretaciones: string[] = [];
+  const [persona, vocal] = genderText(summary["Genero"]);
 
-  const persona = summary.Genero === "M" ? "el evaluado" : "la evaluada";
-  const vocal = persona === "el evaluado" ? "o" : "a";
+  const interpretaciones: string[] = [];
 
   // Paso 1: AdjD y CDI
   const adjD = summary.AdjD ?? null;

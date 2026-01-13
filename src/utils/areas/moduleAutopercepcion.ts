@@ -1,4 +1,4 @@
-export interface AutopercepcionResult {
+export interface SelfPerceptionResult {
   Ego: number;
   "Fr+rF": number;
   SumV: number;
@@ -13,15 +13,15 @@ export interface AutopercepcionResult {
  * Calcula indicadores de autopercepción.
  * @param data Array de respuestas
  * @param variables Diccionario maestro
- * @returns AutopercepcionResult
+ * @returns SelfPerceptionResult
  */
-export function calcularAutopercepcion(
+export function calculateSelfPerception(
   data: {
     Det?: string | null;
     Par?: number | null;
   }[],
   variables: Record<string, number>
-): AutopercepcionResult {
+): SelfPerceptionResult {
   const r = data.length;
 
   let frRf = 0;

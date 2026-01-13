@@ -1,20 +1,26 @@
 import type { ComparisonMap } from "../../types/NormativeData";
 import type { StructuralSummaryData } from "../../types/StructuralSummaryData";
+import { capitalize } from "../capitalize";
+import { genderText } from "./genderText";
 
 export function interpretSituationalStress(
   summary: StructuralSummaryData,
   comparisons: ComparisonMap
 ): string[] {
+  const [persona, vocal, articulo] = genderText(summary["Genero"]);
+
   const interpretaciones: string[] = [];
 
-  const persona = summary["Genero"] === "M" ? "el evaluado" : "la evaluada";
-
   // Paso 1: PuntD vs AdjD
-  const puntD = summary["PuntD"];
-  const adjD = summary["AdjD"];
+  const puntD = summary["PuntD"] ?? 0;
+  const adjD = summary["AdjD"] ?? 0;
 
   if (puntD !== adjD) {
-    interpretaciones.push("[DIFERENCIA PuntD Y AdjD PRESENTE]");
+    interpretaciones.push(
+      `${capitalize(
+        persona
+      )} presenta dificultades importantes para ajustar la capacidad de control y tolerar la sobre estimulación generada por situaciones externas.`
+    );
   } else {
     interpretaciones.push(
       `No se observan indicadores de aumento en el registro de tensión interna en ${persona} por factores situacionales.`
@@ -22,16 +28,14 @@ export function interpretSituationalStress(
   }
 
   // Paso 2: D < AdjD
-  if (typeof puntD === "number" && typeof adjD === "number") {
-    if (puntD < adjD) {
-      interpretaciones.push(
-        "[CONTROL ACTUAL < CONTROL HABITUAL - REVISAR m E Y]"
-      );
-    }
+  if (puntD < adjD) {
+    interpretaciones.push(
+      "Debido a esto, su capacidad de control actual es menor al que tiene habitualmente en situaciones normales. [REVISAR m e Y]"
+    );
+  }
 
-    if (puntD < 0 && adjD < 0) {
-      interpretaciones.push("[SOBRECARGA HABITUAL, ALTA IMPULSIVIDAD]");
-    }
+  if (puntD < 0 && adjD < 0) {
+    interpretaciones.push("[SOBRECARGA HABITUAL, ALTA IMPULSIVIDAD]");
   }
 
   // Paso 3: m e Y
@@ -50,7 +54,7 @@ export function interpretSituationalStress(
 
     if (m > 0 && sumY >= m * 3) {
       interpretaciones.push(
-        "[SOBRECARGA EMOCIONAL - DESBORDE EMOCIONAL E INDEFENSIÓN]"
+        `El impacto de las situaciones externas afecta principalmente en sobre su funcionamiento emocional, por lo que es probable que ${persona} se vea inundad${vocal} por sentimientos de indefensión e impotencia que pueden tener un efecto paralizante en su conducta.`
       );
     }
   }

@@ -1,14 +1,14 @@
 import type { ComparisonMap } from "../../types/NormativeData";
 import type { StructuralSummaryData } from "../../types/StructuralSummaryData";
+import { genderText } from "./genderText";
 
 export function interpretAffects(
   summary: StructuralSummaryData,
   comparisons: ComparisonMap
 ): string[] {
-  const interpretaciones: string[] = [];
+  const [persona, vocal, articulo] = genderText(summary["Genero"]);
 
-  const persona = summary.Genero === "M" ? "el evaluado" : "la evaluada";
-  const vocal = persona === "el evaluado" ? "o" : "a";
+  const interpretaciones: string[] = [];
 
   const depi = summary.DEPICounter ?? 0;
 
@@ -85,13 +85,17 @@ export function interpretAffects(
     interpretaciones.push("[PENDIENTE SumT ALTO - MUY ALTO]");
   }
   if (sumY === "Levemente por encima" || sumY === "Marcadamente por encima") {
-    interpretaciones.push("[PENDIENTE SumY ALTO - MUY ALTO]");
+    interpretaciones.push(
+      `Se observa que ${persona} presenta un intenso malestar emocional vinculado a el efecto de situaciones externas que generan tensión. Esto la lleva a experimentar sentimientos de indefensión y desvalimiento, situándola en un estado de parálisis afectiva y latente desborde.`
+    );
   }
   if (
     sumCPrimaEstado === "Levemente por encima" ||
     sumCPrimaEstado === "Marcadamente por encima"
   ) {
-    interpretaciones.push("[PENDIENTE SumC' ALTO - MUY ALTO]");
+    interpretaciones.push(
+      `Muestra un aumento significativo en el registro de afectos disfóricos que son internalizados. La evaluada tiende a reprimir estos afectos de manera inconsciente, aumentando su tensión interna, lo que puede derivar en trastornos psicosomáticos al largo plazo`
+    );
   }
 
   const totCPrima = summary["SumC'"] ?? 0;
@@ -118,10 +122,13 @@ export function interpretAffects(
     interpretaciones.push("[ALTA PREDICTIVIDAD DE PSICOSOMÁTICOS]");
   }
 
+  // Paso 5: Proporción Afectiva AFR
   const afr = comparisons.Afr.COMPARACION ?? "Indefinido";
   switch (afr) {
     case "Marcadamente por encima":
-      interpretaciones.push("[PENDIENTE AFR MUY ALTO]");
+      interpretaciones.push(
+        `Respecto a su responsividad a la estimulación emocional, se observa una sensibilidad mayor a lo esperado, lo que indica que ${persona} tiene un mayor interés en la emocionalidad, aumentando la frecuencia de demandas e intercambios. Esto conlleva la posibilidad de que surjan problemas de descontrol o falta de modulación en las descargas afectivas.`
+      );
       break;
     case "Levemente por encima":
       interpretaciones.push("[PENDIENTE AFR ALTO]");
@@ -166,6 +173,17 @@ export function interpretAffects(
   if (fc > (cf + cPura) * 3 || (fc > 0 && cf + cPura === 0)) {
     interpretaciones.push(
       `En cuanto a la espontaneidad de sus descargas afectivas, se observa que ${persona} tiende a sobre controlar sus intercambios afectivos, por lo que no puede relajarse cuando maneja sus emociones. [VERIFICAR RELACIONES INTERPERSONALES E INTEGRAR SI C' ES AUMENTADO]`
+    );
+  }
+
+  // Paso 10: Composición de respuestas complejas
+  const compljColY = summary.CompljsColY ?? 0;
+  const compljColSH = summary.CompljsColSH ?? 0;
+  const compljSH = summary.CompljsSH ?? 0;
+  const compljSHY = summary.CompljsSHY ?? 0;
+  if (compljColSH > 0) {
+    interpretaciones.push(
+      `Por otro lado, se observan indicadores de ambivalencia que se manifiestan en una experiencia emocional confusa donde se mezclan afectos placenteros y dolorosos. Este indicador es propio de personas que enfrentan estados depresivos y generan sufrimiento al experimentar esta mezcla de sentimientos ante la misma situación estimular.`
     );
   }
 
