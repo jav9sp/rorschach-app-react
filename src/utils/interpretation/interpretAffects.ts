@@ -6,15 +6,17 @@ export function interpretAffects(
   summary: StructuralSummaryData,
   comparisons: ComparisonMap
 ): string[] {
-  const [persona, vocal, articulo] = genderText(summary["Genero"]);
+  const [persona, vocal] = genderText(summary["Genero"]);
 
   const interpretaciones: string[] = [];
 
+  const elevated = ["Levemente por encima", "Marcadamente por encima"];
+
+  // Paso 1: DEPI y CDI
   const depi = summary.DEPICounter ?? 0;
+  const cdi = summary.CDICounter ?? 0;
 
   if (summary.DEPIText) interpretaciones.push(summary.DEPIText);
-
-  const cdi = summary.CDICounter ?? 0;
 
   if (depi > 5 && cdi < 4) {
     interpretaciones.push("[PENDIENTE DEPI>5 Y CDI<4]");
@@ -30,7 +32,8 @@ export function interpretAffects(
     );
   }
 
-  const lambdaEstado = comparisons.Lambda.COMPARACION ?? "Indefinido";
+  // Paso 2: Lambda, EB extratensivo y EBPer
+  const lambdaComp = comparisons.Lambda.COMPARACION ?? "Indefinido";
   const tipoVivencial = summary.TipoVivencial ?? "Indefinido";
   const ebper = summary.EBPer ?? 0;
 
@@ -57,11 +60,7 @@ export function interpretAffects(
       break;
   }
 
-  if (
-    (lambdaEstado === "Levemente por encima" ||
-      lambdaEstado === "Marcadamente por encima") &&
-    tipoVivencial === "Extroversivo"
-  ) {
+  if (elevated.includes(lambdaComp) && tipoVivencial === "Extroversivo") {
     interpretaciones.push(
       `Pese a lo anterior, su eficacia emocional no es adecuada, ya que su estilo sobre simplificador l${vocal} sitúa en un estilo evitativo, el cual implica mayor dificultad para diferenciar las características e implicaciones de los contextos emocionales complejos, una baja regulación de la influencia de los afectos en su toma de decisiones y a una falta en la modulación de sus descargas afectivas.`
     );
@@ -71,36 +70,37 @@ export function interpretAffects(
     interpretaciones.push("[PENDIENTE EBPer PRESENTE]");
   }
 
-  const sumV = comparisons.SumV.COMPARACION ?? "Indefinido";
-  const sumT = comparisons.SumT.COMPARACION ?? "Indefinido";
-  const sumY = comparisons.SumY.COMPARACION ?? "Indefinido";
-  const sumCPrimaEstado = comparisons["SumC'"].COMPARACION ?? "Indefinido";
+  // Paso 3: Análisis del lado derecho de la eb
+  const vComp = comparisons.SumV.COMPARACION;
+  const tComp = comparisons.SumT.COMPARACION;
+  const yComp = comparisons.SumY.COMPARACION;
+  const cPrimaComp = comparisons["SumC'"].COMPARACION;
 
-  if (sumV === "Levemente por encima" || sumV === "Marcadamente por encima") {
+  if (elevated.includes(vComp)) {
     interpretaciones.push(
       `Si bien ${persona} cuenta con capacidad para realizar trabajo de introspección, se observan signos de desvalorización y autocrítica negativa que probablemente se han cronificado con el tiempo y merman su autoestima, aumentando el malestar psíquico.`
     );
   }
-  if (sumT === "Levemente por encima" || sumT === "Marcadamente por encima") {
-    interpretaciones.push("[PENDIENTE SumT ALTO - MUY ALTO]");
+  if (elevated.includes(tComp)) {
+    interpretaciones.push(
+      `Sus necesidades de cercanía y contacto emocional se encuentran elevadas, por lo que ${persona} experimenta malestar que deriva de un registro más intenso de los sentimientos de soledad, llevándolo a depender más de la presencia afectiva de otros.`
+    );
   }
-  if (sumY === "Levemente por encima" || sumY === "Marcadamente por encima") {
+  if (elevated.includes(yComp)) {
     interpretaciones.push(
       `Se observa que ${persona} presenta un intenso malestar emocional vinculado a el efecto de situaciones externas que generan tensión. Esto la lleva a experimentar sentimientos de indefensión y desvalimiento, situándola en un estado de parálisis afectiva y latente desborde.`
     );
   }
-  if (
-    sumCPrimaEstado === "Levemente por encima" ||
-    sumCPrimaEstado === "Marcadamente por encima"
-  ) {
+  if (elevated.includes(cPrimaComp)) {
     interpretaciones.push(
       `Muestra un aumento significativo en el registro de afectos disfóricos que son internalizados. La evaluada tiende a reprimir estos afectos de manera inconsciente, aumentando su tensión interna, lo que puede derivar en trastornos psicosomáticos al largo plazo`
     );
   }
 
+  // Paso 4: SumC' y SumPonC
   const totCPrima = summary["SumC'"] ?? 0;
   const sumPonC = summary.SumPonC ?? 0;
-  const ego = comparisons.Ego.COMPARACION ?? "Indefinido";
+  const ego = comparisons.Ego.COMPARACION;
   const cop = summary.COP ?? 0;
 
   if (totCPrima >= sumPonC) {
@@ -123,7 +123,7 @@ export function interpretAffects(
   }
 
   // Paso 5: Proporción Afectiva AFR
-  const afr = comparisons.Afr.COMPARACION ?? "Indefinido";
+  const afr = comparisons.Afr.COMPARACION;
   switch (afr) {
     case "Marcadamente por encima":
       interpretaciones.push(
@@ -150,6 +150,7 @@ export function interpretAffects(
       break;
   }
 
+  // Índice de Intelectualización
   const intelec = summary.Intelec ?? 0;
   if (intelec > 3) {
     interpretaciones.push(
@@ -157,11 +158,13 @@ export function interpretAffects(
     );
   }
 
+  // Paso 7: Proyección de Color CP
   const cp = summary.CP ?? 0;
   if (cp > 0) {
     interpretaciones.push("[PENDIENTE CP PRESENTE]");
   }
 
+  // Paso 8: Proporción Forma-Color y Presencia de C Pura
   const fc = summary.FC ?? 0;
   const cf = summary.CF ?? 0;
   const cPura = summary.C ?? 0;
@@ -175,6 +178,10 @@ export function interpretAffects(
       `En cuanto a la espontaneidad de sus descargas afectivas, se observa que ${persona} tiende a sobre controlar sus intercambios afectivos, por lo que no puede relajarse cuando maneja sus emociones. [VERIFICAR RELACIONES INTERPERSONALES E INTEGRAR SI C' ES AUMENTADO]`
     );
   }
+
+  // Paso 9: Respuestas de Espacio Blanco S
+  const sSum = comparisons.S.COMPARACION;
+  if (elevated.includes(sSum)) interpretaciones.push("[RESPUESTAS S ELEVADAS]");
 
   // Paso 10: Composición de respuestas complejas
   const compljColY = summary.CompljsColY ?? 0;

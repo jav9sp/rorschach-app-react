@@ -1,9 +1,10 @@
-import { inkblots } from "../../data/codifications";
 import type { ComparisonMap } from "../../types/NormativeData";
 import type { StructuralSummaryData } from "../../types/StructuralSummaryData";
-import type { Answer } from "../buildMasterSummary";
 import { capitalize } from "../capitalize";
 import { genderText } from "./genderText";
+
+import type { Answer } from "../buildMasterSummary";
+type Direction = "particular_to_general" | "general_to_particular";
 
 export function interpretProcessing(
   answers: Answer[],
@@ -13,34 +14,35 @@ export function interpretProcessing(
   const [persona, vocal, articulo] = genderText(summary["Genero"]);
   const interpretaciones: string[] = [];
 
-  // LAMBDA
-  const lambda = comparisons["Lambda"];
-  if (lambda.COMPARACION === "Marcadamente por encima") {
-    interpretaciones.push(
-      `${capitalize(
-        persona
-      )} muestra una marcada tendencia a usar sus recursos de manera económica y sobre simplificar sus percepciones al analizar el campo estimular, evitando las ambigüedades y la incorporación de información emocional, lo que ${articulo} lleva a perder parte importante de la información del medio.`
-    );
-  } else if (lambda.COMPARACION === "Levemente por encima") {
-    interpretaciones.push(
-      `${capitalize(
-        persona
-      )} tiende a usar sus recursos de manera económica y sobre simplificar sus percepciones al analizar el campo estimular, evitando las ambigüedades y la incorporación de información emocional, lo que ${articulo} lleva a perder parte importante de la información del medio.`
-    );
-  } else if (lambda.COMPARACION === "Dentro del rango") {
-    interpretaciones.push(
-      `${capitalize(
-        persona
-      )} es capaz de usar sus recursos cognitivos de manera equilibrada, siendo capaz de simplificar sus percepciones en justa medida, incorporando la información emocional y realizando un registro eficiente de la información del entorno.`
-    );
-  } else if (lambda.COMPARACION === "Levemente por debajo") {
-    interpretaciones.push(
-      `${capitalize(
-        persona
-      )} muestra una tendencia a recopilar demasiados estímulos en su proceso perceptivo, llevándol${vocal} a abrumarse con el exceso de información al no poder simplificar sus percepciones lo suficiente.`
-    );
-  } else if (lambda.COMPARACION === "Marcadamente por debajo") {
-    interpretaciones.push("[PENDIENTE LAMBDA MUY BAJO]");
+  // Requisitos Previos
+  // Lambda
+  const lambda = comparisons["Lambda"].COMPARACION;
+
+  switch (lambda) {
+    case "Marcadamente por encima":
+      interpretaciones.push(
+        `${capitalize(
+          persona
+        )} muestra una marcada tendencia a usar sus recursos de manera económica y sobre simplificar sus percepciones al analizar el campo estimular, evitando las ambigüedades y la incorporación de información emocional, lo que ${articulo} lleva a perder parte importante de la información del medio.`
+      );
+      break;
+    case "Dentro del rango":
+      interpretaciones.push(
+        `${capitalize(
+          persona
+        )} es capaz de usar sus recursos cognitivos de manera equilibrada, siendo capaz de simplificar sus percepciones en justa medida, incorporando la información emocional y realizando un registro eficiente de la información del entorno.`
+      );
+      break;
+    case "Levemente por debajo":
+      interpretaciones.push(
+        `${capitalize(
+          persona
+        )} muestra una tendencia a recopilar demasiados estímulos en su proceso perceptivo, llevándol${vocal} a abrumarse con el exceso de información al no poder simplificar sus percepciones lo suficiente.`
+      );
+      break;
+    case "Marcadamente por debajo":
+      interpretaciones.push("[PENDIENTE LAMBDA MUY BAJO]");
+      break;
   }
 
   if (summary["OBS"] === "Positivo")
@@ -50,19 +52,36 @@ export function interpretProcessing(
 
   // Zf
   const zf = comparisons.Zf.COMPARACION;
-  const motivacionZf = {
-    "Marcadamente por encima": `Su iniciativa y motivación en la tarea de organizar los estímulos del entorno y relacionarlos de manera significativa está muy por encima de lo esperado, por lo que ${persona} realiza un esfuerzo mayor en su procesamiento de información [que puede estar relacionado a características perfeccionistas o un alto rendimiento].`,
-    alto: `Su iniciativa y motivación en la tarea de organizar los estímulos del entorno y relacionarlos de manera significativa se encuentra por encima de lo esperado, por lo que ${persona} realiza un alto esfuerzo cognitivo en el procesamiento de información.`,
-    normal: `Su iniciativa y motivación en la tarea de organizar los estímulos del entorno y relacionarlos de manera significativa se encuentra dentro de lo esperado, por lo que ${persona} realiza un adecuado esfuerzo cognitivo en el procesamiento de información.`,
-    bajo: `Su iniciativa y motivación en la tarea de organizar los estímulos del entorno y relacionarlos de manera significativa es menor a lo esperado, por lo que ${persona} realiza un menor esfuerzo cognitivo en el procesamiento de la información.`,
-    "Marcadamente por debajo":
-      "Su iniciativa y motivación en la tarea de organizar la información del entorno y relacionarla de manera significativa se encuentra muy por debajo de lo esperado, lo cual [apunta a la presencia de limitaciones cognitivas o un potencial intelectual inhibido por factores emocionales].",
-  };
 
-  // TODO: Corregir el mapeo de la motivación
-  if (zf && motivacionZf[zf as keyof typeof motivacionZf])
-    interpretaciones.push(motivacionZf[zf as keyof typeof motivacionZf]);
+  switch (zf) {
+    case "Marcadamente por encima":
+      interpretaciones.push(
+        `Su iniciativa y motivación en la tarea de organizar los estímulos del entorno y relacionarlos de manera significativa está muy por encima de lo esperado, por lo que ${persona} realiza un esfuerzo mayor en su procesamiento de información [que puede estar relacionado a características perfeccionistas o un alto rendimiento].`
+      );
+      break;
+    case "Levemente por encima":
+      interpretaciones.push(
+        `Su iniciativa y motivación en la tarea de organizar los estímulos del entorno y relacionarlos de manera significativa se encuentra por encima de lo esperado, por lo que ${persona} realiza un alto esfuerzo cognitivo en el procesamiento de información.`
+      );
+      break;
+    case "Dentro del rango":
+      interpretaciones.push(
+        `Su iniciativa y motivación en la tarea de organizar los estímulos del entorno y relacionarlos de manera significativa se encuentra dentro de lo esperado, por lo que ${persona} realiza un adecuado esfuerzo cognitivo en el procesamiento de información.`
+      );
+      break;
+    case "Levemente por debajo":
+      interpretaciones.push(
+        `Su iniciativa y motivación en la tarea de organizar los estímulos del entorno y relacionarlos de manera significativa es menor a lo esperado, por lo que ${persona} realiza un menor esfuerzo cognitivo en el procesamiento de la información.`
+      );
+      break;
+    case "Marcadamente por debajo":
+      interpretaciones.push(
+        "Su iniciativa y motivación en la tarea de organizar la información del entorno y relacionarla de manera significativa se encuentra muy por debajo de lo esperado, lo cual [apunta a la presencia de limitaciones cognitivas o un potencial intelectual inhibido por factores emocionales]."
+      );
+      break;
+  }
 
+  // Paso 2: W:D:Dd
   // Estilo de acercamiento
   const r = comparisons["R"];
   const w = comparisons["W"];
@@ -72,8 +91,19 @@ export function interpretProcessing(
     checkApproach(r.VALOR, w.VALOR, d.VALOR, dd.VALOR, persona)
   );
 
+  // TODO: Esta función no calcula bien
   // Secuencia de enfoque
-  interpretaciones.push(checkSequence(answers, persona));
+  const { isConsistent, direction } = checkSequenceConsistency(answers);
+
+  if (isConsistent) {
+    interpretaciones.push(
+      `Se observan patrones de registro consistentes y metódicos en múltiples láminas, lo que sugiere una forma ordenada y predecible de recopilar información del entorno. Además, mantiene una dirección secuencial estable en láminas con más de una respuesta, que va ${direction}, lo cual constituye un indicador de eficacia en esta tarea`
+    );
+  } else {
+    interpretaciones.push(
+      "No se observan patrones metódicos y predecibles en cómo registra la información del entorno, por lo que no es posible afirmar que sea eficaz en dicha tarea."
+    );
+  }
 
   // W:M
   const tipoVivencial = summary.TipoVivencial;
@@ -100,6 +130,20 @@ export function interpretProcessing(
   if (summary["PSV"]) interpretaciones.push("[PENDIENTE PSV PRESENTE]");
 
   // DQ
+  const DQo = comparisons.DQo.COMPARACION;
+  const DQv = comparisons.DQv.COMPARACION;
+  const DQplus = comparisons["DQ+"].COMPARACION;
+  const DQvplus = comparisons["DQv/+"].COMPARACION;
+
+  if (["Marcadamente por encima", "Levemente por encima"].includes(DQo)) {
+    interpretaciones.push(`[DQo MUY ALTO]`);
+  }
+  if (["Marcadamente por encima", "Levemente por encima"].includes(DQv)) {
+    interpretaciones.push(`[DQv MUY ALTO]`);
+  }
+  if (["Marcadamente por encima", "Levemente por encima"].includes(DQplus)) {
+    interpretaciones.push("[DQ+ SOBRE LA MEDIA]");
+  }
   interpretaciones.push("[PENDIENTE VER CALIDAD DQ]");
   interpretaciones.push("[PENDIENTE VER SECUENCIA DQ]");
 
@@ -114,11 +158,11 @@ export function checkApproach(
   persona: string,
   margin = 0.1
 ): string {
-  if (r === 0) return "[ERROR] r no puede ser 0.";
+  if (r === 0) return "[ERROR] No hay respuestas.";
 
-  const wPcge = w / r;
-  const dPcge = d / r;
-  const ddPcge = dd / r;
+  const wPct = w / r;
+  const dPct = d / r;
+  const ddPct = dd / r;
 
   const W_LOW = 0.19;
   const W_HIGH = 0.41;
@@ -133,15 +177,15 @@ export function checkApproach(
   const aboveMax = (x: number, max: number) => x > max + margin;
   const belowMax = (x: number, max: number) => x < max + margin;
 
-  const wInRange = withinRange(wPcge, W_LOW, W_HIGH);
-  const dInRange = withinRange(dPcge, D_LOW, D_HIGH);
-  const ddOk = belowMax(ddPcge, DD_MAX);
+  const wInRange = withinRange(wPct, W_LOW, W_HIGH);
+  const dInRange = withinRange(dPct, D_LOW, D_HIGH);
+  const ddOk = belowMax(ddPct, DD_MAX);
 
-  const wHigh = aboveHigh(wPcge, W_HIGH);
-  const wLow = belowLow(wPcge, W_LOW);
-  const dHigh = aboveHigh(dPcge, D_HIGH);
-  const dLow = belowLow(dPcge, D_LOW);
-  const ddHigh = aboveMax(ddPcge, DD_MAX);
+  const wHigh = aboveHigh(wPct, W_HIGH);
+  const wLow = belowLow(wPct, W_LOW);
+  const dHigh = aboveHigh(dPct, D_HIGH);
+  const dLow = belowLow(dPct, D_LOW);
+  const ddHigh = aboveMax(ddPct, DD_MAX);
 
   const frases: string[] = [];
 
@@ -246,136 +290,97 @@ function checkAmbitionLevel(
   return "No se cuenta con información suficiente sobre W y M para evaluar la proporción en el contexto del tipo vivencial.";
 }
 
-export function checkSequence(
+export function checkSequenceConsistency(
   answers: Answer[],
-  persona: string,
-  minPatrones = 2
-): string {
-  // Mapeo de orden: w (global) > d (práctico) > dd (detalles atípicos)
-  const orden = { w: 3, d: 2, dd: 1 } as const;
+  minResponsesPerLamina = 2
+): { isConsistent: boolean; direction: Direction | null } {
+  // Orden: w (global) > d (común) > dd (detalle inusual)
+  const order = { w: 3, d: 2, dd: 1 } as const;
 
-  // --- Agrupar respuestas por lámina y extraer la secuencia de Loc en orden de aparición ---
-  const porLamina = new Map<string, string[]>();
-  for (const a of answers) {
-    if (!a || !a.Lam) continue;
-    const loc = String(a.Loc || "")
+  // Normaliza Loc: minúscula, trim, y elimina "s"
+  // Ej: "Ws" -> "w", "DdS" -> "dd"
+  const normalizeLoc = (loc: unknown): string => {
+    return String(loc ?? "")
       .toLowerCase()
-      .trim();
-    if (!porLamina.has(a.Lam)) porLamina.set(a.Lam, []);
-    porLamina.get(a.Lam)!.push(loc);
-  }
+      .trim()
+      .replace(/s/g, ""); // omite 's' donde aparezca
+  };
 
-  // Filtrar solo láminas con 2+ respuestas (requisito del usuario)
-  const laminasEvaluables = [...porLamina.entries()]
-    .map(([lam, locs]) => ({ lam, locs }))
-    .filter(({ locs }) => locs.length >= 2);
+  const toValue = (loc: string): number | null => {
+    return (order as Record<string, number>)[loc] ?? null;
+  };
 
-  // Si no hay ninguna lámina con 2+ respuestas, no se puede estimar patrón
-  if (laminasEvaluables.length === 0) {
-    return `No es posible estimar los patrones de registro de ${persona}, ya que todas las láminas presentan una sola respuesta.`;
-  }
-
-  // --- Funciones helper ---
-  const toValor = (loc: string): number | null => (orden as any)[loc] ?? null;
-
-  const esMonotonicaConCambio = (valores: number[]): "asc" | "desc" | null => {
-    // Determinar dirección por extremos (si son iguales, buscar primer cambio real)
+  const monotonicDirection = (values: number[]): "asc" | "desc" | null => {
+    // Encuentra primer cambio real para fijar dirección
     let dir: "asc" | "desc" | null = null;
 
-    // Buscar primer par con diferencia real para fijar dirección
-    for (let i = 1; i < valores.length; i++) {
-      if (valores[i] > valores[i - 1]) {
+    for (let i = 1; i < values.length; i++) {
+      if (values[i] > values[i - 1]) {
         dir = "asc";
         break;
-      } else if (valores[i] < valores[i - 1]) {
+      }
+      if (values[i] < values[i - 1]) {
         dir = "desc";
         break;
       }
     }
-    if (!dir) return null;
+    if (!dir) return null; // nunca cambió
 
-    // Verificar consistencia permitiendo repeticiones
-    for (let i = 1; i < valores.length; i++) {
-      if (dir === "asc" && valores[i] < valores[i - 1]) return null;
-      if (dir === "desc" && valores[i] > valores[i - 1]) return null;
+    // Verifica que sea monótona (permitiendo repeticiones)
+    for (let i = 1; i < values.length; i++) {
+      if (dir === "asc" && values[i] < values[i - 1]) return null;
+      if (dir === "desc" && values[i] > values[i - 1]) return null;
     }
     return dir;
   };
 
-  // --- Evaluación por lámina ---
-  let patrones = 0;
-  const laminasConPatron: { lam: string; dir: "asc" | "desc" }[] = [];
+  // Agrupar por lámina manteniendo orden de aparición
+  const perLamina = new Map<string, string[]>();
+  for (const a of answers) {
+    if (!a?.Lam) continue;
+    const lam = String(a.Lam).toUpperCase().trim();
+    const loc = normalizeLoc(a.Loc);
+    if (!perLamina.has(lam)) perLamina.set(lam, []);
+    perLamina.get(lam)!.push(loc);
+  }
 
-  for (const { lam, locs } of laminasEvaluables) {
-    // Convertir a escala numérica; descartar LOC desconocidos
-    const valores = locs
-      .map((l) => toValor(l))
+  // Solo láminas con 2+ respuestas
+  const candidates = [...perLamina.entries()]
+    .map(([lam, locs]) => ({ lam, locs }))
+    .filter(({ locs }) => locs.length >= minResponsesPerLamina);
+
+  // Recolecta la dirección por lámina (solo si hay cambios y se puede evaluar)
+  const dirs: ("asc" | "desc")[] = [];
+
+  for (const { locs } of candidates) {
+    // Convierte a valores, descartando locs desconocidas
+    const values = locs
+      .map((l) => toValue(l))
       .filter((v): v is number => v !== null);
 
-    if (valores.length < 2) {
-      // Si al filtrar LOC inválidos quedan <2, no evaluamos esta lámina
-      continue;
-    }
+    if (values.length < 2) continue;
 
-    const dir = esMonotonicaConCambio(valores);
-    if (dir) {
-      patrones++;
-      laminasConPatron.push({ lam, dir });
-    }
+    // Exigir cambio real de localización (si todo igual, se omite)
+    const hasRealChange = values.some((v, i) => i > 0 && v !== values[i - 1]);
+    if (!hasRealChange) continue;
+
+    const dir = monotonicDirection(values);
+    if (dir) dirs.push(dir);
   }
 
-  // --- Redacción coherente según resultado ---
-  if (patrones >= minPatrones) {
-    // Texto con conectores y mayúsculas tras punto
-    let texto =
-      `Se observa que ${persona} presenta patrones de registro consistentes y metódicos en múltiples láminas, ` +
-      `lo que sugiere una forma ordenada y predecible de recopilar la información del entorno. ` +
-      `Además, mantiene una dirección secuencial estable (ascendente o descendente) en las láminas con más de una respuesta, ` +
-      `lo cual constituye un indicador de eficacia en esta tarea.`;
-
-    // Mayúsculas tras punto (por si concatena en otros contextos)
-    texto = texto.replace(
-      /([.])\s*([a-záéíóúñ])/g,
-      (_, p1, p2) => `${p1} ${p2.toUpperCase()}`
-    );
-    if (!texto.endsWith(".")) texto += ".";
-    return texto;
-  } else {
-    let texto =
-      `No se identifican patrones de registro suficientemente consistentes en las láminas con múltiples respuestas, ` +
-      `por lo que ${persona} no evidencia una organización estable y metódica al recoger la información del entorno. ` +
-      `Por otro lado, cuando la secuencia no mantiene una dirección clara o se mantiene plana, ` +
-      `el registro tiende a perder previsibilidad.`;
-    texto = texto.replace(
-      /([.])\s*([a-záéíóúñ])/g,
-      (_, p1, p2) => `${p1} ${p2.toUpperCase()}`
-    );
-    if (!texto.endsWith(".")) texto += ".";
-    return texto;
+  // Si no hay láminas evaluables, no se puede afirmar consistencia
+  if (dirs.length === 0) {
+    return { isConsistent: false, direction: null };
   }
-}
 
-function groupAnswerSequence(
-  answers: Answer[],
-  inkblots: string[]
-): Record<string, string[]> {
-  const groupedSequence: Record<string, string[]> = {};
+  // Consistente si todas tienen la misma dirección
+  const allSame = dirs.every((d) => d === dirs[0]);
+  if (!allSame) {
+    return { isConsistent: false, direction: null };
+  }
 
-  // Crear el map con Lam en minúsculas
-  const lamMap = new Map<string, string>();
-  inkblots.forEach((lam) => {
-    groupedSequence[lam] = [];
-    lamMap.set(lam.toLowerCase(), lam);
-  });
+  const direction: Direction =
+    dirs[0] === "asc" ? "particular_to_general" : "general_to_particular";
 
-  // Recorrer todas las respuestas
-  answers.forEach((ans) => {
-    const lamKey = lamMap.get(ans.Lam.toLowerCase());
-    if (lamKey) {
-      const cleanLoc = ans.Loc.replace("s", ""); // Eliminar la S
-      groupedSequence[lamKey].push(cleanLoc);
-    }
-  });
-
-  return groupedSequence;
+  return { isConsistent: true, direction };
 }

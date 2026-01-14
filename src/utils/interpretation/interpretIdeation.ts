@@ -1,20 +1,30 @@
+import {
+  assessSpecialCodes,
+  checkDependence,
+  interpretSpecialCodes,
+  isMentalFlexible,
+} from "../../helpers/ideation/ideationHelpers";
+import { capitalize } from "../capitalize";
+import { genderText } from "./genderText";
+
 import type { ComparisonMap } from "../../types/NormativeData";
 import type { StructuralSummaryData } from "../../types/StructuralSummaryData";
-import { genderText } from "./genderText";
+import { assessDependence } from "../../helpers/ideation/dependencyIndicators";
 
 export function interpretIdeation(
   summary: StructuralSummaryData,
   comparisons: ComparisonMap
 ): string[] {
-  const [persona, vocal, articulo] = genderText(summary["Genero"]);
+  const [persona, _, articulo] = genderText(summary["Genero"]);
 
   const interpretaciones: string[] = [];
 
-  const edad = summary.Edad ?? 0;
+  const age = summary.Edad ?? 0;
   const lambda = summary.Lambda ?? 0;
   const eb = summary.TipoVivencial ?? "Indefinido";
 
-  if (eb === "Introversivo" && edad <= 12) {
+  // Paso 1: Lambda, EB introversivo y EBPer
+  if (eb === "Introversivo" && age <= 12) {
     interpretaciones.push("[EVALUAR MENOR DE 12 CON EB INTRATENSIVO]");
   }
 
@@ -23,11 +33,11 @@ export function interpretIdeation(
       `Dado que ${persona} tiene un tipo vivencial Introversivo, prefiere usar la ideación al resolver problemas y se inclina a considerar todas las posibles alternativas antes de tomar una decisión, por lo que no procesa emociones en el proceso y se basa fuertemente en su propia evaluación interna para elaborar juicios.`
     );
 
-    if (7 <= edad && edad < 18 && lambda > 1.3) {
+    if (7 <= age && age < 18 && lambda > 1.3) {
       interpretaciones.push("[PENDIENTE NIÑO EVITATIVO]");
     }
 
-    if (edad > 18 && lambda > 1.2) {
+    if (age > 18 && lambda > 1.2) {
       interpretaciones.push("[PENDIENTE ADULTO EVITATIVO]");
     }
   }
@@ -37,55 +47,75 @@ export function interpretIdeation(
     interpretaciones.push("[PENDIENTE EBPer POSITIVO]");
   }
 
+  // Paso 2: Relación a:p y Ma:Mp
   const a = summary.a ?? 0;
   const p = summary.p ?? 0;
   const ma = summary.Ma ?? 0;
   const mp = summary.Mp ?? 0;
   const sumT = summary.SumT ?? 0;
-  const populares = comparisons.Populares.COMPARACION ?? 0;
-  const ego = comparisons.Ego.COMPARACION ?? 0;
   const fd = summary.Fd ?? 0;
+  const populares = comparisons.Populares.COMPARACION;
+  const ego = comparisons.Ego.COMPARACION;
 
   const m = summary.m ?? 0;
-  const fm = summary.FM ?? 0;
-  const M = summary.M ?? 0;
-  const sumMov = m + fm + M;
+  const aniMov = summary.FM ?? 0;
+  const humMov = summary.M ?? 0;
+  const sumMov = m + aniMov + humMov;
 
   if (sumMov < 4) {
     interpretaciones.push(
-      `${
-        persona.charAt(0).toUpperCase() + persona.slice(1)
-      } no proporcionó suficiente información respecto a su funcionamiento ideativo como para realizar un análisis en profundidad, lo que impide estimar de qué manera utiliza sus recursos ideativos y cómo éstos ${articulo} movilizan para interactuar con su entorno.`
+      `${capitalize(
+        persona
+      )} no proporcionó suficiente información respecto a su funcionamiento ideativo como para realizar un análisis en profundidad, lo que impide estimar de qué manera utiliza sus recursos ideativos y cómo éstos ${articulo} movilizan para interactuar con su entorno.`
     );
   } else {
     if (p > a + 1) {
       interpretaciones.push(
-        `${
-          persona.charAt(0).toUpperCase() + persona.slice(1)
-        } muestra una actitud pasiva en sus procesos de ideación, por lo que tiende a asumir un rol pasivo en sus relaciones interpersonales y a no responsabilizarse por sus propias decisiones. Por este mismo motivo, suele refugiarse en la fantasía para satisfacer sus frustraciones de la vida real.`
+        `${capitalize(
+          persona
+        )} muestra una actitud pasiva en sus procesos de ideación, por lo que tiende a asumir un rol pasivo en sus relaciones interpersonales y a no responsabilizarse por sus propias decisiones. Por este mismo motivo, suele refugiarse en la fantasía para satisfacer sus frustraciones de la vida real.`
       );
     } else {
       interpretaciones.push(
-        `${
-          persona.charAt(0).toUpperCase() + persona.slice(1)
-        } muestra una tendencia a usar sus recursos ideativos de manera activa, lo que le permite tomar la iniciativa en la interacción con otros y asumir la responsabilidad de satisfacer sus necesidades mediante interacciones prácticas con su entorno.`
+        `${capitalize(
+          persona
+        )} muestra una tendencia a usar sus recursos ideativos de manera activa, lo que le permite tomar la iniciativa en la interacción con otros y asumir la responsabilidad de satisfacer sus necesidades mediante interacciones prácticas con su entorno.`
       );
     }
 
-    interpretaciones.push(checkDependence(a, p, sumT, populares, ego, fd));
+    // Rasgos de dependencia
+    const dep = assessDependence(a, p, sumT, populares, ego, fd);
 
-    if (
-      (a >= 4 && p === 0) ||
-      (a === 0 && p >= 4) ||
-      a >= p * 3 ||
-      p >= a * 3
-    ) {
+    interpretaciones.push(`[INDICADORES DEPENDENCIA: ${dep.count}]`);
+
+    if (dep.indicators.includes("P_mayor_que_A")) {
       interpretaciones.push(
-        `Se observan rasgos de rigidez en su actividad ideativa, lo cual constituye un factor desfavorable de cara al tratamiento, dado que ${persona} tenderá a aferrarse a su propio punto de vista, dificultando la introducción de procesos de cambio en su pensamiento y conducta.`
+        "Se observa una tendencia a privilegiar respuestas populares por sobre la iniciativa personal."
+      );
+    }
+
+    if (dep.indicators.includes("SumT_elevado")) {
+      interpretaciones.push(
+        "La presencia elevada de T sugiere necesidades de contacto y apoyo afectivo."
+      );
+    }
+
+    if (dep.indicators.includes("Ego_disminuido")) {
+      interpretaciones.push(
+        "Los indicadores de autovaloración se encuentran disminuidos, lo que puede favorecer conductas dependientes."
+      );
+    }
+
+    // Rigidez Ideativa
+    const isFlexible = isMentalFlexible(a, p);
+
+    if (isFlexible) {
+      interpretaciones.push(
+        "Cuenta con una adecuada flexibilidad ideativa, por lo que es capaz de desarrollar nuevos patrones de pensamiento y conducta, factor positivo para el proceso terapéutico."
       );
     } else {
       interpretaciones.push(
-        "Cuenta con una adecuada flexibilidad ideativa, por lo que es capaz de desarrollar nuevos patrones de pensamiento y conducta, factor positivo para el proceso terapéutico."
+        `Se observan rasgos de rigidez en su actividad ideativa, lo cual constituye un factor desfavorable de cara al tratamiento, dado que ${persona} tenderá a aferrarse a su propio punto de vista, dificultando la introducción de procesos de cambio en su pensamiento y conducta.`
       );
     }
 
@@ -94,6 +124,7 @@ export function interpretIdeation(
     }
   }
 
+  // Paso 3: HVI, OBS y MOR
   if (summary.HVI === "Positivo")
     interpretaciones.push("[PENDIENTE HVI POSITIVO]");
   if (summary.OBS === "Positivo")
@@ -106,18 +137,21 @@ export function interpretIdeation(
     );
   }
 
+  // Paso 4: Análisis lado izquierdo de eb
   if (m > 1) {
     interpretaciones.push(
       `Se observa un aumento en la actividad ideativa periférica que deriva de una sensación de descontrol que ${persona} experimenta por situaciones estresantes externas.`
     );
   }
 
-  const fmMasM = comparisons["FM+m"].COMPARACION ?? "Indefinido";
+  const fmMasM = comparisons["FM+m"].COMPARACION;
 
   switch (fmMasM) {
-    case "Levemente por encima":
     case "Marcadamente por encima":
-      interpretaciones.push("[PENDIENTE FM+m ALTO - MUY ALTO]");
+      interpretaciones.push("[PENDIENTE FM+m MUY ALTO]");
+      break;
+    case "Levemente por encima":
+      interpretaciones.push("[PENDIENTE FM+m ALTO]");
       break;
     case "Dentro del rango":
       interpretaciones.push(
@@ -125,6 +159,8 @@ export function interpretIdeation(
       );
       break;
     case "Levemente por debajo":
+      interpretaciones.push("[PENDIENTE FM+m BAJO]");
+      break;
     case "Marcadamente por debajo":
       interpretaciones.push(
         `Su actividad ideativa periférica muestra un bajo nivel de activación lo que, si bien indica que ${persona} no experimenta un aumento de tensión por la insatisfacción de sus necesidades primarias o secundarias, se debe a que probablemente no está realizando un adecuado registro de estas.`
@@ -132,6 +168,7 @@ export function interpretIdeation(
       break;
   }
 
+  // Paso 5: Índice de Intelectualización
   const intelec = summary.Intelec ?? 0;
   if (intelec > 5) {
     interpretaciones.push(
@@ -139,42 +176,16 @@ export function interpretIdeation(
     );
   }
 
-  // interpretaciones.push(evaluarCodEspeciales(variables));
-  interpretaciones.push("[VERIFICAR DISTORSIONES DE M]");
-  interpretaciones.push("[VERIFICAR CUALIDAD DE M]");
+  // Paso 6: Análisis de CCEE, SumBru6 y SumPon6
+  const assessment = assessSpecialCodes(comparisons);
+  interpretaciones.push(...interpretSpecialCodes(persona, assessment));
+
+  // Paso 7: MQ y grados de distorsión de MQ
+  const mqMenos = summary["MQ-"] ?? 0;
+  if (mqMenos > 0) interpretaciones.push("[VERIFICAR DISTORSIONES DE M]");
+
+  // Paso 8: ASpectos cualitativos de M
+  if (humMov > 0) interpretaciones.push("[VERIFICAR CUALIDAD DE M]");
 
   return interpretaciones;
 }
-
-function checkDependence(
-  a: number,
-  p: number,
-  sumT: number,
-  populares: string,
-  ego: string,
-  fd: number
-): string {
-  let contador = 0;
-
-  if (p > a + 1) contador++;
-  if (sumT > 1) contador++;
-  if (
-    ["Levemente por encima", "Marcadamente por encima"].includes(
-      String(populares)
-    )
-  )
-    contador++;
-  if (["Levemente por debajo", "Marcadamente por debajo"].includes(String(ego)))
-    contador++;
-  if (fd > 0) contador++;
-
-  return `[INDICADORES DEPENDENCIA: ${contador}]`;
-}
-
-// function evaluarCodEspeciales(variables: VariablesIdeacion): string {
-//   // const sum6 = variables.SumBrut6 ?? 0;
-//   // const sumpon6 = variables.SumPon6 ?? 0;
-
-//   // Puedes integrar aquí un análisis específico si se requiere.
-//   return "[PENDIENTE ANÁLISIS CCEE]";
-// }

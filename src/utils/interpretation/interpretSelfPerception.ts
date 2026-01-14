@@ -2,12 +2,13 @@ import type { StructuralSummaryData } from "../../types/StructuralSummaryData";
 import type { ComparisonLevel, ComparisonMap } from "../../types/NormativeData";
 import { getDominant } from "../getDominant";
 import { genderText } from "./genderText";
+import { capitalize } from "../capitalize";
 
 export function interpretSelfPerception(
   summary: StructuralSummaryData,
   comparisons: ComparisonMap
 ): string[] {
-  const [persona, vocal, articulo] = genderText(summary["Genero"]);
+  const [persona, vocal] = genderText(summary["Genero"]);
 
   const interpretaciones: string[] = [];
 
@@ -21,8 +22,8 @@ export function interpretSelfPerception(
   }
 
   // Paso 2: Índice de egocentrismo y reflejos
-  const ego: ComparisonLevel = comparisons.Ego?.COMPARACION ?? "Indefinido";
-  switch (ego) {
+  const egoComp: ComparisonLevel = comparisons.Ego?.COMPARACION;
+  switch (egoComp) {
     case "Marcadamente por encima":
       interpretaciones.push(
         `Su índice de egocentrismo se encuentra muy por encima de lo esperado, lo que indica que ${persona} se encuentra excesivamente autocentrad${vocal}, tiende a despreocuparse de su mundo exterior y a otorgar demasiada prioridad a su propio punto de vista.`
@@ -68,8 +69,17 @@ export function interpretSelfPerception(
     );
   }
 
+  // TODO: Incorporar variables para interpretación según caso
   // Paso 3: FD y V en relación con historia personal
   const fd = summary.FD ?? 0;
+  let step3Text = "";
+
+  if (sumV + fd > 0) {
+    step3Text = `${capitalize(
+      persona
+    )} muestra capacidad para realizar trabajo de introspección`;
+  }
+
   if (fd > 2) {
     interpretaciones.push("[PENDIENTE FD>2]");
   }
@@ -77,6 +87,8 @@ export function interpretSelfPerception(
   if (sumV > 0 && sumV + fd > 2) {
     interpretaciones.push("[PENDIENTE V+FD>2]");
   }
+
+  step3Text.length > 0 && interpretaciones.push(step3Text);
 
   // Paso 4: An y Xy
   const an = summary.An ?? 0;
@@ -97,30 +109,35 @@ export function interpretSelfPerception(
     interpretaciones.push("[VERIFICAR CONTENIDOS MOR]");
   }
 
-  // Paso 6: H:(H)+Hd+(HD)
+  // Paso 6: H:(H)+Hd+(HD), FQ de H, GHR:PHR
   const sumH = summary.H ?? 0;
   const sumHd = summary.Hd ?? 0;
   const sumHImg = summary["(H)"] ?? 0;
   const sumHdImg = summary["(Hd)"] ?? 0;
 
   const todoH = comparisons.TodoH.COMPARACION ?? "Indefinido";
-  let todoHTxt = "";
 
   switch (todoH) {
     case "Marcadamente por encima":
-      todoHTxt = "[PENDIENTE TODOH MUY ALTO]";
+      interpretaciones.push("[PENDIENTE TODOH MUY ALTO]");
       break;
     case "Levemente por encima":
-      todoHTxt = "[PENDIENTE TODOH ALTO]";
+      interpretaciones.push("[PENDIENTE TODOH ALTO]");
       break;
     case "Dentro del rango":
-      todoHTxt = `Su interés en el componente humano se encuentra dentro de lo esperado, por lo que ${persona} es capaz de realizar trabajo de identificación para construir su autoconcepto.`;
+      interpretaciones.push(
+        `Su interés en el componente humano se encuentra dentro de lo esperado, por lo que ${persona} es capaz de realizar trabajo de identificación para construir su autoconcepto.`
+      );
       break;
     case "Levemente por debajo":
-      todoHTxt = `Se observan dificultades en los procesos de identificación que derivan del bajo interés que ${persona} tiene por el componente humano, lo cual apunta a la presencia de conflictos de identidad, de autoimagen o de relación con los demás.`;
+      interpretaciones.push(
+        `Se observan dificultades en los procesos de identificación que derivan del bajo interés que ${persona} tiene por el componente humano, lo cual apunta a la presencia de conflictos de identidad, de autoimagen o de relación con los demás.`
+      );
       break;
     case "Marcadamente por debajo":
-      todoHTxt = `Su interés en el componente humano se encuentra muy por debajo de lo esperado, lo que apunta a la presencia de dificultades importantes en sus procesos de identificación y a una tendencia al aislamiento. Esto sugiere también la presencia de conflictos de identidad y relacionales graves que afectan tanto la percepción que tiene de sí mism${vocal} como de las relaciones con otros.`;
+      interpretaciones.push(
+        `Su interés en el componente humano se encuentra muy por debajo de lo esperado, lo que apunta a la presencia de dificultades importantes en sus procesos de identificación y a una tendencia al aislamiento. Esto sugiere también la presencia de conflictos de identidad y relacionales graves que afectan tanto la percepción que tiene de sí mism${vocal} como de las relaciones con otros.`
+      );
       break;
   }
 
@@ -138,16 +155,14 @@ export function interpretSelfPerception(
   const hx = summary.Hx ?? 0;
   if (hx > 0) {
     interpretaciones.push(
-      "Además, se observa una tendencia a establecer aspectos del autoconcepto mediante la intelectualización, lo que puede derivar en la incorporación de distorsiones importantes."
+      "Además, se observa una tendencia a establecer aspectos del autoconcepto mediante la intelectualización, lo que puede derivar en la incorporación de distorsiones."
     );
   }
-
-  interpretaciones.push(todoHTxt);
 
   const ghr = summary.GHR ?? 0;
   const phr = summary.PHR ?? 0;
 
-  if (ghr + phr != 0) {
+  if (ghr + phr > 0) {
     if (ghr < phr) {
       interpretaciones.push(
         `Por otro lado, ${persona} muestra una tendencia a incorporar aspectos desadaptativos o distorsionadores que hacen que la construcción que hace sobre las conceptualizaciones sobre sí mism${vocal} tenga una menor efectividad para producir respuestas adaptativas en su funcionamiento auto perceptivo.`

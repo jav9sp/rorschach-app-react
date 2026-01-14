@@ -1,24 +1,27 @@
-import type {
-  Comparison,
-  ComparisonLevel,
-  ComparisonMap,
-} from "../../types/NormativeData";
-import type { StructuralSummaryData } from "../../types/StructuralSummaryData";
+import { checkAllHaveResponses } from "../checkAllHaveResponses";
 import { evaluateRiskFactors } from "../evaluation/riskFactors";
 import { joinStrings } from "../joinStrings";
+import { genderText } from "./genderText";
+
+import type { ComparisonLevel, ComparisonMap } from "../../types/NormativeData";
+import type { StructuralSummaryData } from "../../types/StructuralSummaryData";
+import type { LaminaClave } from "../counters/moduleSecuenciaLocalizacion";
 
 export function interpretPreliminaries(
   summary: StructuralSummaryData,
   comparisons: ComparisonMap
 ): string[] {
-  const persona = summary.Genero === "M" ? "el evaluado" : "la evaluada";
+  const [persona, vocal, articulo] = genderText(summary["Genero"]);
+
   const intro = `En el presente documento se describen los principales hallazgos sobre el funcionamiento cognitivo y psíquico de ${persona} tras la aplicación del test de Rorschach.`;
 
-  const rTotal = summary.R ?? 0;
+  const r = summary.R ?? 0;
   const lambda = summary.Lambda ?? 0;
+  const sequence = summary.Secuencia ?? null;
 
   const interpretaciones: string[] = [];
-  interpretaciones.push(`${intro} ${checkValidity(rTotal, lambda)}`);
+
+  interpretaciones.push(`${intro} ${checkValidity(r, lambda, sequence)}`);
 
   const altoRendimiento = checkHighPotential(persona, summary);
   if (altoRendimiento) interpretaciones.push(altoRendimiento);
@@ -29,7 +32,12 @@ export function interpretPreliminaries(
 
   interpretaciones.push(...evaluateRiskFactors(summary, comparisons));
 
-  const desfavorables = verifyUnfavorableIndexes(persona, summary, comparisons);
+  const desfavorables = verifyUnfavorableIndexes(
+    persona,
+    summary,
+    comparisons,
+    articulo
+  );
   if (desfavorables) interpretaciones.push(desfavorables);
 
   interpretaciones.push(
@@ -39,10 +47,25 @@ export function interpretPreliminaries(
   return interpretaciones;
 }
 
-function checkValidity(rTotal: number, lambda: number): string {
-  if (lambda > 0.99 && rTotal < 14) {
-    return "Se constata que su disposición durante la evaluación no fue suficientemente cooperativa, por lo que el protocolo se considera inválido al no contar con la información suficiente para establecer una interpretación estable en el tiempo.";
+export function checkValidity(
+  r: number,
+  lambda: number,
+  sequence: Record<LaminaClave, string[]>
+): string {
+  const { ok, failed } = checkAllHaveResponses(sequence);
+
+  const invalidByLambdaR = lambda > 0.99 && r < 14;
+
+  const invalidByFailures = !ok;
+
+  if (invalidByLambdaR || invalidByFailures) {
+    const motivoFracasos = invalidByFailures
+      ? `Invalidez por FRACASO en lámina: ${failed.join(", ")}.`
+      : "";
+
+    return `Se constata que su disposición durante la evaluación no fue suficientemente cooperativa, por lo que el protocolo se considera inválido al no contar con la información suficiente para establecer una interpretación estable en el tiempo. [${motivoFracasos}]`;
   }
+
   return "Se constata que su disposición durante la evaluación fue cooperativa, por lo que el protocolo se considera válido y que la información recopilada es suficiente para establecer conclusiones estables en el tiempo.";
 }
 
@@ -208,11 +231,11 @@ function checkHighPotential(
 }
 
 function verifyUnfavorableIndexes(
-  persona: string,
+  person: string,
   summary: StructuralSummaryData,
-  comparisons: ComparisonMap
+  comparisons: ComparisonMap,
+  article: string
 ): string | null {
-  const articulo = persona === "el evaluado" ? "lo" : "la";
   const lista: string[] = [];
 
   const hvi = summary.HVI ?? "Negativo";
@@ -224,7 +247,7 @@ function verifyUnfavorableIndexes(
   if (hvi === "Positivo") lista.push("[PENDIENTE HVI POSITIVO]");
   if (cdi === "Positivo")
     lista.push(
-      `un índice de inhabilidad social positivo, que ${articulo} vuelve ineficaz en la interacción con los demás`
+      `un índice de inhabilidad social positivo, que ${article} vuelve ineficaz en la interacción con los demás`
     );
   if (reflejos > 0)
     lista.push("elementos narcisistas en la construcción de su autoconcepto");
@@ -240,7 +263,7 @@ function verifyUnfavorableIndexes(
     lista.push("[PENDIENTE S ALTO]");
 
   if (lista.length > 0) {
-    return `Por otro lado, ${persona} presenta ${joinStrings(
+    return `Por otro lado, ${person} presenta ${joinStrings(
       lista
     )}, lo cual se considera como factor desfavorable de cara al tratamiento y dificulta el logro de objetivos terapéuticos.`;
   }

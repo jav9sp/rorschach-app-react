@@ -1,4 +1,4 @@
-import { contarLocalizaciones } from "./counters/moduleLocalizacion";
+import { countLocations } from "./counters/moduleLocalizacion";
 import { contarLocFQ } from "./counters/moduleCalidadFormalLocalizacion";
 import { contarCalidadDQ } from "./counters/moduleCalidadEvolutiva";
 import { contarDeterminantes } from "./counters/moduleDeterminantes";
@@ -28,7 +28,7 @@ import { calcularProcesamiento } from "./areas/moduleProcesamiento";
 import { calculateSelfPerception } from "./areas/moduleAutopercepcion";
 import { generateConstellations } from "./constellations/generateConstellations";
 
-import { calcularSecuenciaLocalizacion } from "./counters/moduleSecuenciaLocalizacion";
+import { calculateLocationSequence } from "./counters/moduleSecuenciaLocalizacion";
 
 import type { StructuralSummaryData } from "../types/StructuralSummaryData";
 import type {
@@ -91,7 +91,7 @@ export function buildMasterSummary(
   summary.Edad = age;
   summary.Genero = gender;
 
-  Object.assign(summary, contarLocalizaciones(locs));
+  Object.assign(summary, countLocations(locs));
   Object.assign(summary, contarCalidadDQ(dq));
 
   const { resumenDeterminantes, resumenSubindices, detCompljs, categorias } =
@@ -268,7 +268,7 @@ export function buildMasterSummary(
   Object.assign(summary, generateConstellations(summary));
 
   // Secuencia de Localización
-  summary.Secuencia = calcularSecuenciaLocalizacion(data);
+  summary.Secuencia = calculateLocationSequence(data);
 
   return summary as StructuralSummaryData;
 }

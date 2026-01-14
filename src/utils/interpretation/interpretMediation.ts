@@ -103,16 +103,22 @@ export function interpretMediation(
 
   // Paso 6: X+% y Xu%
   const xPlus = summary["X+%"] ?? 0;
-  const xu = comparisons["Xu%"].COMPARACION ?? "Indefinido";
-  if (
-    xPlus < 0.78 &&
-    (xu === "Levemente por encima" || xu === "Marcadamente por encima")
-  ) {
-    interpretaciones.push(
-      `Las posibles dificultades de ${persona} se evidencian en su excesivo autocentramiento, lo que ${articulo} lleva a sesgar sus percepciones según sus propias necesidades y a aferrarse a su punto de vista, rechazando perspectivas más convencionales de la realidad o la posibilidad de adoptar otros enfoques. Esto podría volverse problemático, especialmente si el entorno le exige ajustarse a las expectativas sociales, en cuyo caso las probabilidades de conflicto aumentan.`
-    );
-  } else if (xPlus < 0.78 && xu === "Dentro del rango") {
-    interpretaciones.push("[PENDIENTE Xu% NORMAL]");
+  const xu = comparisons["Xu%"]?.COMPARACION ?? "Indefinido";
+
+  if (xPlus < 0.78) {
+    if (xu === "Marcadamente por encima") {
+      interpretaciones.push(
+        `Sus dificultades se manifiestan en el marcado predominio de su individualismo para interpretar la realidad, lo que ${articulo} conduce aferrarse a sus propios puntos de vista de manera rígida. Esto puede generar una desconexión significativa con las convenciones del entorno, aumentando la probabilidad de conflictos, fricciones interpersonales y dificultades para ajustarse a las demandas sociales.`
+      );
+    } else if (xu === "Levemente por encima") {
+      interpretaciones.push(
+        `Se observa en ${persona} una tendencia moderada a privilegiar enfoques personales y originales en la percepción de la realidad, lo que puede traducirse en una mayor creatividad y autonomía de pensamiento, aunque con cierto riesgo de distanciamiento respecto de los criterios convencionales cuando la situación exige mayor ajuste a normas sociales.`
+      );
+    } else if (xu === "Dentro del rango") {
+      interpretaciones.push(
+        `Por otro lado, ${persona} muestra capacidad para expresar su individualidad y creatividad de manera adecuada, sin que esto implique una desviación de los niveles de convencionalidad esperados.`
+      );
+    }
   }
 
   return interpretaciones;

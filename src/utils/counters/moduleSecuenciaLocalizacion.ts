@@ -16,10 +16,10 @@ export type LaminaClave =
  * @param data Respuestas completas
  * @returns Objeto { I: [...], II: [...], ..., X: [...] }
  */
-export function calcularSecuenciaLocalizacion(
+export function calculateLocationSequence(
   data: { Lam: string | number; Loc: string }[]
 ): Record<LaminaClave, string[]> {
-  const secuencia: Record<LaminaClave, string[]> = {
+  const sequence: Record<LaminaClave, string[]> = {
     I: [],
     II: [],
     III: [],
@@ -50,9 +50,9 @@ export function calcularSecuenciaLocalizacion(
     const loc = row.Loc?.toUpperCase().trim() ?? "FRACASO";
 
     if (laminasValidas.includes(lamina) && loc) {
-      secuencia[lamina].push(loc);
+      sequence[lamina].push(loc);
     }
   });
 
-  return secuencia;
+  return sequence;
 }

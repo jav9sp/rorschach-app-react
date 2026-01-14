@@ -15,7 +15,7 @@ export interface ConteoLocalizaciones {
  * @returns ConteoLocalizaciones
  */
 
-export function contarLocalizaciones(
+export function countLocations(
   columna: (string | undefined | null)[]
 ): ConteoLocalizaciones {
   const conteoLoc: ConteoLocalizaciones = {
@@ -27,7 +27,7 @@ export function contarLocalizaciones(
   };
 
   columna.forEach((locRaw) => {
-    if (!locRaw) return; // Ignorar vacíos/null
+    if (!locRaw) return;
 
     const loc = locRaw.toUpperCase();
 

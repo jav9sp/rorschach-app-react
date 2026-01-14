@@ -6,7 +6,7 @@ export function interpretInterpersonal(
   summary: StructuralSummaryData,
   comparisons: ComparisonMap
 ): string[] {
-  const [persona, vocal, articulo] = genderText(summary["Genero"]);
+  const [persona, vocal] = genderText(summary["Genero"]);
 
   const interpretaciones: string[] = [];
 
@@ -24,9 +24,9 @@ export function interpretInterpersonal(
   // Paso 2: Relación a:p
   const totA = summary.a ?? 0;
   const totP = summary.p ?? 0;
-  const sumMov = totA + totP;
+  const totMov = totA + totP;
 
-  if (sumMov > 4) {
+  if (totMov > 4) {
     if (totP > totA + 1) {
       interpretaciones.push(
         "Muestra una tendencia a asumir un rol pasivo en la interacción con los demás, por lo que deja que ellos tomen la iniciativa, evita asumir la responsabilidad de sus decisiones y espera que su entorno actúe en función de sus necesidades."

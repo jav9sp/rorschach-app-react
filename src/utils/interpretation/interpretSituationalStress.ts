@@ -7,7 +7,7 @@ export function interpretSituationalStress(
   summary: StructuralSummaryData,
   comparisons: ComparisonMap
 ): string[] {
-  const [persona, vocal, articulo] = genderText(summary["Genero"]);
+  const [persona, vocal] = genderText(summary["Genero"]);
 
   const interpretaciones: string[] = [];
 
