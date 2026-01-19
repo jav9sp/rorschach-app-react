@@ -6,9 +6,9 @@ import { genderText } from "./genderText";
 
 export function interpretMediation(
   summary: StructuralSummaryData,
-  comparisons: ComparisonMap
+  comparisons: ComparisonMap,
 ): string[] {
-  const [persona, vocal, articulo] = genderText(summary["Genero"]);
+  const { person, article } = genderText(summary["Genero"]);
 
   const interpretaciones: string[] = [];
 
@@ -19,20 +19,20 @@ export function interpretMediation(
   if (xa >= 0.96 && wda >= 0.96) {
     interpretaciones.push(
       `${capitalize(
-        persona
-      )} muestra una adecuada capacidad para ejercer control cognitivo sobre su percepción e interpretación de la realidad según lo esperado, pero se observa una marcada tendencia a ser muy convencional, por lo que actúa en base a las demandas de su entorno, evita cometer errores y elimina la expresión de su creatividad y originalidad.`
+        person,
+      )} muestra una adecuada capacidad para ejercer control cognitivo sobre su percepción e interpretación de la realidad según lo esperado, pero se observa una marcada tendencia a ser muy convencional, por lo que actúa en base a las demandas de su entorno, evita cometer errores y elimina la expresión de su creatividad y originalidad.`,
     );
   } else if (xa >= 0.78 && xa <= 0.9 && wda >= 0.78 && wda <= 0.9) {
     interpretaciones.push(
       `${capitalize(
-        persona
-      )} muestra una adecuada capacidad para ejercer control cognitivo sobre su percepción e interpretación de la realidad según lo esperado, por lo que es capaz de percibir la realidad como lo hace la mayoría.`
+        person,
+      )} muestra una adecuada capacidad para ejercer control cognitivo sobre su percepción e interpretación de la realidad según lo esperado, por lo que es capaz de percibir la realidad como lo hace la mayoría.`,
     );
   } else if (xa <= 0.78 && wda <= 0.78) {
     interpretaciones.push(
       `${capitalize(
-        persona
-      )} muestra dificultades para ejercer control cognitivo sobre su percepción e interpretación de la realidad, por lo que tiende a comportarse de manera poco convencional [EVALUAR DESVIACIÓN - CORTE EN 0.78] [aumentando el riesgo de conflictos de comunicación con su entono y su capacidad para generar conductas que respondan adecuadamente a las demandas de su entorno.]`
+        person,
+      )} muestra dificultades para ejercer control cognitivo sobre su percepción e interpretación de la realidad, por lo que tiende a comportarse de manera poco convencional [EVALUAR DESVIACIÓN - CORTE EN 0.78] [aumentando el riesgo de conflictos de comunicación con su entono y su capacidad para generar conductas que respondan adecuadamente a las demandas de su entorno.]`,
     );
   } else {
     interpretaciones.push(`[PENDIENTE EVALUACIÓN XA% ${xa} Y WDA% ${wda}]`);
@@ -41,7 +41,7 @@ export function interpretMediation(
   // Paso 2: FQsin
   if (summary["FQxsin"] && summary["FQxsin"] > 0) {
     interpretaciones.push(
-      "[PENDIENTE FQsin PRESENTE, VERIFICAR CONTENIDO QUE ACOMPAÑA A FQsin]"
+      "[PENDIENTE FQsin PRESENTE, VERIFICAR CONTENIDO QUE ACOMPAÑA A FQsin]",
     );
   }
 
@@ -68,27 +68,27 @@ export function interpretMediation(
   switch (populares) {
     case "Marcadamente por encima":
       interpretaciones.push(
-        `Su capacidad para identificar aquellos elementos más habituales del campo estimular está muy aumentada, por lo que su adecuación perceptiva está muy por encima de la comparación normativa. Esto indica que ${persona} es es mucho más consciente de las exigencias sociales y tiende a acumular malestar si no cumple con las expectativas del entorno.`
+        `Su capacidad para identificar aquellos elementos más habituales del campo estimular está muy aumentada, por lo que su adecuación perceptiva está muy por encima de la comparación normativa. Esto indica que ${person} es es mucho más consciente de las exigencias sociales y tiende a acumular malestar si no cumple con las expectativas del entorno.`,
       );
       break;
     case "Levemente por encima":
       interpretaciones.push(
-        `Su capacidad para identificar aquellos elementos más habituales del campo estimular está levemente aumentada, por lo que su adecuación perceptiva es mayor a la comparación normativa. Esto indica que ${persona} es más sensible a las exigencias sociales y tiende a proteger mucho su identidad percibida.`
+        `Su capacidad para identificar aquellos elementos más habituales del campo estimular está levemente aumentada, por lo que su adecuación perceptiva es mayor a la comparación normativa. Esto indica que ${person} es más sensible a las exigencias sociales y tiende a proteger mucho su identidad percibida.`,
       );
       break;
     case "Dentro del rango":
       interpretaciones.push(
-        `Su capacidad para identificar aquellos elementos más habituales del campo estimular es adecuada, por lo que su adecuación perceptiva se ajusta a la comparación normativa. Esto indica que ${persona} tiene una adecuada sensibilidad a las exigencias sociales y es capaz de actuar de manera convencional en escenarios socialmente obvios.`
+        `Su capacidad para identificar aquellos elementos más habituales del campo estimular es adecuada, por lo que su adecuación perceptiva se ajusta a la comparación normativa. Esto indica que ${person} tiene una adecuada sensibilidad a las exigencias sociales y es capaz de actuar de manera convencional en escenarios socialmente obvios.`,
       );
       break;
     case "Levemente por debajo":
       interpretaciones.push(
-        `Su capacidad para identificar aquellos elementos más habituales del campo estimular está levemente disminuida, por lo que su adecuación perceptiva en relación con la comparación normativa es menor. Esto indica que ${persona} tiene una sensibilidad menor a las exigencias sociales que lo llevan a actuar de manera menos convencional en escenarios socialmente obvios.`
+        `Su capacidad para identificar aquellos elementos más habituales del campo estimular está levemente disminuida, por lo que su adecuación perceptiva en relación con la comparación normativa es menor. Esto indica que ${person} tiene una sensibilidad menor a las exigencias sociales que lo llevan a actuar de manera menos convencional en escenarios socialmente obvios.`,
       );
       break;
     case "Marcadamente por debajo":
       interpretaciones.push(
-        `Su capacidad para identificar aquellos elementos más habituales del campo estimular está muy disminuida, por lo que su adecuación perceptiva en relación con la comparación normativa se encuentra muy por debajo. Esto indica que ${persona} tiene una muy baja sensibilidad a las exigencias sociales [EVALUAR DESAJUSTES] [lo que indica un pobre contacto con la realidad] por lo que no será capaz de comportarse convencionalmente incluso en situaciones sociales obvias.`
+        `Su capacidad para identificar aquellos elementos más habituales del campo estimular está muy disminuida, por lo que su adecuación perceptiva en relación con la comparación normativa se encuentra muy por debajo. Esto indica que ${person} tiene una muy baja sensibilidad a las exigencias sociales [EVALUAR DESAJUSTES] [lo que indica un pobre contacto con la realidad] por lo que no será capaz de comportarse convencionalmente incluso en situaciones sociales obvias.`,
       );
       break;
   }
@@ -97,7 +97,7 @@ export function interpretMediation(
   const fqPlus = summary["FQx+"] ?? 0;
   if (fqPlus > 4) {
     interpretaciones.push(
-      `Si bien ${persona} muestra una buena capacidad perceptiva y alta motivación, muestra una tendencia marcada a la búsqueda de exactitud, [indicando rasgos perfeccionistas u obsesivos].`
+      `Si bien ${person} muestra una buena capacidad perceptiva y alta motivación, muestra una tendencia marcada a la búsqueda de exactitud, [indicando rasgos perfeccionistas u obsesivos].`,
     );
   }
 
@@ -108,15 +108,15 @@ export function interpretMediation(
   if (xPlus < 0.78) {
     if (xu === "Marcadamente por encima") {
       interpretaciones.push(
-        `Sus dificultades se manifiestan en el marcado predominio de su individualismo para interpretar la realidad, lo que ${articulo} conduce aferrarse a sus propios puntos de vista de manera rígida. Esto puede generar una desconexión significativa con las convenciones del entorno, aumentando la probabilidad de conflictos, fricciones interpersonales y dificultades para ajustarse a las demandas sociales.`
+        `Sus dificultades se manifiestan en el marcado predominio de su individualismo para interpretar la realidad, lo que ${article} conduce aferrarse a sus propios puntos de vista de manera rígida. Esto puede generar una desconexión significativa con las convenciones del entorno, aumentando la probabilidad de conflictos, fricciones interpersonales y dificultades para ajustarse a las demandas sociales.`,
       );
     } else if (xu === "Levemente por encima") {
       interpretaciones.push(
-        `Se observa en ${persona} una tendencia moderada a privilegiar enfoques personales y originales en la percepción de la realidad, lo que puede traducirse en una mayor creatividad y autonomía de pensamiento, aunque con cierto riesgo de distanciamiento respecto de los criterios convencionales cuando la situación exige mayor ajuste a normas sociales.`
+        `Se observa en ${person} una tendencia moderada a privilegiar enfoques personales y originales en la percepción de la realidad, lo que puede traducirse en una mayor creatividad y autonomía de pensamiento, aunque con cierto riesgo de distanciamiento respecto de los criterios convencionales cuando la situación exige mayor ajuste a normas sociales.`,
       );
     } else if (xu === "Dentro del rango") {
       interpretaciones.push(
-        `Por otro lado, ${persona} muestra capacidad para expresar su individualidad y creatividad de manera adecuada, sin que esto implique una desviación de los niveles de convencionalidad esperados.`
+        `Por otro lado, ${person} muestra capacidad para expresar su individualidad y creatividad de manera adecuada, sin que esto implique una desviación de los niveles de convencionalidad esperados.`,
       );
     }
   }

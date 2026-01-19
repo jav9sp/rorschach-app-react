@@ -1,6 +1,5 @@
 import {
   assessSpecialCodes,
-  checkDependence,
   interpretSpecialCodes,
   isMentalFlexible,
 } from "../../helpers/ideation/ideationHelpers";
@@ -13,9 +12,9 @@ import { assessDependence } from "../../helpers/ideation/dependencyIndicators";
 
 export function interpretIdeation(
   summary: StructuralSummaryData,
-  comparisons: ComparisonMap
+  comparisons: ComparisonMap,
 ): string[] {
-  const [persona, _, articulo] = genderText(summary["Genero"]);
+  const { person, article } = genderText(summary["Genero"]);
 
   const interpretaciones: string[] = [];
 
@@ -30,7 +29,7 @@ export function interpretIdeation(
 
   if (eb === "Introversivo") {
     interpretaciones.push(
-      `Dado que ${persona} tiene un tipo vivencial Introversivo, prefiere usar la ideación al resolver problemas y se inclina a considerar todas las posibles alternativas antes de tomar una decisión, por lo que no procesa emociones en el proceso y se basa fuertemente en su propia evaluación interna para elaborar juicios.`
+      `Dado que ${person} tiene un tipo vivencial Introversivo, prefiere usar la ideación al resolver problemas y se inclina a considerar todas las posibles alternativas antes de tomar una decisión, por lo que no procesa emociones en el proceso y se basa fuertemente en su propia evaluación interna para elaborar juicios.`,
     );
 
     if (7 <= age && age < 18 && lambda > 1.3) {
@@ -65,21 +64,21 @@ export function interpretIdeation(
   if (sumMov < 4) {
     interpretaciones.push(
       `${capitalize(
-        persona
-      )} no proporcionó suficiente información respecto a su funcionamiento ideativo como para realizar un análisis en profundidad, lo que impide estimar de qué manera utiliza sus recursos ideativos y cómo éstos ${articulo} movilizan para interactuar con su entorno.`
+        person,
+      )} no proporcionó suficiente información respecto a su funcionamiento ideativo como para realizar un análisis en profundidad, lo que impide estimar de qué manera utiliza sus recursos ideativos y cómo éstos ${article} movilizan para interactuar con su entorno.`,
     );
   } else {
     if (p > a + 1) {
       interpretaciones.push(
         `${capitalize(
-          persona
-        )} muestra una actitud pasiva en sus procesos de ideación, por lo que tiende a asumir un rol pasivo en sus relaciones interpersonales y a no responsabilizarse por sus propias decisiones. Por este mismo motivo, suele refugiarse en la fantasía para satisfacer sus frustraciones de la vida real.`
+          person,
+        )} muestra una actitud pasiva en sus procesos de ideación, por lo que tiende a asumir un rol pasivo en sus relaciones interpersonales y a no responsabilizarse por sus propias decisiones. Por este mismo motivo, suele refugiarse en la fantasía para satisfacer sus frustraciones de la vida real.`,
       );
     } else {
       interpretaciones.push(
         `${capitalize(
-          persona
-        )} muestra una tendencia a usar sus recursos ideativos de manera activa, lo que le permite tomar la iniciativa en la interacción con otros y asumir la responsabilidad de satisfacer sus necesidades mediante interacciones prácticas con su entorno.`
+          person,
+        )} muestra una tendencia a usar sus recursos ideativos de manera activa, lo que le permite tomar la iniciativa en la interacción con otros y asumir la responsabilidad de satisfacer sus necesidades mediante interacciones prácticas con su entorno.`,
       );
     }
 
@@ -90,19 +89,19 @@ export function interpretIdeation(
 
     if (dep.indicators.includes("P_mayor_que_A")) {
       interpretaciones.push(
-        "Se observa una tendencia a privilegiar respuestas populares por sobre la iniciativa personal."
+        "Se observa una tendencia a privilegiar respuestas populares por sobre la iniciativa personal.",
       );
     }
 
     if (dep.indicators.includes("SumT_elevado")) {
       interpretaciones.push(
-        "La presencia elevada de T sugiere necesidades de contacto y apoyo afectivo."
+        "La presencia elevada de T sugiere necesidades de contacto y apoyo afectivo.",
       );
     }
 
     if (dep.indicators.includes("Ego_disminuido")) {
       interpretaciones.push(
-        "Los indicadores de autovaloración se encuentran disminuidos, lo que puede favorecer conductas dependientes."
+        "Los indicadores de autovaloración se encuentran disminuidos, lo que puede favorecer conductas dependientes.",
       );
     }
 
@@ -111,11 +110,11 @@ export function interpretIdeation(
 
     if (isFlexible) {
       interpretaciones.push(
-        "Cuenta con una adecuada flexibilidad ideativa, por lo que es capaz de desarrollar nuevos patrones de pensamiento y conducta, factor positivo para el proceso terapéutico."
+        "Cuenta con una adecuada flexibilidad ideativa, por lo que es capaz de desarrollar nuevos patrones de pensamiento y conducta, factor positivo para el proceso terapéutico.",
       );
     } else {
       interpretaciones.push(
-        `Se observan rasgos de rigidez en su actividad ideativa, lo cual constituye un factor desfavorable de cara al tratamiento, dado que ${persona} tenderá a aferrarse a su propio punto de vista, dificultando la introducción de procesos de cambio en su pensamiento y conducta.`
+        `Se observan rasgos de rigidez en su actividad ideativa, lo cual constituye un factor desfavorable de cara al tratamiento, dado que ${person} tenderá a aferrarse a su propio punto de vista, dificultando la introducción de procesos de cambio en su pensamiento y conducta.`,
       );
     }
 
@@ -133,14 +132,14 @@ export function interpretIdeation(
   const mor = summary.MOR ?? 0;
   if (mor >= 2) {
     interpretaciones.push(
-      `Se observa una marcada tendencia hacia el pesimismo en su actividad ideativa, que hace que ${persona} tienda a manifestar prejuicios negativos sobre el futuro y a mantener expectativas poco favorables.`
+      `Se observa una marcada tendencia hacia el pesimismo en su actividad ideativa, que hace que ${person} tienda a manifestar prejuicios negativos sobre el futuro y a mantener expectativas poco favorables.`,
     );
   }
 
   // Paso 4: Análisis lado izquierdo de eb
   if (m > 1) {
     interpretaciones.push(
-      `Se observa un aumento en la actividad ideativa periférica que deriva de una sensación de descontrol que ${persona} experimenta por situaciones estresantes externas.`
+      `Se observa un aumento en la actividad ideativa periférica que deriva de una sensación de descontrol que ${person} experimenta por situaciones estresantes externas.`,
     );
   }
 
@@ -155,7 +154,7 @@ export function interpretIdeation(
       break;
     case "Dentro del rango":
       interpretaciones.push(
-        `Su actividad ideativa periférica muestra un adecuado nivel de activación, lo que indica que ${persona} registra tanto sus necesidades primarias como secundarias insatisfechas según lo esperado sin producir un aumento en sus preocupaciones o malestar interno.`
+        `Su actividad ideativa periférica muestra un adecuado nivel de activación, lo que indica que ${person} registra tanto sus necesidades primarias como secundarias insatisfechas según lo esperado sin producir un aumento en sus preocupaciones o malestar interno.`,
       );
       break;
     case "Levemente por debajo":
@@ -163,7 +162,7 @@ export function interpretIdeation(
       break;
     case "Marcadamente por debajo":
       interpretaciones.push(
-        `Su actividad ideativa periférica muestra un bajo nivel de activación lo que, si bien indica que ${persona} no experimenta un aumento de tensión por la insatisfacción de sus necesidades primarias o secundarias, se debe a que probablemente no está realizando un adecuado registro de estas.`
+        `Su actividad ideativa periférica muestra un bajo nivel de activación lo que, si bien indica que ${person} no experimenta un aumento de tensión por la insatisfacción de sus necesidades primarias o secundarias, se debe a que probablemente no está realizando un adecuado registro de estas.`,
       );
       break;
   }
@@ -172,13 +171,13 @@ export function interpretIdeation(
   const intelec = summary.Intelec ?? 0;
   if (intelec > 5) {
     interpretaciones.push(
-      `Se observa que ${persona} se sirve de la intelectualización como parte fundamental de su funcionamiento psicológico, lo que le permite mitigar el impacto de las emociones disfóricas, pero que ${articulo} vuelve muy vulnerable a la desorganización en situaciones de sobrecarga emocional.`
+      `Se observa que ${person} se sirve de la intelectualización como parte fundamental de su funcionamiento psicológico, lo que le permite mitigar el impacto de las emociones disfóricas, pero que ${article} vuelve muy vulnerable a la desorganización en situaciones de sobrecarga emocional.`,
     );
   }
 
   // Paso 6: Análisis de CCEE, SumBru6 y SumPon6
   const assessment = assessSpecialCodes(comparisons);
-  interpretaciones.push(...interpretSpecialCodes(persona, assessment));
+  interpretaciones.push(...interpretSpecialCodes(person, assessment));
 
   // Paso 7: MQ y grados de distorsión de MQ
   const mqMenos = summary["MQ-"] ?? 0;

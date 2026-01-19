@@ -6,9 +6,9 @@ import { capitalize } from "../capitalize";
 
 export function interpretSelfPerception(
   summary: StructuralSummaryData,
-  comparisons: ComparisonMap
+  comparisons: ComparisonMap,
 ): string[] {
-  const [persona, vocal] = genderText(summary["Genero"]);
+  const { person, vowel } = genderText(summary["Genero"]);
 
   const interpretaciones: string[] = [];
 
@@ -26,27 +26,27 @@ export function interpretSelfPerception(
   switch (egoComp) {
     case "Marcadamente por encima":
       interpretaciones.push(
-        `Su índice de egocentrismo se encuentra muy por encima de lo esperado, lo que indica que ${persona} se encuentra excesivamente autocentrad${vocal}, tiende a despreocuparse de su mundo exterior y a otorgar demasiada prioridad a su propio punto de vista.`
+        `Su índice de egocentrismo se encuentra muy por encima de lo esperado, lo que indica que ${person} se encuentra excesivamente autocentrad${vowel}, tiende a despreocuparse de su mundo exterior y a otorgar demasiada prioridad a su propio punto de vista.`,
       );
       break;
     case "Levemente por encima":
       interpretaciones.push(
-        `Su índice de egocentrismo se encuentra elevado en relación con lo esperado, lo que indica que ${persona} tiene una inusual preocupación por sí mism${vocal}, tiende a despreocuparse de su mundo exterior y a otorgar demasiada prioridad a su propio punto de vista.`
+        `Su índice de egocentrismo se encuentra elevado en relación con lo esperado, lo que indica que ${person} tiene una inusual preocupación por sí mism${vowel}, tiende a despreocuparse de su mundo exterior y a otorgar demasiada prioridad a su propio punto de vista.`,
       );
       break;
     case "Dentro del rango":
       interpretaciones.push(
-        `Su índice de egocentrismo se encuentra dentro de los parámetros esperados, por lo que la preocupación que ${persona} tiene sobre sí mism${vocal} es adecuada, pudiendo prestar atención a sus necesidades personales sin descuidar su entorno.`
+        `Su índice de egocentrismo se encuentra dentro de los parámetros esperados, por lo que la preocupación que ${person} tiene sobre sí mism${vowel} es adecuada, pudiendo prestar atención a sus necesidades personales sin descuidar su entorno.`,
       );
       break;
     case "Levemente por debajo":
       interpretaciones.push(
-        `Su índice de egocentrismo se encuentra por debajo de lo esperado, lo que indica que ${persona} tiene una baja preocupación por sus propias necesidades, su imagen personal se encuentra desvalorizada y su autoestima es baja.`
+        `Su índice de egocentrismo se encuentra por debajo de lo esperado, lo que indica que ${person} tiene una baja preocupación por sus propias necesidades, su imagen personal se encuentra desvalorizada y su autoestima es baja.`,
       );
       break;
     case "Marcadamente por debajo":
       interpretaciones.push(
-        `Su índice de egocentrismo se encuentra muy por debajo de lo esperado, por lo que ${persona} tiende a despreocupar sus propias necesidades y tiene una imagen desvalorizada de sí misma. Esto puede llevarla a desconfiar de sus propios recursos y a dejarse influenciar excesivamente por los demás`
+        `Su índice de egocentrismo se encuentra muy por debajo de lo esperado, por lo que ${person} tiende a despreocupar sus propias necesidades y tiene una imagen desvalorizada de sí misma. Esto puede llevarla a desconfiar de sus propios recursos y a dejarse influenciar excesivamente por los demás`,
       );
       break;
   }
@@ -58,14 +58,14 @@ export function interpretSelfPerception(
     interpretaciones.push("[PENDIENTE AUTOVALORACIÓN NEGATIVA]");
   } else {
     interpretaciones.push(
-      "No muestra indicadores de autovaloración negativa, por lo que es posible afirmar que cuenta con una adecuada autoestima."
+      "No muestra indicadores de autovaloración negativa, por lo que es posible afirmar que cuenta con una adecuada autoestima.",
     );
   }
 
   const reflejos = summary["Fr+rF"] ?? 0;
   if (reflejos > 0) {
     interpretaciones.push(
-      `Además, se observan indicadores de narcisismo, por lo que ${persona} tiende a sobrestimar su valía personal, lo que indica inmadurez personal.`
+      `Además, se observan indicadores de narcisismo, por lo que ${person} tiende a sobrestimar su valía personal, lo que indica inmadurez personal.`,
     );
   }
 
@@ -76,7 +76,7 @@ export function interpretSelfPerception(
 
   if (sumV + fd > 0) {
     step3Text = `${capitalize(
-      persona
+      person,
     )} muestra capacidad para realizar trabajo de introspección`;
   }
 
@@ -96,7 +96,7 @@ export function interpretSelfPerception(
 
   if (an + xy > 3) {
     interpretaciones.push(
-      `Se observa una muy elevada preocupación por el cuerpo, que apunta a la posible presencia de alteraciones en la autoimagen y las actitudes que ${persona} tiene hacia sí mism${vocal}, reflejando que experimenta una gran vulnerabilidad referida a la experiencia de sí mism${vocal}.`
+      `Se observa una muy elevada preocupación por el cuerpo, que apunta a la posible presencia de alteraciones en la autoimagen y las actitudes que ${person} tiene hacia sí mism${vowel}, reflejando que experimenta una gran vulnerabilidad referida a la experiencia de sí mism${vowel}.`,
     );
   }
 
@@ -126,17 +126,17 @@ export function interpretSelfPerception(
       break;
     case "Dentro del rango":
       interpretaciones.push(
-        `Su interés en el componente humano se encuentra dentro de lo esperado, por lo que ${persona} es capaz de realizar trabajo de identificación para construir su autoconcepto.`
+        `Su interés en el componente humano se encuentra dentro de lo esperado, por lo que ${person} es capaz de realizar trabajo de identificación para construir su autoconcepto.`,
       );
       break;
     case "Levemente por debajo":
       interpretaciones.push(
-        `Se observan dificultades en los procesos de identificación que derivan del bajo interés que ${persona} tiene por el componente humano, lo cual apunta a la presencia de conflictos de identidad, de autoimagen o de relación con los demás.`
+        `Se observan dificultades en los procesos de identificación que derivan del bajo interés que ${person} tiene por el componente humano, lo cual apunta a la presencia de conflictos de identidad, de autoimagen o de relación con los demás.`,
       );
       break;
     case "Marcadamente por debajo":
       interpretaciones.push(
-        `Su interés en el componente humano se encuentra muy por debajo de lo esperado, lo que apunta a la presencia de dificultades importantes en sus procesos de identificación y a una tendencia al aislamiento. Esto sugiere también la presencia de conflictos de identidad y relacionales graves que afectan tanto la percepción que tiene de sí mism${vocal} como de las relaciones con otros.`
+        `Su interés en el componente humano se encuentra muy por debajo de lo esperado, lo que apunta a la presencia de dificultades importantes en sus procesos de identificación y a una tendencia al aislamiento. Esto sugiere también la presencia de conflictos de identidad y relacionales graves que afectan tanto la percepción que tiene de sí mism${vowel} como de las relaciones con otros.`,
       );
       break;
   }
@@ -155,7 +155,7 @@ export function interpretSelfPerception(
   const hx = summary.Hx ?? 0;
   if (hx > 0) {
     interpretaciones.push(
-      "Además, se observa una tendencia a establecer aspectos del autoconcepto mediante la intelectualización, lo que puede derivar en la incorporación de distorsiones."
+      "Además, se observa una tendencia a establecer aspectos del autoconcepto mediante la intelectualización, lo que puede derivar en la incorporación de distorsiones.",
     );
   }
 
@@ -165,17 +165,17 @@ export function interpretSelfPerception(
   if (ghr + phr > 0) {
     if (ghr < phr) {
       interpretaciones.push(
-        `Por otro lado, ${persona} muestra una tendencia a incorporar aspectos desadaptativos o distorsionadores que hacen que la construcción que hace sobre las conceptualizaciones sobre sí mism${vocal} tenga una menor efectividad para producir respuestas adaptativas en su funcionamiento auto perceptivo.`
+        `Por otro lado, ${person} muestra una tendencia a incorporar aspectos desadaptativos o distorsionadores que hacen que la construcción que hace sobre las conceptualizaciones sobre sí mism${vowel} tenga una menor efectividad para producir respuestas adaptativas en su funcionamiento auto perceptivo.`,
       );
     } else {
       interpretaciones.push(
-        `Se observa que la interpretación que hace de las representaciones humanas le permiten construir las conceptualizaciones sobre sí mism${vocal} de manera efectiva, lo que le permite producir respuestas adaptativas en esta área de funcionamiento la mayor parte del tiempo`
+        `Se observa que la interpretación que hace de las representaciones humanas le permiten construir las conceptualizaciones sobre sí mism${vowel} de manera efectiva, lo que le permite producir respuestas adaptativas en esta área de funcionamiento la mayor parte del tiempo`,
       );
     }
   }
 
   interpretaciones.push(
-    "[PASO 8: VERIFICAR PROYECCIONES EN FQ-, MOR, M Y SOBRE ELABORACIONES]"
+    "[PASO 8: VERIFICAR PROYECCIONES EN FQ-, MOR, M Y SOBRE ELABORACIONES]",
   );
 
   return interpretaciones;

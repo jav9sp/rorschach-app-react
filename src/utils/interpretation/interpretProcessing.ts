@@ -9,9 +9,9 @@ type Direction = "particular_to_general" | "general_to_particular";
 export function interpretProcessing(
   answers: Answer[],
   summary: StructuralSummaryData,
-  comparisons: ComparisonMap
+  comparisons: ComparisonMap,
 ): string[] {
-  const [persona, vocal, articulo] = genderText(summary["Genero"]);
+  const { person, vowel, article } = genderText(summary["Genero"]);
   const interpretaciones: string[] = [];
 
   // Requisitos Previos
@@ -22,22 +22,22 @@ export function interpretProcessing(
     case "Marcadamente por encima":
       interpretaciones.push(
         `${capitalize(
-          persona
-        )} muestra una marcada tendencia a usar sus recursos de manera económica y sobre simplificar sus percepciones al analizar el campo estimular, evitando las ambigüedades y la incorporación de información emocional, lo que ${articulo} lleva a perder parte importante de la información del medio.`
+          person,
+        )} muestra una marcada tendencia a usar sus recursos de manera económica y sobre simplificar sus percepciones al analizar el campo estimular, evitando las ambigüedades y la incorporación de información emocional, lo que ${article} lleva a perder parte importante de la información del medio.`,
       );
       break;
     case "Dentro del rango":
       interpretaciones.push(
         `${capitalize(
-          persona
-        )} es capaz de usar sus recursos cognitivos de manera equilibrada, siendo capaz de simplificar sus percepciones en justa medida, incorporando la información emocional y realizando un registro eficiente de la información del entorno.`
+          person,
+        )} es capaz de usar sus recursos cognitivos de manera equilibrada, siendo capaz de simplificar sus percepciones en justa medida, incorporando la información emocional y realizando un registro eficiente de la información del entorno.`,
       );
       break;
     case "Levemente por debajo":
       interpretaciones.push(
         `${capitalize(
-          persona
-        )} muestra una tendencia a recopilar demasiados estímulos en su proceso perceptivo, llevándol${vocal} a abrumarse con el exceso de información al no poder simplificar sus percepciones lo suficiente.`
+          person,
+        )} muestra una tendencia a recopilar demasiados estímulos en su proceso perceptivo, llevándol${vowel} a abrumarse con el exceso de información al no poder simplificar sus percepciones lo suficiente.`,
       );
       break;
     case "Marcadamente por debajo":
@@ -56,27 +56,27 @@ export function interpretProcessing(
   switch (zf) {
     case "Marcadamente por encima":
       interpretaciones.push(
-        `Su iniciativa y motivación en la tarea de organizar los estímulos del entorno y relacionarlos de manera significativa está muy por encima de lo esperado, por lo que ${persona} realiza un esfuerzo mayor en su procesamiento de información [que puede estar relacionado a características perfeccionistas o un alto rendimiento].`
+        `Su iniciativa y motivación en la tarea de organizar los estímulos del entorno y relacionarlos de manera significativa está muy por encima de lo esperado, por lo que ${person} realiza un esfuerzo mayor en su procesamiento de información [que puede estar relacionado a características perfeccionistas o un alto rendimiento].`,
       );
       break;
     case "Levemente por encima":
       interpretaciones.push(
-        `Su iniciativa y motivación en la tarea de organizar los estímulos del entorno y relacionarlos de manera significativa se encuentra por encima de lo esperado, por lo que ${persona} realiza un alto esfuerzo cognitivo en el procesamiento de información.`
+        `Su iniciativa y motivación en la tarea de organizar los estímulos del entorno y relacionarlos de manera significativa se encuentra por encima de lo esperado, por lo que ${person} realiza un alto esfuerzo cognitivo en el procesamiento de información.`,
       );
       break;
     case "Dentro del rango":
       interpretaciones.push(
-        `Su iniciativa y motivación en la tarea de organizar los estímulos del entorno y relacionarlos de manera significativa se encuentra dentro de lo esperado, por lo que ${persona} realiza un adecuado esfuerzo cognitivo en el procesamiento de información.`
+        `Su iniciativa y motivación en la tarea de organizar los estímulos del entorno y relacionarlos de manera significativa se encuentra dentro de lo esperado, por lo que ${person} realiza un adecuado esfuerzo cognitivo en el procesamiento de información.`,
       );
       break;
     case "Levemente por debajo":
       interpretaciones.push(
-        `Su iniciativa y motivación en la tarea de organizar los estímulos del entorno y relacionarlos de manera significativa es menor a lo esperado, por lo que ${persona} realiza un menor esfuerzo cognitivo en el procesamiento de la información.`
+        `Su iniciativa y motivación en la tarea de organizar los estímulos del entorno y relacionarlos de manera significativa es menor a lo esperado, por lo que ${person} realiza un menor esfuerzo cognitivo en el procesamiento de la información.`,
       );
       break;
     case "Marcadamente por debajo":
       interpretaciones.push(
-        "Su iniciativa y motivación en la tarea de organizar la información del entorno y relacionarla de manera significativa se encuentra muy por debajo de lo esperado, lo cual [apunta a la presencia de limitaciones cognitivas o un potencial intelectual inhibido por factores emocionales]."
+        "Su iniciativa y motivación en la tarea de organizar la información del entorno y relacionarla de manera significativa se encuentra muy por debajo de lo esperado, lo cual [apunta a la presencia de limitaciones cognitivas o un potencial intelectual inhibido por factores emocionales].",
       );
       break;
   }
@@ -88,7 +88,7 @@ export function interpretProcessing(
   const d = comparisons["D"];
   const dd = comparisons["Dd"];
   interpretaciones.push(
-    checkApproach(r.VALOR, w.VALOR, d.VALOR, dd.VALOR, persona)
+    checkApproach(r.VALOR, w.VALOR, d.VALOR, dd.VALOR, person),
   );
 
   // TODO: Esta función no calcula bien
@@ -97,11 +97,11 @@ export function interpretProcessing(
 
   if (isConsistent) {
     interpretaciones.push(
-      `Se observan patrones de registro consistentes y metódicos en múltiples láminas, lo que sugiere una forma ordenada y predecible de recopilar información del entorno. Además, mantiene una dirección secuencial estable en láminas con más de una respuesta, que va ${direction}, lo cual constituye un indicador de eficacia en esta tarea`
+      `Se observan patrones de registro consistentes y metódicos en múltiples láminas, lo que sugiere una forma ordenada y predecible de recopilar información del entorno. Además, mantiene una dirección secuencial estable en láminas con más de una respuesta, que va ${direction}, lo cual constituye un indicador de eficacia en esta tarea`,
     );
   } else {
     interpretaciones.push(
-      "No se observan patrones metódicos y predecibles en cómo registra la información del entorno, por lo que no es posible afirmar que sea eficaz en dicha tarea."
+      "No se observan patrones metódicos y predecibles en cómo registra la información del entorno, por lo que no es posible afirmar que sea eficaz en dicha tarea.",
     );
   }
 
@@ -115,15 +115,15 @@ export function interpretProcessing(
   const estilo = summary["Estilo Cognitivo"];
   if (estilo === "Dentro del rango") {
     interpretaciones.push(
-      "Su estilo de procesamiento es normal, lo que le permite discriminar la información importante de la accesoria al examinar el campo estimular, facilitando su resolución de problemas y toma de decisiones."
+      "Su estilo de procesamiento es normal, lo que le permite discriminar la información importante de la accesoria al examinar el campo estimular, facilitando su resolución de problemas y toma de decisiones.",
     );
   } else if (estilo === "Hipoincorporador") {
     interpretaciones.push(
-      "Su estilo cognitivo es hipoincorporador, por lo que no espera a integrar toda la información importante a la hora de resolver problemas, reflejando impulsividad y negligencia en su proceso de toma de decisiones."
+      "Su estilo cognitivo es hipoincorporador, por lo que no espera a integrar toda la información importante a la hora de resolver problemas, reflejando impulsividad y negligencia en su proceso de toma de decisiones.",
     );
   } else if (estilo === "Hiperincorporador") {
     interpretaciones.push(
-      "Su estilo cognitivo es hiperincorporador, por lo que tiende a querer recopilar toda la información del entorno sin discriminar aquella importante de la accesoria, llevándole a abrumarse con información y paralizarse al resolver problemas o tomar decisiones."
+      "Su estilo cognitivo es hiperincorporador, por lo que tiende a querer recopilar toda la información del entorno sin discriminar aquella importante de la accesoria, llevándole a abrumarse con información y paralizarse al resolver problemas o tomar decisiones.",
     );
   }
 
@@ -133,7 +133,7 @@ export function interpretProcessing(
   const DQo = comparisons.DQo.COMPARACION;
   const DQv = comparisons.DQv.COMPARACION;
   const DQplus = comparisons["DQ+"].COMPARACION;
-  const DQvplus = comparisons["DQv/+"].COMPARACION;
+  // const DQvplus = comparisons["DQv/+"].COMPARACION;
 
   if (["Marcadamente por encima", "Levemente por encima"].includes(DQo)) {
     interpretaciones.push(`[DQo MUY ALTO]`);
@@ -156,7 +156,7 @@ export function checkApproach(
   d: number,
   dd: number,
   persona: string,
-  margin = 0.1
+  margin = 0.1,
 ): string {
   if (r === 0) return "[ERROR] No hay respuestas.";
 
@@ -192,41 +192,41 @@ export function checkApproach(
   // Caso equilibrado
   if (wInRange && dInRange && ddOk) {
     frases.push(
-      `muestra un estilo equilibrado de acercamiento a los estímulos, siendo capaz de trabajar tanto de manera global abarcando el conjunto del campo estimular como de forma práctica, identificando con claridad los elementos más evidentes.`
+      `muestra un estilo equilibrado de acercamiento a los estímulos, siendo capaz de trabajar tanto de manera global abarcando el conjunto del campo estimular como de forma práctica, identificando con claridad los elementos más evidentes.`,
     );
   } else {
     // w alto
     if (wHigh)
       frases.push(
-        `presenta un enfoque marcadamente global y abstracto, tendiendo a priorizar la visión de conjunto por encima de los aspectos concretos.`
+        `presenta un enfoque marcadamente global y abstracto, tendiendo a priorizar la visión de conjunto por encima de los aspectos concretos.`,
       );
 
     // w bajo
     if (wLow)
       frases.push(
-        `muestra un nivel bajo de procesamiento global, lo que podría dificultarle integrar el conjunto del estímulo cuando la tarea requiere una visión amplia.`
+        `muestra un nivel bajo de procesamiento global, lo que podría dificultarle integrar el conjunto del estímulo cuando la tarea requiere una visión amplia.`,
       );
 
     // d alto
     if (dHigh)
       frases.push(
-        `${persona} tiende a abordar los estímulos de forma muy práctica y focalizada, centrando su atención en lo evidente, lo cual puede restarle capacidad para mantener una perspectiva más global.`
+        `${persona} tiende a abordar los estímulos de forma muy práctica y focalizada, centrando su atención en lo evidente, lo cual puede restarle capacidad para mantener una perspectiva más global.`,
       );
 
     // d bajo
     if (dLow)
       frases.push(
-        `${persona} evidencia un abordaje práctico por debajo de lo esperado, pudiendo mostrar cierta dificultad para identificar los aspectos más operativos o funcionales de los estímulos.`
+        `${persona} evidencia un abordaje práctico por debajo de lo esperado, pudiendo mostrar cierta dificultad para identificar los aspectos más operativos o funcionales de los estímulos.`,
       );
 
     // dd alto
     if (ddHigh)
       frases.push(
-        `muestra una tendencia a centrarse en detalles poco habituales, lo que refleja un acercamiento muy personal y la pérdida de la visión de conjunto y eficacia práctica.`
+        `muestra una tendencia a centrarse en detalles poco habituales, lo que refleja un acercamiento muy personal y la pérdida de la visión de conjunto y eficacia práctica.`,
       );
     else if (!ddOk)
       frases.push(
-        `${persona} muestra una leve tendencia a fijarse en detalles atípicos, aunque sin que ello afecte significativamente su forma general de abordar los estímulos.`
+        `${persona} muestra una leve tendencia a fijarse en detalles atípicos, aunque sin que ello afecte significativamente su forma general de abordar los estímulos.`,
       );
   }
 
@@ -253,7 +253,7 @@ export function checkApproach(
     .replace(/\s+/g, " ")
     .replace(
       /([.])\s*([a-záéíóúñ])/g,
-      (_, p1, p2) => `${p1} ${p2.toUpperCase()}`
+      (_, p1, p2) => `${p1} ${p2.toUpperCase()}`,
     )
     .trim();
 
@@ -266,7 +266,7 @@ export function checkApproach(
 function checkAmbitionLevel(
   tipoVivencial: string,
   sumW: number,
-  sumM: number
+  sumM: number,
 ): string {
   if (sumW && sumM && sumM > 0) {
     const proporcionReal = sumW / sumM;
@@ -292,7 +292,7 @@ function checkAmbitionLevel(
 
 export function checkSequenceConsistency(
   answers: Answer[],
-  minResponsesPerLamina = 2
+  minResponsesPerLamina = 2,
 ): { isConsistent: boolean; direction: Direction | null } {
   // Orden: w (global) > d (común) > dd (detalle inusual)
   const order = { w: 3, d: 2, dd: 1 } as const;

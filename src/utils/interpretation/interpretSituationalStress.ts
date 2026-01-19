@@ -5,9 +5,9 @@ import { genderText } from "./genderText";
 
 export function interpretSituationalStress(
   summary: StructuralSummaryData,
-  comparisons: ComparisonMap
+  comparisons: ComparisonMap,
 ): string[] {
-  const [persona, vocal] = genderText(summary["Genero"]);
+  const { person, vowel } = genderText(summary["Genero"]);
 
   const interpretaciones: string[] = [];
 
@@ -18,19 +18,19 @@ export function interpretSituationalStress(
   if (puntD !== adjD) {
     interpretaciones.push(
       `${capitalize(
-        persona
-      )} presenta dificultades importantes para ajustar la capacidad de control y tolerar la sobre estimulación generada por situaciones externas.`
+        person,
+      )} presenta dificultades importantes para ajustar la capacidad de control y tolerar la sobre estimulación generada por situaciones externas.`,
     );
   } else {
     interpretaciones.push(
-      `No se observan indicadores de aumento en el registro de tensión interna en ${persona} por factores situacionales.`
+      `No se observan indicadores de aumento en el registro de tensión interna en ${person} por factores situacionales.`,
     );
   }
 
   // Paso 2: D < AdjD
   if (puntD < adjD) {
     interpretaciones.push(
-      "Debido a esto, su capacidad de control actual es menor al que tiene habitualmente en situaciones normales. [REVISAR m e Y]"
+      "Debido a esto, su capacidad de control actual es menor al que tiene habitualmente en situaciones normales. [REVISAR m e Y]",
     );
   }
 
@@ -48,13 +48,13 @@ export function interpretSituationalStress(
   if (m > 0 || sumY > 0) {
     if (sumY > 0 && m >= sumY * 3) {
       interpretaciones.push(
-        "[SOBRECARGA IDEACIONAL - PÉRDIDA CONTROL INMINENTE]"
+        "[SOBRECARGA IDEACIONAL - PÉRDIDA CONTROL INMINENTE]",
       );
     }
 
     if (m > 0 && sumY >= m * 3) {
       interpretaciones.push(
-        `El impacto de las situaciones externas afecta principalmente en sobre su funcionamiento emocional, por lo que es probable que ${persona} se vea inundad${vocal} por sentimientos de indefensión e impotencia que pueden tener un efecto paralizante en su conducta.`
+        `El impacto de las situaciones externas afecta principalmente en sobre su funcionamiento emocional, por lo que es probable que ${person} se vea inundad${vowel} por sentimientos de indefensión e impotencia que pueden tener un efecto paralizante en su conducta.`,
       );
     }
   }
@@ -67,7 +67,7 @@ export function interpretSituationalStress(
 
   if (sumT > 1) {
     interpretaciones.push(
-      "[VERIFICAR AUMENTO DE T - ¿PÉRDIDA RECIENTE? ¿DUELO NO ELABORADO?]"
+      "[VERIFICAR AUMENTO DE T - ¿PÉRDIDA RECIENTE? ¿DUELO NO ELABORADO?]",
     );
   }
 
@@ -82,7 +82,7 @@ export function interpretSituationalStress(
     sumV > 0
   ) {
     interpretaciones.push(
-      "[RECALCULAR AdjD POR AUMENTO DE T O V - INCORPORAR HISTORIA CLÍNICA]"
+      "[RECALCULAR AdjD POR AUMENTO DE T O V - INCORPORAR HISTORIA CLÍNICA]",
     );
   }
 
