@@ -122,6 +122,15 @@ export function interpretAffects(
     interpretaciones.push("[ALTA PREDICTIVIDAD DE PSICOSOMÁTICOS]");
   }
 
+  // Verificar presencia de Contenidos Críticos
+  const sx = summary.Sx ?? 0;
+  const bl = summary.Bl ?? 0;
+  const cl = summary.Cl ?? 0;
+
+  if (sx > 0) interpretaciones.push("[INTEGRAR PRESENCIA DE Sx]");
+  if (bl > 0) interpretaciones.push("[INTEGRAR PRESENCIA DE Bl]");
+  if (cl > 0) interpretaciones.push("[INTEGRAR PRESENCIA DE Cl]");
+
   // Paso 5: Proporción Afectiva AFR
   const afr = comparisons.Afr.COMPARACION;
   switch (afr) {

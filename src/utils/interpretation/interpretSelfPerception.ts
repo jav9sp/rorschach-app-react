@@ -115,7 +115,7 @@ export function interpretSelfPerception(
   const sumHImg = summary["(H)"] ?? 0;
   const sumHdImg = summary["(Hd)"] ?? 0;
 
-  const todoH = comparisons.TodoH.COMPARACION ?? "Indefinido";
+  const todoH = comparisons.TodoH.COMPARACION;
 
   switch (todoH) {
     case "Marcadamente por encima":

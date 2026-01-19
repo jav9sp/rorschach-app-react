@@ -1,6 +1,12 @@
 import type { ComparisonMap } from "../../types/NormativeData";
 import type { StructuralSummaryData } from "../../types/StructuralSummaryData";
+import { capitalize } from "../capitalize";
+import { getDominant } from "../getDominant";
+import { joinStrings } from "../joinStrings";
 import { genderText } from "./genderText";
+
+const elevated = ["Levemente por encima", "Marcadamente por encima"];
+const decreased = ["Levemente por debajo", "Marcadamente por debajo"];
 
 export function interpretInterpersonal(
   summary: StructuralSummaryData,
@@ -53,33 +59,63 @@ export function interpretInterpersonal(
       `Su capacidad para identificar sus necesidades de contacto es adecuada, por lo que ${persona} cuenta con disposición a establecer contacto con los demás según lo esperado.`
     );
   } else if (sumT > 1) {
-    interpretaciones.push("[PENDIENTE SumT>1]");
+    interpretaciones.push(
+      `Sus necesidades de cercanía son mayores a lo esperado, lo que indica que ${persona} probablemente enfrenta un proceso de pérdida significativa que no ha sido elaborada adecuadamente. Esto l${vocal} lleva a experimentar intensos sentimientos de soledad y a ansiar el contacto con otros.`
+    );
   }
 
   // Paso 4: contenidos humanos
-  const todoH = comparisons.TodoH.COMPARACION ?? "Indefinido";
-  let todoHTxt = "";
-  if (todoH === "Levemente por debajo") {
-    todoHTxt =
-      "Su interés en el componente humano se encuentra por debajo de lo esperado";
+
+  const sumH = summary.H ?? 0;
+  const sumHd = summary.Hd ?? 0;
+  const sumHImg = summary["(H)"] ?? 0;
+  const sumHdImg = summary["(Hd)"] ?? 0;
+  const todoH = summary.TodoH ?? 0;
+
+  const todoHComp = comparisons.TodoH.COMPARACION;
+
+  if (todoH === 0) {
+    interpretaciones.push(
+      `${capitalize(
+        persona
+      )} no proporcionó suficiente información para estimar cómo construye las conceptualizaciones de los demás, lo cual refleja un nulo interés en el componente humano y apunta a la presencia de dificultades en sus procesos de identificación.`
+    );
+  } else {
+    if (elevated.includes(todoHComp)) {
+      interpretaciones.push("[TODOH ELEVADO]");
+    }
+    if (decreased.includes(todoHComp)) {
+      interpretaciones.push("[TODOH DISMINUIDO]");
+    } else {
+      interpretaciones.push("[TODOH NORMAL]");
+    }
+
+    const valuesH = {
+      H: sumH,
+      Hd: sumHd,
+      HImg: sumHImg,
+      HdImg: sumHdImg,
+    };
+
+    const dominantH = getDominant(valuesH);
+    interpretaciones.push(`[PENDIENTE H DOMINANTE: ${dominantH.dominants}]`);
   }
-
-  const parrafoContH = `${todoHTxt}, En cuanto a cómo construye las conceptualizaciones de los demás, `;
-  interpretaciones.push(parrafoContH);
-
-  interpretaciones.push(predominioContH(persona, summary));
 
   // Paso 5: GHR:PHR
   const ghr = summary.GHR ?? 0;
   const phr = summary.PHR ?? 0;
   if (ghr + phr >= 3) {
-    if (phr >= ghr) {
+    interpretaciones.push(
+      "Su interés en las interacciones con otros es adecuada"
+    );
+
+    if (ghr >= phr) {
       interpretaciones.push(
-        `Respecto a su eficacia interpersonal, se observan dificultades de adaptabilidad que llevan a ${persona} a ser percibida de manera poco favorable por los demás. Además, dado que sus constructos sobre los demás contienen sesgos, su percepción de los otros y sobre los vínculos se encuentra alterada.`
+        `y las interpretaciones e imágenes mentales que hace sobre los demás y los vínculos tienden a ser realistas, permitiéndole adaptarse y ser socialmente eficaz la mayor parte del tiempo.`
       );
     } else {
       interpretaciones.push(
-        `Respecto a su eficacia interpersonal, se observa que ${persona} es capaz de establecer vínculos positivos, profundos y empáticos con los demás [ESTO ESTA MAL - VER AFR].`
+        `pero las interpretaciones e imágenes mentales que hace sobre los demás y los vínculos tienden a ser poco realistas e incluir sesgos personales excesivos, apuntando a la presencia de alteraciones sobre estos constructos. Esto aumenta la probabilidad de que su conducta presente menor eficacia y adaptación social.`
       );
     }
   }
@@ -89,19 +125,29 @@ export function interpretInterpersonal(
   const cop = summary.COP ?? 0;
   const ag = summary.AG ?? 0;
 
-  if (per > 2) {
-    interpretaciones.push(
-      `Por otro lado, se observan marcados indicadores de infantilismo que l${vocal} llevan a justificar defensivamente su autoimagen, intentando protegerse de los supuestos cuestionamientos que los demás hacen sobre sí. Esto aumenta las probabilidades de conflicto cuando el entorno le exige adaptarse a sus exigencias, escenarios en los cuales ${persona} podría actuar de manera más rígida.`
-    );
-  }
-
-  const attributions: boolean = cop + ag > 0;
+  const attributions: boolean = cop + ag + per > 0;
 
   if (!attributions) {
     interpretaciones.push(
-      `Se observa que ${persona} no realiza atribuciones respecto a la interacción con otros, por lo que no prevé aspectos positivos ni negativos de interactuar. Por este motivo, es probable que sea percibid${vocal} como distante o poco sociable.`
+      `Se observa que ${persona} no realiza atribuciones respecto a la interacción con otros, por lo que no prevé aspectos positivos ni negativos de interactuar. Por este motivo, es probable que sea percibid${vocal} como distante o poco sociable por los demás.`
     );
   } else {
+    interpretaciones.push(
+      `Respecto a las atribuciones que ${persona} realiza sobre las interacciones sociales, se observa que`
+    );
+
+    if (per > 2) {
+      interpretaciones.push(
+        `tiende a mostrar elementos de infantilismo que l${vocal} llevan a justificar defensivamente su autoimagen, reflejando inseguridad y compensarlo recurriendo al autoritarismo infantil. Por este motivo es probable que ${persona} sea percibida como rígid${vocal} y tienda a tener conflictos cuando el entorno no se somete a sus exigencias.`
+      );
+    }
+
+    if (cop > ag) {
+      interpretaciones.push(
+        "Tiende a atribuir aspectos positivos en la interacción con otros y muestra disposición a participar de ellas."
+      );
+    }
+
     if (cop <= 1 && ag === 2) {
       interpretaciones.push(
         `Además, se observa que ${persona} tiende a percibir la agresividad como componente natural en las relaciones personales, por lo que es más proclive a manifestar conductas agresivas hacia los demás.`
@@ -139,31 +185,4 @@ export function interpretInterpersonal(
   interpretaciones.push("[VERIFICAR CUALI DE FM O M CON PAR]");
 
   return interpretaciones;
-}
-
-// TODO: Cambiar y usar getDominant()
-function predominioContH(
-  persona: string,
-  variables: StructuralSummaryData
-  // estadosSimples: EstadosSimplesInterpersonal
-): string {
-  const contH = variables.H ?? 0;
-  const contHd = variables.Hd ?? 0;
-  const contHImg = variables["(H)"] ?? 0;
-  const contHdImg = variables["(Hd)"] ?? 0;
-
-  // const estadoContHd = estadosSimples.Hd ?? "Indefinido";
-  // const estadoContHImg = estadosSimples["(H)"] ?? "Indefinido";
-  // const estadoContHdImg = estadosSimples["(Hd)"] ?? "Indefinido";
-
-  if (contH > contHImg + contHd + contHdImg) {
-    return "Se muestra capaz de construir las conceptualizaciones sobre los demás integrando percepciones completas, basadas en datos e interacciones reales con su entorno según lo esperado.";
-  }
-
-  if (contH < contHImg + contHd + contHdImg) {
-    return "Muestra dificultades en la construcción de las conceptualizaciones sobre los demás, ";
-  }
-
-  // Placeholder para usar estadoContHd, estadoContHImg, estadoContHdImg en análisis más profundo
-  return `${persona}`;
 }

@@ -1,5 +1,6 @@
 import type { ComparisonMap } from "../../types/NormativeData";
 import type { StructuralSummaryData } from "../../types/StructuralSummaryData";
+import { capitalize } from "../capitalize";
 import { genderText } from "./genderText";
 
 export function interpretStressControl(
@@ -7,6 +8,7 @@ export function interpretStressControl(
   comparisons: ComparisonMap
 ): string[] {
   const [persona, vocal] = genderText(summary["Genero"]);
+  const elevated = ["Levemente por encima", "Marcadamente por encima"];
 
   const interpretaciones: string[] = [];
 
@@ -17,17 +19,17 @@ export function interpretStressControl(
 
   if (adjD === 0) {
     interpretaciones.push(
-      `${
-        persona.charAt(0).toUpperCase() + persona.slice(1)
-      } cuenta con una adecuada capacidad para controlar y dirigir sus conductas ante las tensiones de la vida cotidiana, por lo que sus controles solo fallarían ante situaciones de estrés intenso, prolongado o inesperado.`
+      `${capitalize(
+        persona
+      )} cuenta con una adecuada capacidad para controlar y dirigir sus conductas ante las tensiones de la vida cotidiana, por lo que sus controles solo fallarían ante situaciones de estrés intenso, prolongado o inesperado.`
     );
   }
 
   if (adjD !== null && adjD > 0) {
     interpretaciones.push(
-      `${
-        persona.charAt(0).toUpperCase() + persona.slice(1)
-      } cuenta con una capacidad para controlar y dirigir sus conductas ante las tensiones de la vida cotidiana que es mayor a lo esperado, indicando que cuenta con muchos más recursos para manejar los estados de tensión interna y las demandas del entorno.`
+      `${capitalize(
+        persona
+      )} cuenta con una capacidad para controlar y dirigir sus conductas ante las tensiones de la vida cotidiana que es mayor a lo esperado, indicando que cuenta con muchos más recursos para manejar los estados de tensión interna y las demandas del entorno.`
     );
   }
 
@@ -44,7 +46,7 @@ export function interpretStressControl(
   }
 
   // Paso 2: EA
-  const ea = comparisons.EA.COMPARACION ?? "Indefinido";
+  const ea = comparisons.EA.COMPARACION;
 
   switch (ea) {
     case "Marcadamente por encima":
@@ -54,7 +56,9 @@ export function interpretStressControl(
       interpretaciones.push("[PENDIENTE EA ALTO]");
       break;
     case "Dentro del rango":
-      interpretaciones.push("[PENDIENTE EA NORMAL");
+      interpretaciones.push(
+        `Se observa que cuenta con recursos suficientes para hacer frente a los disparadores de tensión interna, lo que le permite iniciar conductas deliberadas y tomar decisiones frente a estos.`
+      );
       break;
     case "Levemente por debajo":
       interpretaciones.push(
@@ -67,6 +71,8 @@ export function interpretStressControl(
       );
       break;
   }
+
+  interpretaciones.push("[VERIFICAR CALIDAD DE RECURSOS]");
 
   // Verificación M y SumPonC
   const sumPonC = summary.SumPonC ?? 0;
@@ -91,9 +97,7 @@ export function interpretStressControl(
   const tipoVivencial = summary.TipoVivencial ?? "Indefinido";
   const ebper = summary.EBPer ?? 0;
 
-  if (
-    ["Levemente por encima", "Marcadamente por encima"].includes(lambdaEstado)
-  ) {
+  if (elevated.includes(lambdaEstado)) {
     interpretaciones.push(
       "[EVALUAR POSIBLE LADO EB CERO POR L ALTO Y ESTILO EVITATIVO]"
     );
@@ -130,7 +134,7 @@ export function interpretStressControl(
     interpretaciones.push("[PENDIENTE es = 0]");
   }
 
-  if (["Levemente por encima", "Marcadamente por encima"].includes(nivelEs)) {
+  if (elevated.includes(nivelEs)) {
     interpretaciones.push("[PENDIENTE es ELEVADA]");
   }
 
