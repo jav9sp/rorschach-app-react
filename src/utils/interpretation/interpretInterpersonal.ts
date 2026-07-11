@@ -151,20 +151,16 @@ export function interpretInterpersonal(
       interpretaciones.push(
         `Además, se observa que ${person} tiende a percibir la agresividad como componente natural en las relaciones personales, por lo que es más proclive a manifestar conductas agresivas hacia los demás.`,
       );
-    }
-
-    if (cop <= 2 && ag > 2) {
+    } else if (cop <= 2 && ag > 2) {
       interpretaciones.push(
         "Se observa que gran parte de su actividad interpersonal está marcada por una tendencia a asumir actitudes agresivas hacia los demás, lo que puede responder a una actitud defensiva ante una percepción de hostilidad del ambiente.",
       );
-    }
-
-    if (cop === 2 && ag <= 1) {
+    } else if (cop === 2 && ag <= 1) {
       interpretaciones.push("[PENDIENTE COP == 2 and AG <= 1]");
-    }
-
-    if (cop === 3 && ag === 2) {
+    } else if (cop === 3 && ag === 2) {
       interpretaciones.push("[PENDIENTE COP == 3 and AG == 2]");
+    } else {
+      interpretaciones.push(`[PENDIENTE COP == ${cop} and AG == ${ag}]`);
     }
   }
 
