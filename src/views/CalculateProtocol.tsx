@@ -6,6 +6,10 @@ import Interpretations from "../components/Interpretations";
 
 import { buildMasterSummary } from "../utils/buildMasterSummary";
 import { parseExcel } from "../utils/parseExcel";
+import {
+  validateProtocol,
+  formatValidationErrors,
+} from "../utils/validateProtocol";
 import { obtenerTablaPorEstilo } from "../utils/normativeData/moduleCargarTablaNormativa";
 import { compararConNormativa } from "../utils/normativeData/normativeComparison";
 
@@ -25,9 +29,10 @@ export default function CalculateProtocol() {
   const [summary, setSummary] = useState<StructuralSummaryData | null>(null);
   const [comparisons, setComparisons] = useState<Comparison[] | null>(null);
   const [gender, setGender] = useState("M");
-  const [age, setAge] = useState(14);
+  const [age, setAge] = useState<number | "">("");
   const [loading, setLoading] = useState(false);
   const [showInfo, setShowInfo] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const ejecutarComparacion = async () => {
@@ -43,9 +48,12 @@ export default function CalculateProtocol() {
         localStorage.setItem("comparacion", JSON.stringify(comparacion));
 
         setComparisons(comparacion);
-      } catch (error) {
-        console.error("Error al comparar con normativa:", error);
+      } catch (err) {
+        console.error("Error al comparar con normativa:", err);
         setComparisons(null);
+        setError(
+          "El sumario se calculó correctamente, pero no fue posible compararlo con las tablas normativas."
+        );
       }
     };
 
@@ -53,25 +61,41 @@ export default function CalculateProtocol() {
   }, [summary]);
 
   const handleFile = async (file: File) => {
+    setError(null);
+
+    if (age === "" || age < 4 || age > 99) {
+      setError("Indica una edad válida (entre 4 y 99 años) antes de subir el archivo.");
+      return;
+    }
+
     setLoading(true);
 
     try {
       const data: Answer[] = await parseExcel(file);
-      setAnswers(data);
 
-      if (!age || age < 4 || age > 99) {
-        throw new Error("Edad fuera de rango válido.");
+      const validationErrors = validateProtocol(data);
+      if (validationErrors.length > 0) {
+        throw new Error(
+          `El archivo tiene columnas incompletas o valores no reconocidos y no se puede calcular con seguridad. ${formatValidationErrors(validationErrors)}`
+        );
       }
 
       const summaryData = buildMasterSummary(data, age, gender);
+      setAnswers(data);
       setSummary(summaryData);
 
       setTimeout(() => {
         setLoading(false);
       }, 800);
-    } catch (error) {
-      console.error("Error:", error);
+    } catch (err) {
+      console.error("Error al procesar el archivo:", err);
       setComparisons(null);
+      setError(
+        err instanceof Error
+          ? err.message
+          : "No se pudo procesar el archivo. Verifica que sea un Excel válido con el formato de la plantilla."
+      );
+      setLoading(false);
     }
   };
 
@@ -81,6 +105,14 @@ export default function CalculateProtocol() {
         <h1 className="text-4xl md:text-5xl font-bold mb-12">
           {summary ? "Resultados del Evaluado" : "Calcular Protocolo"}
         </h1>
+
+        {error && (
+          <div
+            role="alert"
+            className="mb-8 px-4 py-3 border border-red-300 bg-red-50 text-red-700 rounded">
+            {error}
+          </div>
+        )}
 
         {!summary && (
           <>
@@ -101,8 +133,13 @@ export default function CalculateProtocol() {
                   Edad
                 </label>
                 <input
-                  onChange={(e) => setAge(+e.target.value)}
+                  onChange={(e) =>
+                    setAge(e.target.value === "" ? "" : +e.target.value)
+                  }
+                  value={age}
                   type="number"
+                  min={4}
+                  max={99}
                   name="edad"
                   id="edad"
                   className="w-full px-4 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
@@ -171,6 +208,7 @@ export default function CalculateProtocol() {
                 setSummary(null);
                 setComparisons(null);
                 setShowInfo(true);
+                setError(null);
               }}
               className="px-4 py-2 border rounded border-gray-300 bg-amber-600 hover:bg-amber-500 transition-colors cursor-pointer font-semibold text-white">
               Limpiar Datos
