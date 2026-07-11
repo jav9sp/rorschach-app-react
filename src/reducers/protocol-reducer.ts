@@ -8,7 +8,7 @@ export type ProtocolActions =
   | { type: "clear-responses" };
 
 export type ProtocolState = {
-  summary: StructuralSummaryData | {};
+  summary: StructuralSummaryData | Record<string, never>;
   responses: Answer[];
   comparisson: Comparison[];
 };

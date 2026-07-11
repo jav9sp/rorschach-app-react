@@ -9,7 +9,7 @@ import { evaluateSCON } from "./evaluateSCON";
 /**
  * Resultado general de constelaciones.
  */
-export interface ConstelacionesResult extends Record<string, string | number> {}
+export type ConstelacionesResult = Record<string, string | number>;
 
 /**
  * Genera todas las constelaciones.

@@ -3,7 +3,7 @@
  * @param data Array de respuestas
  * @returns { R: number }
  */
-export function calcularR(data: any[]): { R: number } {
+export function calcularR(data: unknown[]): { R: number } {
   return { R: data.length };
 }
 
@@ -14,7 +14,7 @@ export function calcularR(data: any[]): { R: number } {
  * @returns { Lambda: number }
  */
 export function calcularLambda(
-  data: any[],
+  data: unknown[],
   detDict: Record<string, number>
 ): { Lambda: number } {
   const r = data.length;

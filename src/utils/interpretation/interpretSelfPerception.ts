@@ -88,7 +88,7 @@ export function interpretSelfPerception(
     interpretaciones.push("[PENDIENTE V+FD>2]");
   }
 
-  step3Text.length > 0 && interpretaciones.push(step3Text);
+  if (step3Text.length > 0) interpretaciones.push(step3Text);
 
   // Paso 4: An y Xy
   const an = summary.An ?? 0;

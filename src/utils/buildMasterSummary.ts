@@ -61,7 +61,8 @@ export type Answer = {
   Populares: string;
   Z: number;
   "CC.EE.": string;
-  [key: string]: any; // Para campos extra
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- columnas extra que pueda traer el Excel, fuera de las ya tipadas arriba
+  [key: string]: any;
 };
 
 // ? Se debe dejar como Partial porque otros módulos necesitan la edad

@@ -27,7 +27,7 @@ export function evaluateDEPI(
   const persona = summary.Genero === "M" ? "el evaluado" : "la evaluada";
 
   let condiciones = 0;
-  let interpretaciones: string[] = [];
+  const interpretaciones: string[] = [];
   let factorCognitivo = 0;
   let factorAfectivo = 0;
   let factorSocial = 0;

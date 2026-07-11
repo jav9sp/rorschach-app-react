@@ -74,7 +74,7 @@ export function contarDeterminantes(
     p: 0,
   };
 
-  let detCompljs: string[] = [];
+  const detCompljs: string[] = [];
 
   for (let i = 0; i < columnaDet.length; i++) {
     const detRaw = columnaDet[i];

@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- acepta el StructuralSummaryData completo con acceso dinámico por clave
 type Variables = Record<string, any>;
 
 interface EstrategiaInterpretacion {
