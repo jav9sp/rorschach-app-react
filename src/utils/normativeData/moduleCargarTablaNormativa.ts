@@ -1,3 +1,12 @@
+/**
+ * Fuente de las tablas normativas: Exner, J. E. (2001). A Rorschach
+ * Workbook for the Comprehensive System (5ª ed.).
+ *
+ * TODO: falta verificar y documentar el N muestral de cada subgrupo
+ * (Extroversivo, Introversivo, Ambigual, Total, 14 años, 15 años) — no
+ * está registrado en el repositorio. Confirmarlo contra el workbook antes
+ * de citarlo públicamente en el informe generado para el usuario final.
+ */
 import muestraExtroRo from "../../data/muestraExtroRo.json";
 import muestraIntroRo from "../../data/muestraIntroRo.json";
 import muestraAmbigualRo from "../../data/muestraAmbigualRo.json";
