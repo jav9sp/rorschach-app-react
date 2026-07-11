@@ -14,7 +14,7 @@ export function evaluateCDI(
 ): CDIResults {
   let condiciones = 0;
 
-  if (summary["EA"] ?? (0 < 6 || summary["AdjD"]) ?? 0 < 0) condiciones += 1;
+  if ((summary["EA"] ?? 0) < 6 || (summary["AdjD"] ?? 0) < 0) condiciones += 1;
 
   if ((summary["COP"] ?? 0) < 2 && (summary["AG"] ?? 0) < 2) condiciones += 1;
 
