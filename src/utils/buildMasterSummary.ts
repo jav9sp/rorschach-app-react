@@ -59,7 +59,11 @@ export type Answer = {
   Par: number;
   Contenidos: string;
   Populares: string;
-  Z: number;
+  // Debe ser una categoría Z ("zw"/"za"/"zd"/"zs", ver moduleZScore.ts). Se
+  // tolera `number` en el tipo porque un Excel real puede traer un punto ya
+  // calculado (convención antigua e incorrecta) — es justamente lo que
+  // validateProtocol.ts detecta y rechaza antes de calcular.
+  Z: string | number;
   "CC.EE.": string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- columnas extra que pueda traer el Excel, fuera de las ya tipadas arriba
   [key: string]: any;
@@ -70,7 +74,7 @@ export type Answer = {
 export function buildMasterSummary(
   data: Answer[],
   age: number,
-  gender: string
+  gender: string,
 ): StructuralSummaryData {
   // Definir el Objeto Maestro con toda las variables
   const summary: Partial<StructuralSummaryData> = {};
@@ -83,10 +87,10 @@ export function buildMasterSummary(
   const cont = data.map((r) => r.Contenidos);
   const ccee = data.map((r) => r["CC.EE."]);
   const lam: string[] = data.map((r) =>
-    r.Lam != null ? String(r.Lam).trim().toUpperCase() : ""
+    r.Lam != null ? String(r.Lam).trim().toUpperCase() : "",
   );
   const z: string[] = data.map((r) =>
-    r.Z != null ? String(r.Z).trim().toLowerCase() : ""
+    r.Z != null ? String(r.Z).trim().toLowerCase() : "",
   );
 
   summary.Edad = age;
@@ -148,12 +152,12 @@ export function buildMasterSummary(
   };
   Object.assign(
     summary,
-    calcularEB_EA_EBPer(ebEaEbperInput, summary.Lambda ?? 0)
+    calcularEB_EA_EBPer(ebEaEbperInput, summary.Lambda ?? 0),
   );
 
   summary.TipoVivencial = calcularEstiloVivencial(
     summary.EB ?? "0:0",
-    summary.EA ?? 0
+    summary.EA ?? 0,
   );
 
   summary.PuntD = calcularDScore(summary["EA-es"] ?? 0);
@@ -229,8 +233,6 @@ export function buildMasterSummary(
     W: Number(summary.W ?? 0),
     D: Number(summary.D ?? 0),
     Dd: Number(summary.Dd ?? 0),
-    Zf: Number(summary.Zf ?? 0),
-    Zd: Number(summary.Zd ?? 0),
     PSV: Number(summary.PSV ?? 0),
   };
   Object.assign(summary, calcularProcesamiento(data, procesamientoInput));
@@ -262,7 +264,7 @@ export function buildMasterSummary(
   };
   Object.assign(
     summary,
-    calcularIndicadoresIdeacion(data, indicadoresIdeacion)
+    calcularIndicadoresIdeacion(data, indicadoresIdeacion),
   );
 
   // Cálculo Constelaciones

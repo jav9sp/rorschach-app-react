@@ -1,6 +1,14 @@
 import zestData from "../data/zscore_conversion.json";
 
 /**
+ * Códigos de categoría Z reconocidos: W (ordinario), Adyacente, Distante,
+ * Espacio en blanco integrado. Es la convención que espera esta función —
+ * no un punto numérico ya calculado.
+ */
+export const Z_CATEGORY_CODES = ["zw", "za", "zd", "zs"] as const;
+export type ZCategoryCode = (typeof Z_CATEGORY_CODES)[number];
+
+/**
  * Tabla de puntajes por lámina y código.
  */
 export const puntajesPorLaminaYCodigo: Record<
@@ -38,7 +46,7 @@ export interface ZScoreResult {
  */
 export function calcularZScore(
   columnaLamina: (string | null | undefined)[],
-  columnaZ: (string | number | null | undefined)[]
+  columnaZ: (string | number | null | undefined)[],
 ): ZScoreResult {
   const zvalores: number[] = [];
 

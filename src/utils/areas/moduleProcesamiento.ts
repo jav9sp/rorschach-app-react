@@ -1,8 +1,6 @@
 export interface ProcesamientoResult {
-  Zf: number;
   "W:D:Dd": string;
   "W:M": string;
-  Zd: number;
   PSV: number;
   "DQ+": number;
   DQv: number;
@@ -10,6 +8,14 @@ export interface ProcesamientoResult {
 
 /**
  * Calcula índices de procesamiento.
+ *
+ * Nota: Zf y Zd NO se calculan ni se devuelven aquí — son responsabilidad
+ * exclusiva de `calcularZScore` (moduleZScore.ts). Antes esta función
+ * recibía Zf/Zd como insumo y los "devolvía" tal cual en su propio
+ * resultado; como se combina después de calcularZScore en
+ * buildMasterSummary, ese eco sobrescribía silenciosamente el valor real
+ * (convertía un Zd `null` legítimo en `0`).
+ *
  * @param data Array de respuestas
  * @param variables Diccionario maestro
  * @returns ProcesamientoResult
@@ -19,7 +25,7 @@ export function calcularProcesamiento(
     Det?: string | null;
     DQ?: string | null;
   }[],
-  variables: Record<string, number>
+  variables: Record<string, number>,
 ): ProcesamientoResult {
   const w = variables["W"] ?? 0;
   const d = variables["D"] ?? 0;
@@ -38,10 +44,6 @@ export function calcularProcesamiento(
   });
   const wmRatio = `${w}:${totalM}`;
 
-  // Zd y Zf
-  const zf = variables["Zf"] ?? 0;
-  const zd = variables["Zd"] ?? 0;
-
   const psv = variables["PSV"] ?? 0;
 
   // DQ+ y DQv
@@ -49,10 +51,8 @@ export function calcularProcesamiento(
   const dqV = data.filter((row) => row.DQ === "v").length;
 
   return {
-    Zf: zf,
     "W:D:Dd": wddRatio,
     "W:M": wmRatio,
-    Zd: zd,
     PSV: psv,
     "DQ+": dqPlus,
     DQv: dqV,

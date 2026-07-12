@@ -21,8 +21,8 @@ export type StructuralSummaryData = {
   DQv: number;
   Zf: number;
   Zsum: number;
-  Zest: number;
-  Zd: number;
+  Zest: number | null;
+  Zd: number | null;
   "Estilo Cognitivo": string;
   "WDx+": number;
   WDxo: number;

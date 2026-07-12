@@ -73,7 +73,7 @@ export type InterpersonalInput = Pick<
 // Módulo Procesamiento
 export type ProcessingInput = Pick<
   StructuralSummaryData,
-  "W" | "D" | "Dd" | "Zf" | "Zd" | "PSV"
+  "W" | "D" | "Dd" | "PSV"
 >;
 
 // Módulo Autopercepción
