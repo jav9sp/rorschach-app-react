@@ -44,7 +44,7 @@ export function calcularAfectos(
     Lam?: string | null;
     Loc?: string | null;
   }[],
-  variables: AfectsInput
+  variables: AfectsInput,
 ): AfectosResult {
   const rTotal = data.length;
 
@@ -70,7 +70,7 @@ export function calcularAfectos(
 
   // Afr: proporción de respuestas en VIII, IX, X
   const laminasAfr = data.filter((row) =>
-    ["viii", "ix", "x", "VIII", "IX", "X"].includes(row.Lam ?? "")
+    ["viii", "ix", "x", "VIII", "IX", "X"].includes(row.Lam ?? ""),
   ).length;
   const otrasLaminas = rTotal - laminasAfr || 1;
   const afr = Number((laminasAfr / otrasLaminas).toFixed(2));
@@ -127,7 +127,7 @@ export function calcularAfectos(
     const tieneSituacional = partes.some((p) => sitDet.has(p as AfectosShKey));
     const tieneMovimiento = partes.some((p) => movDet.has(p));
     const totalSombreado = partes.filter((p) =>
-      totShDet.has(p as AfectosShKey)
+      totShDet.has(p as AfectosShKey),
     ).length;
 
     if (tieneColor && tieneSituacional) {
@@ -151,7 +151,7 @@ export function calcularAfectos(
 
   sumSH = Array.from(totShDet).reduce(
     (acc, det) => acc + (variables[det] ?? 0),
-    0
+    0,
   );
 
   return {

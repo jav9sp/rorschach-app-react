@@ -22,7 +22,7 @@ const numeros: Record<number, string> = {
  * Marca positivo si cumple al menos 5 condiciones.
  */
 export function evaluateDEPI(
-  summary: Partial<StructuralSummaryData>
+  summary: Partial<StructuralSummaryData>,
 ): DEPIResults {
   const persona = summary.Genero === "M" ? "el evaluado" : "la evaluada";
 
@@ -45,7 +45,7 @@ export function evaluateDEPI(
     condiciones++;
     factorAfectivo++;
     interpretaciones.push(
-      "fuerte presencia de elementos disfóricos en su elaboración cognitiva"
+      "fuerte presencia de elementos disfóricos en su elaboración cognitiva",
     );
   } else if ((summary.S ?? 0) > 2) {
     condiciones++;
@@ -69,7 +69,7 @@ export function evaluateDEPI(
     condiciones++;
     factorAfectivo++;
     interpretaciones.push(
-      "baja responsividad cognitiva a la estimulación emocional"
+      "baja responsividad cognitiva a la estimulación emocional",
     );
   } else if ((summary.Compljs ?? 10) < 4) {
     condiciones++;
@@ -81,7 +81,7 @@ export function evaluateDEPI(
     condiciones++;
     factorAfectivo++;
     interpretaciones.push(
-      "aumento de tensión interna por el registro de elementos disfóricos"
+      "aumento de tensión interna por el registro de elementos disfóricos",
     );
   } else if ((summary["SumC'"] ?? 0) > 2) {
     condiciones++;
@@ -103,7 +103,7 @@ export function evaluateDEPI(
     condiciones++;
     factorSocial++;
     interpretaciones.push(
-      "falta de atribuciones positivas a la interacción con los demás"
+      "falta de atribuciones positivas a la interacción con los demás",
     );
   } else if ((summary["Aisl/R"] ?? 0) > 0.24) {
     condiciones++;
@@ -122,7 +122,7 @@ export function evaluateDEPI(
       persona,
       factorCognitivo,
       factorAfectivo,
-      factorSocial
+      factorSocial,
     );
   }
 
@@ -139,7 +139,7 @@ function generarDepiPositivo(
   persona: string,
   factorCognitivo: number,
   factorAfectivo: number,
-  factorSocial: number
+  factorSocial: number,
 ): string {
   const areasAfectadas: string[] = [];
   if (factorCognitivo > 0) areasAfectadas.push("cognitiva");

@@ -16,7 +16,7 @@ export interface ConteoCalidadDQ {
  * @returns ConteoCalidadDQ
  */
 export function contarCalidadDQ(
-  columna: (string | undefined | null)[]
+  columna: (string | undefined | null)[],
 ): ConteoCalidadDQ {
   const claves: Record<string, keyof ConteoCalidadDQ> = {
     "+": "DQ+",

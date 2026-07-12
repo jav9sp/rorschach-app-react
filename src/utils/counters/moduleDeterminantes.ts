@@ -32,7 +32,7 @@ export interface Intereses {
  */
 export function contarDeterminantes(
   columnaDet: (string | null | undefined)[],
-  columnaFQ: (string | null | undefined)[]
+  columnaFQ: (string | null | undefined)[],
 ): {
   resumenDeterminantes: ConteoDeterminantes;
   resumenSubindices: ConteoSubindices;
@@ -128,7 +128,7 @@ export function contarDeterminantes(
 
   // Contar categorías presentes (> 0)
   const categoriasCount = Object.values(conteoGeneral).filter(
-    (v) => v > 0
+    (v) => v > 0,
   ).length;
   const intereses: Intereses = { Intereses: categoriasCount };
 

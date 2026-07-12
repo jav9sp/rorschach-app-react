@@ -16,7 +16,7 @@ export interface ConteoLocalizaciones {
  */
 
 export function countLocations(
-  columna: (string | undefined | null)[]
+  columna: (string | undefined | null)[],
 ): ConteoLocalizaciones {
   const conteoLoc: ConteoLocalizaciones = {
     W: 0,

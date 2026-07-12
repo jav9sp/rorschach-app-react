@@ -1,7 +1,7 @@
 import type { LaminaClave } from "./counters/moduleSecuenciaLocalizacion";
 
 export function checkAllHaveResponses(
-  sequence: Record<LaminaClave, string[]>
+  sequence: Record<LaminaClave, string[]>,
 ): { ok: boolean; failed: LaminaClave[] } {
   const laminas: LaminaClave[] = [
     "I",

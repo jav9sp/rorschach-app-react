@@ -10,7 +10,7 @@ type CDIResults = {
  * Requiere 4 de 5 condiciones.
  */
 export function evaluateCDI(
-  summary: Partial<StructuralSummaryData>
+  summary: Partial<StructuralSummaryData>,
 ): CDIResults {
   let condiciones = 0;
 

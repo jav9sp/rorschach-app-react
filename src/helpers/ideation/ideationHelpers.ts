@@ -53,7 +53,7 @@ export function evaluateSpecialCodes(comparisons: Partial<ComparisonMap>): {
 
   for (const [key, comp] of Object.entries(codes) as [
     SpecialCodeKey,
-    string | undefined
+    string | undefined,
   ][]) {
     if (comp === "Levemente por encima") levemente.push(key);
     if (comp === "Marcadamente por encima") marcadamente.push(key);
@@ -83,7 +83,7 @@ export function checkDependence(
   sumT: number,
   populares: string,
   ego: string,
-  fd: number
+  fd: number,
 ): string {
   let contador = 0;
 
@@ -118,7 +118,7 @@ function compToElevation(comp?: string): Elevation | null {
 }
 
 export function assessSpecialCodes(
-  comparisons: Partial<ComparisonMap>
+  comparisons: Partial<ComparisonMap>,
 ): SpecialCodesAssessment {
   const comps: Record<SpecialCodeKey, string | undefined> = {
     DV1: comparisons.DV1?.COMPARACION,
@@ -164,13 +164,13 @@ export function assessSpecialCodes(
  */
 export function interpretSpecialCodes(
   persona: string,
-  assessment: SpecialCodesAssessment
+  assessment: SpecialCodesAssessment,
 ): string[] {
   const out: string[] = [];
 
   if (!assessment.hasAnyElevation) {
     out.push(
-      `En el protocolo de ${persona} no se observan elevaciones relevantes en los códigos especiales críticos, lo que sugiere que los deslices ideativos (si aparecen) son escasos o situacionales.`
+      `En el protocolo de ${persona} no se observan elevaciones relevantes en los códigos especiales críticos, lo que sugiere que los deslices ideativos (si aparecen) son escasos o situacionales.`,
     );
     return out;
   }
@@ -178,26 +178,26 @@ export function interpretSpecialCodes(
   // 1) Encabezado general según nivel
   if (assessment.elevated.marcado.length > 0) {
     out.push(
-      `En ${persona} se observan elevaciones marcadas en códigos especiales críticos, lo que sugiere fallas lógicas más importantes y un mayor riesgo de desorganización del curso ideativo, especialmente en situaciones demandantes.`
+      `En ${persona} se observan elevaciones marcadas en códigos especiales críticos, lo que sugiere fallas lógicas más importantes y un mayor riesgo de desorganización del curso ideativo, especialmente en situaciones demandantes.`,
     );
   } else if (assessment.elevated.leve.length > 0) {
     out.push(
-      `En ${persona} se observan elevaciones leves en códigos especiales críticos, compatibles con deslices cognitivos moderados o dificultades puntuales en la discriminación y organización de ideas.`
+      `En ${persona} se observan elevaciones leves en códigos especiales críticos, compatibles con deslices cognitivos moderados o dificultades puntuales en la discriminación y organización de ideas.`,
     );
   }
 
   // 2) Lectura cualitativa por grado del continuum
   if (assessment.maxGrade === 1) {
     out.push(
-      `La elevación se concentra en indicadores de menor gravedad (grado 1), asociados a lapsus leves, razonamiento más concreto o dificultades moderadas de discriminación.`
+      `La elevación se concentra en indicadores de menor gravedad (grado 1), asociados a lapsus leves, razonamiento más concreto o dificultades moderadas de discriminación.`,
     );
   } else if (assessment.maxGrade === 2) {
     out.push(
-      `La presencia de indicadores de gravedad intermedia (grado 2) sugiere rupturas lógicas más relevantes e inmadurez o desarticulación del pensamiento en algunos momentos.`
+      `La presencia de indicadores de gravedad intermedia (grado 2) sugiere rupturas lógicas más relevantes e inmadurez o desarticulación del pensamiento en algunos momentos.`,
     );
   } else if (assessment.maxGrade === 3) {
     out.push(
-      `Se identifican indicadores de gravedad alta (grado 3), lo que constituye una señal de alarma por su asociación con disfunción ideativa severa o desorganización del pensamiento.`
+      `Se identifican indicadores de gravedad alta (grado 3), lo que constituye una señal de alarma por su asociación con disfunción ideativa severa o desorganización del pensamiento.`,
     );
   }
 
@@ -205,7 +205,7 @@ export function interpretSpecialCodes(
   const list = (arr: string[]) => arr.join(", ");
   if (assessment.elevated.marcado.length) {
     out.push(
-      `Códigos marcadamente elevados: ${list(assessment.elevated.marcado)}.`
+      `Códigos marcadamente elevados: ${list(assessment.elevated.marcado)}.`,
     );
   }
   if (assessment.elevated.leve.length) {

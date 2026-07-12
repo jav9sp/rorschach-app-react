@@ -16,7 +16,8 @@ export default function FileUpload({ onFileSelected }: FileUploadProps) {
     <div className="flex flex-col items-center gap-2 my-10">
       <label
         htmlFor="file-upload"
-        className="block text-2xl font-medium text-gray-700">
+        className="block text-2xl font-medium text-gray-700"
+      >
         Subir archivo Excel
       </label>
       <input

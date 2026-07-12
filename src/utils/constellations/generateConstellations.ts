@@ -18,7 +18,7 @@ export type ConstelacionesResult = Record<string, string | number>;
  * @returns ConstelacionesResult
  */
 export function generateConstellations(
-  summary: Partial<StructuralSummaryData>
+  summary: Partial<StructuralSummaryData>,
 ): ConstelacionesResult {
   return {
     ...evaluateCDI(summary),

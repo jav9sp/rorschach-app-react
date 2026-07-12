@@ -42,7 +42,7 @@ export function evaluateSCON(summary: Partial<StructuralSummaryData>): {
   if (Number(summary["CompljsColSH"] || 0) > 0) {
     condiciones++;
     interpretaciones.push(
-      "una fuerte presencia de elementos disfóricos en su elaboración cognitiva"
+      "una fuerte presencia de elementos disfóricos en su elaboración cognitiva",
     );
   }
 
@@ -65,13 +65,13 @@ export function evaluateSCON(summary: Partial<StructuralSummaryData>): {
   if (zd > 3.5) {
     condiciones++;
     interpretaciones.push(
-      "dificultad para tomar decisiones debido a exceso de análisis"
+      "dificultad para tomar decisiones debido a exceso de análisis",
     );
   }
   if (zd < -3.5) {
     condiciones++;
     interpretaciones.push(
-      "impulsividad en la toma de decisiones al resolver problemas"
+      "impulsividad en la toma de decisiones al resolver problemas",
     );
   }
 
@@ -80,7 +80,7 @@ export function evaluateSCON(summary: Partial<StructuralSummaryData>): {
   if (es > ea) {
     condiciones++;
     interpretaciones.push(
-      "un aumento en el registro de tensión interna y falta de recursos para manejarla"
+      "un aumento en el registro de tensión interna y falta de recursos para manejarla",
     );
   }
 
@@ -100,7 +100,7 @@ export function evaluateSCON(summary: Partial<StructuralSummaryData>): {
   if (Number(summary["S"] || 0) > 3) {
     condiciones++;
     interpretaciones.push(
-      "un estilo confrontacional que puede aumentar el conflicto con el entorno"
+      "un estilo confrontacional que puede aumentar el conflicto con el entorno",
     );
   }
 
@@ -111,7 +111,7 @@ export function evaluateSCON(summary: Partial<StructuralSummaryData>): {
   } else if (p > 8) {
     condiciones++;
     interpretaciones.push(
-      "una excesiva sensibilidad a las convenciones sociales"
+      "una excesiva sensibilidad a las convenciones sociales",
     );
   }
 

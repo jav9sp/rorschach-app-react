@@ -9,7 +9,7 @@ describe("calcularDScore", () => {
     "EA-es = %s -> D score %s (según tabla)",
     (key, expected) => {
       expect(calcularDScore(Number(key))).toBe(expected);
-    }
+    },
   );
 
   it("redondea a un decimal antes de buscar en la tabla", () => {
@@ -38,6 +38,8 @@ describe("calcularAdjD", () => {
   it("calcula AdjD como el D score de (EA - Adjes)", () => {
     // EA=10, Adjes=7 -> diferencia 3 -> según la tabla real, D score de 3 es su valor tabulado
     const diferencia = 10 - 7;
-    expect(calcularAdjD(10, 7)).toBe(dScoreTable[String(diferencia) as keyof typeof dScoreTable]);
+    expect(calcularAdjD(10, 7)).toBe(
+      dScoreTable[String(diferencia) as keyof typeof dScoreTable],
+    );
   });
 });

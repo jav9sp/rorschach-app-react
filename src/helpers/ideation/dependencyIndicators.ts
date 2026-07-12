@@ -11,7 +11,7 @@ export function assessDependence(
   sumT: number,
   populares: string,
   ego: string,
-  fd: number
+  fd: number,
 ): {
   indicators: DependenceIndicator[];
   count: number;

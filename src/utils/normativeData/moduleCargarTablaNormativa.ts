@@ -28,7 +28,7 @@ const RUTAS_ESTILOS: Record<string, JsonNormativeTable> = {
 
 export function obtenerTablaPorEstilo(
   estilo: string,
-  edad: number
+  edad: number,
 ): JsonNormativeTable {
   if (edad > 16) {
     return RUTAS_ESTILOS[estilo] || RUTAS_ESTILOS["Indefinido"];

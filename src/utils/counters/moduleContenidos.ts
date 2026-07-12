@@ -42,14 +42,14 @@ export type ConteoContenidos = Record<Contenido, number>;
  * @returns Conteo de cada contenido posible
  */
 export function contarContenidos(
-  columna: (string | null | undefined)[]
+  columna: (string | null | undefined)[],
 ): ConteoContenidos {
   const conteo: ConteoContenidos = CONTENIDOS_POSIBLES.reduce(
     (acc, contenido) => {
       acc[contenido] = 0;
       return acc;
     },
-    {} as ConteoContenidos
+    {} as ConteoContenidos,
   );
 
   columna.forEach((entradaRaw) => {

@@ -9,13 +9,13 @@ function parseNumber(value: string | number): number {
   if (typeof value === "number") return value;
 
   return parseFloat(
-    value.replace(",", ".").replace("[", "").replace("]", "").trim()
+    value.replace(",", ".").replace("[", "").replace("]", "").trim(),
   );
 }
 
 export function compararConNormativa(
   resultados: StructuralSummaryData,
-  tabla: JsonNormativeTable
+  tabla: JsonNormativeTable,
 ): Comparison[] {
   return tabla.map((row) => {
     const variable = row.VARIABLE;

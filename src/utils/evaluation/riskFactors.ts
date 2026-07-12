@@ -5,7 +5,7 @@ type RiskResult = string;
 
 export function evaluateRiskFactors(
   summary: StructuralSummaryData,
-  comparisons: ComparisonMap
+  comparisons: ComparisonMap,
 ): RiskResult[] {
   const resultados: RiskResult[] = [];
 
@@ -22,7 +22,7 @@ export function evaluateRiskFactors(
     ["Levemente por debajo", "Marcadamente por debajo"].includes(lambdaEstado)
   ) {
     resultados.push(
-      `Se observa que ${persona} tiene bajas probabilidades de desarrollar futuros desajustes psíquicos los cuales, en caso de ocurrir, estarían vinculados a su estilo de funcionamiento ideacional, la falta de intercambio afectivo y la evitación de la toma de decisiones.`
+      `Se observa que ${persona} tiene bajas probabilidades de desarrollar futuros desajustes psíquicos los cuales, en caso de ocurrir, estarían vinculados a su estilo de funcionamiento ideacional, la falta de intercambio afectivo y la evitación de la toma de decisiones.`,
     );
   }
 
@@ -32,7 +32,7 @@ export function evaluateRiskFactors(
     ["Levemente por debajo", "Marcadamente por debajo"].includes(lambdaEstado)
   ) {
     resultados.push(
-      `Se observa que ${persona} tiene bajas probabilidades de desarrollar futuros desajustes psíquicos los cuales, en caso de ocurrir, estarían vinculados a su estilo de funcionamiento afectivo, su espontaneidad en la descarga de afectos y la toma de decisiones impulsiva.`
+      `Se observa que ${persona} tiene bajas probabilidades de desarrollar futuros desajustes psíquicos los cuales, en caso de ocurrir, estarían vinculados a su estilo de funcionamiento afectivo, su espontaneidad en la descarga de afectos y la toma de decisiones impulsiva.`,
     );
   }
 
@@ -42,7 +42,7 @@ export function evaluateRiskFactors(
     ["Levemente por debajo", "Marcadamente por debajo"].includes(lambdaEstado)
   ) {
     resultados.push(
-      `Se observa que ${persona} tiene un nivel de riesgo medio a desarrollar futuros desajustes psíquicos importantes, los cuales estarían vinculados a su estilo de funcionamiento inconsistente a la hora de resolver problemas y tomar decisiones.`
+      `Se observa que ${persona} tiene un nivel de riesgo medio a desarrollar futuros desajustes psíquicos importantes, los cuales estarían vinculados a su estilo de funcionamiento inconsistente a la hora de resolver problemas y tomar decisiones.`,
     );
   }
 
@@ -52,7 +52,7 @@ export function evaluateRiskFactors(
     ["Levemente por encima", "Marcadamente por encima"].includes(lambdaEstado)
   ) {
     resultados.push(
-      `Se observa que ${persona} tiene un nivel de riesgo medio a desarrollar futuros desajustes psíquicos importantes, los cuales estarían vinculados a su estilo de funcionamiento ideacional evitativo, su pensamiento simple y excesivo control sobre los afectos.`
+      `Se observa que ${persona} tiene un nivel de riesgo medio a desarrollar futuros desajustes psíquicos importantes, los cuales estarían vinculados a su estilo de funcionamiento ideacional evitativo, su pensamiento simple y excesivo control sobre los afectos.`,
     );
   }
 
@@ -62,7 +62,7 @@ export function evaluateRiskFactors(
     ["Levemente por encima", "Marcadamente por encima"].includes(lambdaEstado)
   ) {
     resultados.push(
-      `Se observa que ${persona} tiene un nivel de riesgo medio a desarrollar futuros desajustes psíquicos importantes, los cuales estarían vinculados a su estilo de funcionamiento afectivo evitativo, su baja modulación de las descargas afectivas y su pensamiento demasiado concreto.`
+      `Se observa que ${persona} tiene un nivel de riesgo medio a desarrollar futuros desajustes psíquicos importantes, los cuales estarían vinculados a su estilo de funcionamiento afectivo evitativo, su baja modulación de las descargas afectivas y su pensamiento demasiado concreto.`,
     );
   }
 
@@ -72,13 +72,13 @@ export function evaluateRiskFactors(
     ["Levemente por encima", "Marcadamente por encima"].includes(lambdaEstado)
   ) {
     resultados.push(
-      `Se observa que ${persona} tiene altas probabilidades de desarrollar futuros desajustes psíquicos importantes debido a la marcada inconsistencia interna, su estilo de pensamiento demasiado simple y la dificultad para controlar los afectos.`
+      `Se observa que ${persona} tiene altas probabilidades de desarrollar futuros desajustes psíquicos importantes debido a la marcada inconsistencia interna, su estilo de pensamiento demasiado simple y la dificultad para controlar los afectos.`,
     );
   }
 
   if (eb === "Indefinido") {
     resultados.push(
-      `No existe información suficiente para estimar la presencia de factores de riesgo que alerten sobre posibles desajustes psíquicos importantes que ${persona} pueda desarrollar en el corto o mediano plazo.`
+      `No existe información suficiente para estimar la presencia de factores de riesgo que alerten sobre posibles desajustes psíquicos importantes que ${persona} pueda desarrollar en el corto o mediano plazo.`,
     );
   }
 

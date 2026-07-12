@@ -5,7 +5,7 @@ export function finalConsiderations(summary: StructuralSummaryData): string[] {
 
   if (summary.COP > 4) {
     considerations.push(
-      "COP > 4: Tendencia a abandono temprano del tratamiento."
+      "COP > 4: Tendencia a abandono temprano del tratamiento.",
     );
   }
 

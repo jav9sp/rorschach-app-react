@@ -32,7 +32,7 @@ export type ConteoLocFQ = Record<ClaveLocFQ, number>;
  * @param respuestas Array de Respuesta con Loc y FQ
  */
 export function contarLocFQ(
-  respuestas: Pick<Answer, "Loc" | "FQ">[]
+  respuestas: Pick<Answer, "Loc" | "FQ">[],
 ): ConteoLocFQ {
   const clavesFQ: Record<string, string> = {
     "+": "FQx+",

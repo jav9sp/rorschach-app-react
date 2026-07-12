@@ -17,7 +17,7 @@ export interface ConteoCalidadFQ {
  * @returns ConteoCalidadFQ
  */
 export function contarCalidadFQ(
-  columna: (string | null | undefined)[]
+  columna: (string | null | undefined)[],
 ): ConteoCalidadFQ {
   const claves: Record<string, keyof ConteoCalidadFQ> = {
     "+": "FQx+",

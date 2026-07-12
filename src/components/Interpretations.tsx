@@ -27,7 +27,7 @@ export default function Interpretations({
         summary,
         comparisonMap,
       }),
-    [answers, summary, comparisonMap]
+    [answers, summary, comparisonMap],
   );
 
   return (

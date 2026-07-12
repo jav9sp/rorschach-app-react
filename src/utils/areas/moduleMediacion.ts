@@ -19,7 +19,7 @@ export function calcularMediacion(
     FQ?: string | null;
     Loc?: string | null;
     Populares?: string | null;
-  }[]
+  }[],
 ): MediacionResult {
   const totalR = data.length;
 
@@ -60,18 +60,18 @@ export function calcularMediacion(
 
   // X-%, X-Tot
   const xNegPct = Number(
-    (norm.filter((r) => r.FQ === "-").length / totalR).toFixed(2)
+    (norm.filter((r) => r.FQ === "-").length / totalR).toFixed(2),
   );
   const xNegTot = norm.filter((r) => r.FQ === "-").length;
 
   // X+%
   const xPosPct = Number(
-    (norm.filter((r) => ["+", "o"].includes(r.FQ)).length / totalR).toFixed(2)
+    (norm.filter((r) => ["+", "o"].includes(r.FQ)).length / totalR).toFixed(2),
   );
 
   // Xu%
   const xuPct = Number(
-    (norm.filter((r) => r.FQ === "u").length / totalR).toFixed(2)
+    (norm.filter((r) => r.FQ === "u").length / totalR).toFixed(2),
   );
 
   // S-: Loc contiene S y FQ == -

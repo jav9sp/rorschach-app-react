@@ -25,7 +25,7 @@ export interface InterpersonalResult {
  * @returns InterpersonalResult
  */
 export function calcularInterpersonal(
-  variables: InterpersonalInput
+  variables: InterpersonalInput,
 ): InterpersonalResult {
   const rTotal = variables["R"] ?? 0;
 

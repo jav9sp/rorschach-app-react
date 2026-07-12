@@ -46,7 +46,7 @@ export interface EBEAEBPerResult {
  */
 export function calcularEB_EA_EBPer(
   detDict: EBEAEBperInput,
-  lambdaVal: number
+  lambdaVal: number,
 ): EBEAEBPerResult {
   const m = detDict["M"] ?? 0;
   const fc = detDict["FC"] ?? 0;

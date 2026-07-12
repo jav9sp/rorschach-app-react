@@ -42,7 +42,8 @@ export default function ComparisonTable({
                   key={c.VARIABLE}
                   className={`${
                     c.COMPARACION !== "Dentro del rango" ? "bg-amber-100" : ""
-                  } hover:bg-gray-50`}>
+                  } hover:bg-gray-50`}
+                >
                   <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-700">
                     {c.VARIABLE}
                   </td>

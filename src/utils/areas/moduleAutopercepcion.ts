@@ -20,7 +20,7 @@ export function calculateSelfPerception(
     Det?: string | null;
     Par?: number | null;
   }[],
-  variables: Record<string, number>
+  variables: Record<string, number>,
 ): SelfPerceptionResult {
   const r = data.length;
 

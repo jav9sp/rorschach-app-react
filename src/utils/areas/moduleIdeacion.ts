@@ -28,7 +28,7 @@ export interface CodigosEspeciales {
  * @returns CodigosEspeciales
  */
 export function calcularCodigosEspeciales(
-  variables: SpecialCodesInput
+  variables: SpecialCodesInput,
 ): CodigosEspeciales {
   const clavesCriticas: Array<keyof SpecialCodesInput> = [
     "DV1",
@@ -45,7 +45,7 @@ export function calcularCodigosEspeciales(
 
   const sumBrut6 = clavesCriticas.reduce(
     (acc, key) => acc + (variables[key] ?? 0),
-    0
+    0,
   );
 
   const sum6ce = clavesCriticas
@@ -124,7 +124,7 @@ export function calcularIndicadoresIdeacion(
     FQ?: string | null;
     Nivel?: number | null;
   }[],
-  dicVariables: IdeationIndicatorsInput
+  dicVariables: IdeationIndicatorsInput,
 ): IndicadoresIdeacion {
   let ma = 0;
   let mp = 0;

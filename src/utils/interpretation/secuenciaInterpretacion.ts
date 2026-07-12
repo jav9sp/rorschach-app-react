@@ -7,7 +7,7 @@ interface EstrategiaInterpretacion {
 }
 
 export function determinarEstrategiaInterpretacion(
-  variables: Variables
+  variables: Variables,
 ): EstrategiaInterpretacion {
   const secuencias: Array<
     [string | [string, string], (v: Variables) => boolean, string[]]

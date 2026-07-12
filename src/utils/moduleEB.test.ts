@@ -37,7 +37,7 @@ describe("calcularEB_EA_EBPer", () => {
     // EA = 4 + (0.5*2 + 1*1 + 1.5*1) = 4 + 3.5 = 7.5
     const result = calcularEB_EA_EBPer(
       { M: 4, FC: 2, CF: 1, C: 1, es: 3 },
-      0.5 // Lambda < 1
+      0.5, // Lambda < 1
     );
 
     expect(result.EB).toBe("4:3.5");
@@ -50,7 +50,7 @@ describe("calcularEB_EA_EBPer", () => {
     // |M - SumC| = |4 - 6.5| = 2.5 -> cumple el umbral -> estilo definido
     const definido = calcularEB_EA_EBPer(
       { M: 4, FC: 3, CF: 2, C: 2, es: 0 },
-      0.5
+      0.5,
     );
     expect(definido.EA).toBe(10.5);
     expect(definido.EBPer).toBe(0.62); // 4 / 6.5 redondeado a 2 decimales
@@ -59,13 +59,16 @@ describe("calcularEB_EA_EBPer", () => {
   it("EBPer es 0 cuando el estilo no está definido (Lambda >= 1)", () => {
     const noDefinido = calcularEB_EA_EBPer(
       { M: 5, FC: 0, CF: 0, C: 3, es: 0 },
-      1.2 // Lambda >= 1 invalida el estilo definido
+      1.2, // Lambda >= 1 invalida el estilo definido
     );
     expect(noDefinido.EBPer).toBe(0);
   });
 
   it("EBPer es 0 cuando SumC ponderada es 0 (evita división por cero)", () => {
-    const result = calcularEB_EA_EBPer({ M: 5, FC: 0, CF: 0, C: 0, es: 0 }, 0.2);
+    const result = calcularEB_EA_EBPer(
+      { M: 5, FC: 0, CF: 0, C: 0, es: 0 },
+      0.2,
+    );
     expect(result.EBPer).toBe(0);
   });
 });

@@ -1,15 +1,6 @@
 export type SecuenciaLocalizacion = Record<LaminaClave, string[]>;
 export type LaminaClave =
-  | "I"
-  | "II"
-  | "III"
-  | "IV"
-  | "V"
-  | "VI"
-  | "VII"
-  | "VIII"
-  | "IX"
-  | "X";
+  "I" | "II" | "III" | "IV" | "V" | "VI" | "VII" | "VIII" | "IX" | "X";
 
 /**
  * Genera la secuencia de localizaciones por lámina I–X.
@@ -17,7 +8,7 @@ export type LaminaClave =
  * @returns Objeto { I: [...], II: [...], ..., X: [...] }
  */
 export function calculateLocationSequence(
-  data: { Lam: string | number; Loc: string }[]
+  data: { Lam: string | number; Loc: string }[],
 ): Record<LaminaClave, string[]> {
   const sequence: Record<LaminaClave, string[]> = {
     I: [],

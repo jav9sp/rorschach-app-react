@@ -15,7 +15,7 @@ export function calcularR(data: unknown[]): { R: number } {
  */
 export function calcularLambda(
   data: unknown[],
-  detDict: Record<string, number>
+  detDict: Record<string, number>,
 ): { Lambda: number } {
   const r = data.length;
   const fPura = detDict["F"] ?? 0;
@@ -32,7 +32,7 @@ export function calcularLambda(
  */
 export function sumarDeterminantes(
   detDict: Record<string, number>,
-  claves: string[]
+  claves: string[],
 ): number {
   return claves.reduce((acc, k) => acc + (detDict[k] ?? 0), 0);
 }
@@ -43,7 +43,7 @@ export function sumarDeterminantes(
  * @returns Sumas resumidas
  */
 export function calcularDetsResumidos(
-  detDict: Record<string, number>
+  detDict: Record<string, number>,
 ): Record<string, number> {
   return {
     "SumC'": sumarDeterminantes(detDict, ["FC'", "C'F", "C'"]),

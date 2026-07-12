@@ -10,7 +10,7 @@ export type ConteoValoresComa = Record<string, number>;
  * @returns Mapa de valores únicos y sus frecuencias
  */
 export function contarValoresComa(
-  columna: (string | null | undefined)[]
+  columna: (string | null | undefined)[],
 ): ConteoValoresComa {
   const conteo: ConteoValoresComa = {};
 
