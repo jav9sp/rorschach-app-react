@@ -9,8 +9,9 @@ export default function Landing() {
         </h1>
 
         <p className="text-lg md:text-xl text-gray-600 mb-8 text-center">
-          Carga tus codificaciones en Excel, genera el sumario estructural y
-          obtén la tabla de estadísticos descriptivos según Tipo Vivencial.
+          Codifica las respuestas lámina por lámina directamente desde el
+          navegador, genera el sumario estructural y obtén la tabla de
+          estadísticos descriptivos según Tipo Vivencial.
         </p>
 
         <div className="mt-12 text-left">
@@ -18,7 +19,7 @@ export default function Landing() {
             ¿Qué puedes hacer con esta herramienta?
           </h2>
           <ul className="list-disc list-inside text-gray-600 space-y-2">
-            <li>Subir tu archivo de codificaciones (.xlsx)</li>
+            <li>Codificar respuestas lámina por lámina desde el navegador</li>
             <li>Calcular automáticamente el sumario estructural</li>
             <li>Obtener constelaciones interpretativas</li>
             <li>
@@ -36,10 +37,18 @@ export default function Landing() {
           </ul>
 
           <Link
-            to="/calcular"
-            className="px-6 py-3 bg-teal-600 text-white rounded-lg shadow hover:bg-teal-700 transition mx-auto block w-fit my-10">
-            Probar la App
+            to="/codificar"
+            className="px-6 py-3 bg-teal-600 text-white rounded-lg shadow hover:bg-teal-700 transition mx-auto block w-fit my-10"
+          >
+            Codificar un Protocolo
           </Link>
+
+          <p className="text-center text-gray-500">
+            ¿Ya tienes las codificaciones en Excel?{" "}
+            <Link to="/calcular" className="text-teal-700 underline">
+              Cárgalas aquí
+            </Link>
+          </p>
         </div>
 
         <section className="my-20">
@@ -55,7 +64,8 @@ export default function Landing() {
           <a
             href="https://forms.gle/GAzi5XmUg5EdhJVW7"
             target="blank"
-            className="px-6 py-3 bg-teal-600 text-white rounded-lg shadow hover:bg-teal-700 transition mx-auto block w-fit">
+            className="px-6 py-3 bg-teal-600 text-white rounded-lg shadow hover:bg-teal-700 transition mx-auto block w-fit"
+          >
             Responder Formulario
           </a>
         </section>

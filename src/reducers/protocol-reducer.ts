@@ -1,40 +1,43 @@
-import type { Comparison } from "../types/NormativeData";
-import type { StructuralSummaryData } from "../types/StructuralSummaryData";
 import type { Answer } from "../utils/buildMasterSummary";
 
 export type ProtocolActions =
-  | { type: "add-response"; payload: { answer: Answer } }
+  | { type: "add-response"; payload: { answer: Omit<Answer, "N"> } }
   | { type: "delete-response"; payload: { id: Answer["N"] } }
   | { type: "clear-responses" };
 
 export type ProtocolState = {
-  summary: StructuralSummaryData | Record<string, never>;
   responses: Answer[];
-  comparisson: Comparison[];
 };
 
 export const initialState: ProtocolState = {
-  summary: {},
   responses: [],
-  comparisson: [],
 };
+
+function renumber(responses: Omit<Answer, "N">[]): Answer[] {
+  return responses.map((r, i) => ({ ...r, N: i + 1 }) as Answer);
+}
 
 export const protocolReducer = (
   state: ProtocolState = initialState,
-  actions: ProtocolActions
-) => {
-  if (actions.type === "add-response") {
-    let updatedResponses = [];
+  action: ProtocolActions,
+): ProtocolState => {
+  switch (action.type) {
+    case "add-response":
+      return {
+        responses: renumber([...state.responses, action.payload.answer]),
+      };
 
-    const newResponse: Answer = { ...actions.payload.answer };
+    case "delete-response":
+      return {
+        responses: renumber(
+          state.responses.filter((r) => r.N !== action.payload.id),
+        ),
+      };
 
-    updatedResponses = [...state.responses, newResponse];
+    case "clear-responses":
+      return { responses: [] };
 
-    return {
-      ...state,
-      responses: updatedResponses,
-    };
+    default:
+      return state;
   }
-
-  return state;
 };
